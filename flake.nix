@@ -20,11 +20,14 @@
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          default = pkgs.mkShellNoCC {
+          stress = pkgs.mkShellNoCC {
+            name = "stress";
             packages = [ pkgs.nodejs_24 ];
           };
+        in
+        {
+          default = stress;
+          inherit stress;
         }
       );
     };
