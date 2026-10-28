@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Roadmap from "./components/Roadmap/Roadmap";
+import Roadmap from "./pages/home/Roadmap";
 import { LESSONS } from "./data/lessons";
 
 function App() {
@@ -8,7 +8,6 @@ function App() {
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
 
   // Če je izbrana lekcija, (zaenkrat) pokažemo samo njen naslov.
-  // Pravi zaslon lekcije bo naredil kdo drug v skupini.
   if (selectedLessonId !== null) {
     const lesson = LESSONS.find((l) => l.id === selectedLessonId);
     return (
