@@ -194,6 +194,48 @@ body {
   font-weight: 600;
 }
 
+/* Kartica s trenutno lekcijo */
+.card__label {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+.current__title {
+  font-size: 22px;
+  font-weight: 600;
+}
+.card .current__subtitle {
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+/* Velik zelen gumb, ki se ob kliku "pritisne" */
+.start-button {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--leaf);
+  color: var(--paper);
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #1f6b2f;
+  transition: transform 0.1s;
+}
+.start-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #1f6b2f;
+}
+.start-button:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: 3px;
+}
+
 .progress {
   height: 14px;
   background: var(--sea-soft);

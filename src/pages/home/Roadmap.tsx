@@ -15,6 +15,9 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
   const doneCount = lessons.filter((l) => l.status === "done").length;
   const percent = Math.round((doneCount / lessons.length) * 100);
 
+  // Trenutna lekcija (za kartico z gumbom "Začni lekcijo")
+  const currentLesson = lessons.find((l) => l.status === "current");
+
   return (
     <div className="roadmap">
       <section className="roadmap__map" aria-label="Pot učenja">
@@ -43,6 +46,21 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
           </span>
           <p className="hello__bubble">Hi! Let's learn!</p>
         </div>
+
+        {/* Kartico pokažemo samo, če trenutna lekcija obstaja */}
+        {currentLesson && (
+          <div className="card">
+            <h2 className="card__label">Ta lekcija</h2>
+            <p className="current__title">{currentLesson.title}</p>
+            <p className="current__subtitle">{currentLesson.titleSl}</p>
+            <button
+              className="start-button"
+              onClick={() => onSelectLesson(currentLesson.id)}
+            >
+              Začni lekcijo
+            </button>
+          </div>
+        )}
 
         <div className="card">
           <h2 className="card__title">Tvoj napredek</h2>
