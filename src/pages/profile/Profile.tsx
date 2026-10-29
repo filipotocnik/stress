@@ -22,8 +22,8 @@ function Profile({ user: authUser, onEdit }: ProfileProps) {
   useEffect(() => {
     let active = true;
     loadUser(authUser).then(
-      (user) => {
-        if (active) setUser(user);
+      (loaded) => {
+        if (active) setUser(loaded);
       },
       () => {
         if (active) setLoadError(true);
