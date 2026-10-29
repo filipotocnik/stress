@@ -14,20 +14,20 @@ import { wildAnimalsLesson } from "./wild-animals";
 import { monthsAndFestivalsLesson } from "./months-and-festivals";
 
 export const lessons: Lesson[] = [
-    coloursLesson,
-    numbersLesson,
-    schoolThingsLesson,
-    clothesLesson,
-    myFamilyLesson,
-    myBodyLesson,
-    foodLesson,
-    freeTimeLesson,
-    schoolDayLesson,
-    mealTimesLesson,
-    wildAnimalsLesson,
-    monthsAndFestivalsLesson,
+	coloursLesson,
+	numbersLesson,
+	schoolThingsLesson,
+	clothesLesson,
+	myFamilyLesson,
+	myBodyLesson,
+	foodLesson,
+	freeTimeLesson,
+	schoolDayLesson,
+	mealTimesLesson,
+	wildAnimalsLesson,
+	monthsAndFestivalsLesson,
 ];
 
 export const lessonsById = new Map<string, Lesson>(
-    lessons.map((lesson) => [lesson.id, lesson]),
+	lessons.map((lesson) => [lesson.id, lesson]),
 );

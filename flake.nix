@@ -22,7 +22,10 @@
           pkgs = nixpkgs.legacyPackages.${system};
           stress = pkgs.mkShellNoCC {
             name = "stress";
-            packages = [ pkgs.nodejs_24 ];
+            packages = [
+              pkgs.nodejs_24
+              pkgs.jdk21_headless
+            ];
           };
         in
         {
