@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import type { User } from "firebase/auth";
 import {
-  ensureUserProfile,
-  getAuthErrorMessage,
-  logOut,
+	ensureUserProfile,
+	getAuthErrorMessage,
+	logOut,
 } from "../../auth/auth";
 import type { UserProfile } from "../../models/user";
 

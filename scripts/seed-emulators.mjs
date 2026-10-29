@@ -41,17 +41,17 @@ try {
 		credential = await signInWithEmailAndPassword(auth, email, password);
 	}
 
-  const profile = doc(db, "users", credential.user.uid);
-  if (!(await getDocFromServer(profile)).exists()) {
-    await setDoc(profile, {
-      firstName: "Test",
-      lastName: "User",
-      displayName: "Test User",
-      avatar: "owl",
-      createdAt: serverTimestamp(),
-    });
-  }
-  console.log(`Local test user ready: ${email} / ${password}`);
+	const profile = doc(db, "users", credential.user.uid);
+	if (!(await getDocFromServer(profile)).exists()) {
+		await setDoc(profile, {
+			firstName: "Test",
+			lastName: "User",
+			displayName: "Test User",
+			avatar: "owl",
+			createdAt: serverTimestamp(),
+		});
+	}
+	console.log(`Local test user ready: ${email} / ${password}`);
 } catch (error) {
 	console.error(
 		"Could not seed local emulators. Is npm run emulators running?",

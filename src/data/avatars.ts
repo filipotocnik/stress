@@ -9,23 +9,23 @@ import lion from "../assets/avatars/lion.svg";
 import rabbit from "../assets/avatars/rabbit.svg";
 
 export interface Avatar {
-  id: string;
-  name: string;
-  image: string;
+	id: string;
+	name: string;
+	image: string;
 }
 
 export const AVATARS: Avatar[] = [
-  { id: "owl", name: "Owl", image: owl },
-  { id: "dog", name: "Dog", image: dog },
-  { id: "cat", name: "Cat", image: cat },
-  { id: "fox", name: "Fox", image: fox },
-  { id: "panda", name: "Panda", image: panda },
-  { id: "frog", name: "Frog", image: frog },
-  { id: "lion", name: "Lion", image: lion },
-  { id: "rabbit", name: "Rabbit", image: rabbit },
+	{ id: "owl", name: "Owl", image: owl },
+	{ id: "dog", name: "Dog", image: dog },
+	{ id: "cat", name: "Cat", image: cat },
+	{ id: "fox", name: "Fox", image: fox },
+	{ id: "panda", name: "Panda", image: panda },
+	{ id: "frog", name: "Frog", image: frog },
+	{ id: "lion", name: "Lion", image: lion },
+	{ id: "rabbit", name: "Rabbit", image: rabbit },
 ];
 
 // Poišče avatar po id-ju. Če ga ni, vrne sovo.
 export function getAvatar(id: string): Avatar {
-  return AVATARS.find((a) => a.id === id) ?? AVATARS[0];
+	return AVATARS.find((a) => a.id === id) ?? AVATARS[0];
 }

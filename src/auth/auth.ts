@@ -7,78 +7,85 @@ import {
 	type User,
 } from "firebase/auth";
 import {
-  collection,
-  doc,
-  getDocs,
-  runTransaction,
-  serverTimestamp,
+	collection,
+	doc,
+	getDocs,
+	runTransaction,
+	serverTimestamp,
 } from "firebase/firestore";
 import { AVATARS } from "../data/avatars";
 import { auth, db } from "../firebase";
 import type {
-  LessonProgress,
-  User as AppUser,
-  UserProfile,
+	LessonProgress,
+	User as AppUser,
+	UserProfile,
 } from "../models/user";
 
 export async function ensureUserProfile(
-  user: User,
-  newProfile?: UserProfile,
+	user: User,
+	newProfile?: UserProfile,
 ): Promise<UserProfile> {
-  const reference = doc(db, "users", user.uid);
+	const reference = doc(db, "users", user.uid);
 
-  return runTransaction(db, async (transaction) => {
-    const snapshot = await transaction.get(reference);
-    if (snapshot.exists()) {
-      const data = snapshot.data();
-      // starejši računi nimajo vseh polj
-      return {
-        firstName: (data.firstName as string | undefined) ?? "",
-        lastName: (data.lastName as string | undefined) ?? "",
-        displayName: (data.displayName as string | undefined) ?? "",
-        avatar: (data.avatar as string | undefined) ?? AVATARS[0].id,
-      };
-    }
+	return runTransaction(db, async (transaction) => {
+		const snapshot = await transaction.get(reference);
+		if (snapshot.exists()) {
+			const data = snapshot.data();
+			// starejši računi nimajo vseh polj
+			return {
+				firstName: (data.firstName as string | undefined) ?? "",
+				lastName: (data.lastName as string | undefined) ?? "",
+				displayName: (data.displayName as string | undefined) ?? "",
+				avatar: (data.avatar as string | undefined) ?? AVATARS[0].id,
+			};
+		}
 
-    const profile = newProfile ?? {
-      firstName: "",
-      lastName: "",
-      displayName: user.displayName || "",
-      avatar: AVATARS[0].id,
-    };
-    transaction.set(reference, {
-      ...profile,
-      createdAt: serverTimestamp(),
-    });
-    return profile;
-  });
+		const profile = newProfile ?? {
+			firstName: "",
+			lastName: "",
+			displayName: user.displayName || "",
+			avatar: AVATARS[0].id,
+		};
+		transaction.set(reference, {
+			...profile,
+			createdAt: serverTimestamp(),
+		});
+		return profile;
+	});
 }
 
 export async function loadUser(user: User): Promise<AppUser> {
-  const profile = await ensureUserProfile(user);
-  const snapshot = await getDocs(collection(db, "users", user.uid, "progress"));
+	const profile = await ensureUserProfile(user);
+	const snapshot = await getDocs(
+		collection(db, "users", user.uid, "progress"),
+	);
 
-  // id dokumenta je id lekcije
-  const lessonProgress: Record<string, LessonProgress> = {};
-  for (const progress of snapshot.docs) {
-    lessonProgress[progress.id] = progress.data() as LessonProgress;
-  }
+	// id dokumenta je id lekcije
+	const lessonProgress: Record<string, LessonProgress> = {};
+	for (const progress of snapshot.docs) {
+		lessonProgress[progress.id] = progress.data() as LessonProgress;
+	}
 
-  return { ...profile, id: user.uid, email: user.email ?? "", lessonProgress };
+	return {
+		...profile,
+		id: user.uid,
+		email: user.email ?? "",
+		lessonProgress,
+	};
 }
 
 export async function register(
-  profile: UserProfile,
-  email: string,
-  password: string,
+	profile: UserProfile,
+	email: string,
+	password: string,
 ) {
-  const { user } = await createUserWithEmailAndPassword(
-    auth,
-    email.trim(),
-    password,
-  );
-  await updateProfile(user, { displayName: profile.displayName });
-  await ensureUserProfile(user, profile);
+	const { user } = await createUserWithEmailAndPassword(
+		auth,
+		email.trim(),
+		password,
+	);
+	await updateProfile(user, { displayName: profile.displayName });
+	await ensureUserProfile(user, profile);
 }
 
 export async function logIn(email: string, password: string) {
