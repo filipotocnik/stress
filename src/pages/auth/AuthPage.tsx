@@ -13,18 +13,18 @@ export interface AuthFormValues {
 }
 
 interface AuthPageProps {
-  submitting: boolean;
-  onSubmit: (values: AuthFormValues) => Promise<void>;
+	submitting: boolean;
+	onSubmit: (values: AuthFormValues) => Promise<void>;
 }
 
 export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
-  const [mode, setMode] = useState<AuthFormValues["mode"]>("login");
-  const [error, setError] = useState("");
-  const isRegistration = mode === "register";
+	const [mode, setMode] = useState<AuthFormValues["mode"]>("login");
+	const [error, setError] = useState("");
+	const isRegistration = mode === "register";
 
-  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (submitting) return;
+	async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+		event.preventDefault();
+		if (submitting) return;
 
     const data = new FormData(event.currentTarget);
     const firstName = String(data.get("firstName") ?? "").trim();
@@ -52,21 +52,21 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
     }
   }
 
-  function switchMode() {
-    setMode(isRegistration ? "login" : "register");
-    setError("");
-  }
+	function switchMode() {
+		setMode(isRegistration ? "login" : "register");
+		setError("");
+	}
 
-  return (
-    <section className="auth-card" aria-labelledby="auth-title">
-      <h1 id="auth-title">
-        {isRegistration ? "Ustvari račun" : "Dobrodošli nazaj"}
-      </h1>
-      <p className="auth-description">
-        {isRegistration
-          ? "Začni svojo poučno pustolovščino."
-          : "Prijavi se in nadaljuj z učenjem."}
-      </p>
+	return (
+		<section className="auth-card" aria-labelledby="auth-title">
+			<h1 id="auth-title">
+				{isRegistration ? "Ustvari račun" : "Dobrodošli nazaj"}
+			</h1>
+			<p className="auth-description">
+				{isRegistration
+					? "Začni svojo poučno pustolovščino."
+					: "Prijavi se in nadaljuj z učenjem."}
+			</p>
 
       <form key={mode} onSubmit={handleSubmit} aria-busy={submitting}>
         <fieldset disabled={submitting} className="auth-fields">
@@ -152,17 +152,17 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
         </fieldset>
       </form>
 
-      <p className="auth-switch">
-        {isRegistration ? "Že imaš račun?" : "Še nimaš računa?"}{" "}
-        <button
-          className="auth-link"
-          type="button"
-          onClick={switchMode}
-          disabled={submitting}
-        >
-          {isRegistration ? "Prijavi se" : "Registriraj se"}
-        </button>
-      </p>
-    </section>
-  );
+			<p className="auth-switch">
+				{isRegistration ? "Že imaš račun?" : "Še nimaš računa?"}{" "}
+				<button
+					className="auth-link"
+					type="button"
+					onClick={switchMode}
+					disabled={submitting}
+				>
+					{isRegistration ? "Prijavi se" : "Registriraj se"}
+				</button>
+			</p>
+		</section>
+	);
 }
