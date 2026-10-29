@@ -1,5 +1,5 @@
-/* Pisava Fredoka (iz vizualnih smernic) */
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
+/* Pisava Atkinson Hyperlegible (iz vizualnih smernic) */
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap");
 
 /* Barve iz prototipa, shranjene kot spremenljivke */
 :root {
@@ -20,7 +20,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Fredoka", system-ui, sans-serif;
+  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
   font-size: 18px;
 }
 
