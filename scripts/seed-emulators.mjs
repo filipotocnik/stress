@@ -40,7 +40,10 @@ try {
   const profile = doc(db, "users", credential.user.uid);
   if (!(await getDocFromServer(profile)).exists()) {
     await setDoc(profile, {
+      firstName: "Test",
+      lastName: "User",
       displayName: "Test User",
+      avatar: "owl",
       createdAt: serverTimestamp(),
     });
   }

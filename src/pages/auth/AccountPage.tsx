@@ -4,8 +4,8 @@ import {
   ensureUserProfile,
   getAuthErrorMessage,
   logOut,
-  type UserProfile,
 } from "../../auth/auth";
+import type { UserProfile } from "../../models/user";
 
 export default function AccountPage({ user }: { user: User }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);

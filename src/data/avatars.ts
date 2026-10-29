@@ -25,6 +25,7 @@ export const AVATARS: Avatar[] = [
   { id: "rabbit", name: "Rabbit", image: rabbit },
 ];
 
+// Poišče avatar po id-ju. Če ga ni, vrne sovo.
 export function getAvatar(id: string): Avatar {
   return AVATARS.find((a) => a.id === id) ?? AVATARS[0];
 }

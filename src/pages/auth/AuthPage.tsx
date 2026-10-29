@@ -1,9 +1,13 @@
 import { useState, type SubmitEvent } from "react";
 import { getAuthErrorMessage } from "../../auth/auth";
+import { AVATARS } from "../../data/avatars";
 
 export interface AuthFormValues {
   mode: "login" | "register";
+  firstName: string;
+  lastName: string;
   displayName: string;
+  avatar: string;
   email: string;
   password: string;
 }
@@ -23,9 +27,12 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
     if (submitting) return;
 
     const data = new FormData(event.currentTarget);
+    const firstName = String(data.get("firstName") ?? "").trim();
+    const lastName = String(data.get("lastName") ?? "").trim();
     const displayName = String(data.get("displayName") ?? "").trim();
-    if (isRegistration && !displayName) {
-      setError("Vnesi svoje ime.");
+    const avatar = String(data.get("avatar") ?? "");
+    if (isRegistration && (!firstName || !lastName || !displayName)) {
+      setError("Izpolni ime, priimek in uporabniško ime.");
       return;
     }
 
@@ -33,7 +40,10 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
     try {
       await onSubmit({
         mode,
+        firstName,
+        lastName,
         displayName,
+        avatar,
         email: String(data.get("email") ?? ""),
         password: String(data.get("password") ?? ""),
       });
@@ -61,15 +71,49 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
       <form key={mode} onSubmit={handleSubmit} aria-busy={submitting}>
         <fieldset disabled={submitting} className="auth-fields">
           {isRegistration && (
-            <label className="auth-field">
-              Ime
-              <input
-                name="displayName"
-                autoComplete="nickname"
-                required
-                maxLength={80}
-              />
-            </label>
+            <>
+              <label className="auth-field">
+                Ime
+                <input
+                  name="firstName"
+                  autoComplete="given-name"
+                  required
+                  maxLength={40}
+                />
+              </label>
+              <label className="auth-field">
+                Priimek
+                <input
+                  name="lastName"
+                  autoComplete="family-name"
+                  required
+                  maxLength={40}
+                />
+              </label>
+              <label className="auth-field">
+                Uporabniško ime
+                <input
+                  name="displayName"
+                  autoComplete="nickname"
+                  required
+                  maxLength={40}
+                />
+              </label>
+              <fieldset className="auth-avatars">
+                <legend>Profilna slika</legend>
+                {AVATARS.map((avatar, index) => (
+                  <label key={avatar.id} className="auth-avatar">
+                    <input
+                      type="radio"
+                      name="avatar"
+                      value={avatar.id}
+                      defaultChecked={index === 0}
+                    />
+                    <img src={avatar.image} alt={avatar.name} />
+                  </label>
+                ))}
+              </fieldset>
+            </>
           )}
           <label className="auth-field">
             E-pošta

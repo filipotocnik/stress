@@ -4,12 +4,16 @@ export interface LessonProgress {
   completedAt: string;
 }
 
-export interface User {
-  id: string;
+// Shranjeno v users/{uid}
+export interface UserProfile {
   firstName: string;
   lastName: string;
-  nickname: string;
+  displayName: string;
   avatar: string; // id iz AVATARS
+}
+
+export interface User extends UserProfile {
+  id: string;
   email: string;
   lessonProgress: Record<string, LessonProgress>;
 }
