@@ -1,21 +1,19 @@
-// Napredek pri eni lekciji. Zapis nastane šele, ko je lekcija končana.
+// Zapis nastane šele, ko je lekcija končana
 export interface LessonProgress {
   stars: 1 | 2 | 3;
-  completedAt: string; // ISO datum, npr. new Date().toISOString()
+  completedAt: string;
 }
 
-// Uporabnik, kot je shranjen v Firestore (users/{uid}).
 export interface User {
-  id: string; // uid iz Firebase Auth
+  id: string;
   firstName: string;
   lastName: string;
   nickname: string;
-  avatar: string; // id iz AVATARS, npr. "owl"
+  avatar: string; // id iz AVATARS
   email: string;
-  lessonProgress: Record<string, LessonProgress>; // ključ = id lekcije, npr. "hello"
+  lessonProgress: Record<string, LessonProgress>;
 }
 
-// Vse zvezdice, ki jih je uporabnik zbral v končanih lekcijah.
 export function getTotalStars(user: User): number {
   return Object.values(user.lessonProgress).reduce(
     (sum, progress) => sum + progress.stars,
@@ -23,7 +21,6 @@ export function getTotalStars(user: User): number {
   );
 }
 
-// Število končanih lekcij.
 export function getCompletedCount(user: User): number {
   return Object.keys(user.lessonProgress).length;
 }

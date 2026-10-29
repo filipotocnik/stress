@@ -4,11 +4,10 @@ import { useAuth } from "./auth/useAuth";
 import AccountPage from "./pages/auth/AccountPage";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
-
 import Profile from "./pages/profile/Profile";
 import type { User } from "./models/user";
 
-// Zaenkrat izmišljen uporabnik. Kasneje ga preberemo iz Firebase.
+// TODO: prebrati iz Firestore
 const TEST_USER: User = {
   id: "test-user",
   firstName: "Ana",

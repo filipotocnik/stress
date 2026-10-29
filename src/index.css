@@ -1,9 +1,6 @@
-/* Skupni slog za celo aplikacijo: pisave in barve (iz vizualnih smernic).
-   Vsaka stran uporablja te spremenljivke namesto svojih barv. */
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap");
 
 :root {
-  /* Barve iz prototipa */
   --bg: #e6f2f7;
   --paper: #ffffff;
   --ink: #173042;
@@ -25,7 +22,6 @@ body {
   font-size: 18px;
 }
 
-/* Gumbi in polja privzeto ne podedujejo pisave */
 button,
 input {
   font-family: inherit;

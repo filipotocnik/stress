@@ -2,18 +2,15 @@ import { getAvatar } from "../../data/avatars";
 import { getCompletedCount, getTotalStars, type User } from "../../models/user";
 import "./Profile.css";
 
-// Število lekcij je za vse uporabnike enako, zato ga ne shranjujemo pri uporabniku.
-// Ko združimo Pijino vejo, ga zamenjamo z LESSONS.length iz data/lessons.ts.
+// TODO: zamenjati z LESSONS.length
 const TOTAL_LEVELS = 12;
 
 interface ProfileProps {
   user: User;
-  // Gumb "Uredi profil" pokažemo samo, če ga kdo posluša
   onEdit?: () => void;
 }
 
 function Profile({ user, onEdit }: ProfileProps) {
-  // Odstotek napredka za vrstico napredka
   const completed = getCompletedCount(user);
   const stars = getTotalStars(user);
   const percent = Math.round((completed / TOTAL_LEVELS) * 100);
