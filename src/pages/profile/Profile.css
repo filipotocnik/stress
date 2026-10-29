@@ -97,7 +97,7 @@
 
 .profile__logout {
 	display: block;
-	margin: 0 auto;
+	margin: 24px auto 0;
 	padding: 12px 24px;
 	border: 2px solid var(--line);
 	border-radius: 8px;
