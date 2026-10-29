@@ -1,3 +1,5 @@
+import type { GrammarHint, GrammarPractice } from "./grammar";
+
 export type LevelId = 1 | 2 | 3;
 
 export interface Level {
@@ -6,15 +8,9 @@ export interface Level {
     descriptionSl: string;
 }
 
-export interface GrammarPractice {
-    id: string;
-    sentence: string;   // with exactly one ___ marker
-    options: string[];  // words to choose from
-    correctAnswer: string;  // must match exactly one of the words
-}
-
 export interface LessonContent {
     wordIds: string[];  // list of eight words
+    grammarHints: GrammarHint[]; // short explanation before the lesson, can be empty
     grammar: GrammarPractice[]; // one or more grammar exercises
 }
 
