@@ -4,6 +4,7 @@ import { useAuth } from "./auth/useAuth";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
 import Roadmap from "./pages/home/Roadmap";
+import Profile from "./pages/profile/Profile";
 import { lessons, lessonsById } from "./data";
 
 function App() {
@@ -14,13 +15,16 @@ function App() {
 	const [selectedLessonId, setSelectedLessonId] = useState<string | null>(
 		null,
 	);
+	// Začasno, dokler ni navigacije
+	const [showProfile, setShowProfile] = useState(false);
 
 	async function handleAuthenticate(values: AuthFormValues) {
 		setSubmitting(true);
 		try {
 			if (values.mode === "register") {
+				const { firstName, lastName, displayName, avatar } = values;
 				await register(
-					values.displayName,
+					{ firstName, lastName, displayName, avatar },
 					values.email,
 					values.password,
 				);
@@ -69,7 +73,21 @@ function App() {
 		);
 	}
 
-	return <Roadmap lessons={lessons} onSelectLesson={setSelectedLessonId} />;
+	if (showProfile) {
+		return (
+			<main style={{ padding: 24 }}>
+				<button onClick={() => setShowProfile(false)}>← Nazaj</button>
+				<Profile key={user.uid} user={user} />
+			</main>
+		);
+	}
+
+	return (
+		<>
+			<button onClick={() => setShowProfile(true)}>Moj profil</button>
+			<Roadmap lessons={lessons} onSelectLesson={setSelectedLessonId} />
+		</>
+	);
 }
 
 export default App;
