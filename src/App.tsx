@@ -14,6 +14,7 @@ import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
 import Roadmap from "./pages/home/Roadmap";
 import MyLessons from "./pages/my-lessons/MyLessons";
+import EditProfile from "./pages/profile/EditProfile";
 import Profile from "./pages/profile/Profile";
 import { lessons, lessonsById } from "./data";
 
@@ -79,7 +80,17 @@ function App() {
 				<Route path="/lekcije" element={<MyLessons />} />
 				<Route
 					path="/profil"
-					element={<Profile key={user.uid} user={user} />}
+					element={
+						<Profile
+							key={user.uid}
+							user={user}
+							onEdit={() => navigate("/profil/uredi")}
+						/>
+					}
+				/>
+				<Route
+					path="/profil/uredi"
+					element={<EditProfile key={user.uid} user={user} />}
 				/>
 				<Route path="/lekcija/:lessonId" element={<LessonPreview />} />
 			</Route>
