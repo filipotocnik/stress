@@ -1,0 +1,134 @@
+.navbar {
+	/* ostane na vrhu tudi med pomikanjem */
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	gap: 48px;
+	padding: 0 32px;
+	background: var(--ink);
+}
+
+.navbar__brand {
+	padding: 14px 0;
+	color: var(--sun);
+	font-size: 26px;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+/* Zavihki enakomerno razporejeni po preostali širini */
+.navbar__links {
+	flex: 1;
+	display: flex;
+	justify-content: space-evenly;
+	font-size: 20px;
+}
+
+.navbar__link {
+	padding: 18px 0 14px;
+	border-bottom: 4px solid transparent;
+	color: var(--bg);
+	font-weight: bold;
+	text-decoration: none;
+	opacity: 0.75;
+}
+
+.navbar__link:hover {
+	opacity: 1;
+}
+
+/* NavLink sam doda razred "active" */
+.navbar__link.active {
+	border-bottom-color: var(--sun);
+	color: var(--sun);
+	opacity: 1;
+}
+
+.navbar a:focus-visible {
+	outline: 3px solid var(--sun);
+	outline-offset: 3px;
+}
+
+.leave-dialog__backdrop {
+	position: fixed;
+	inset: 0;
+	display: grid;
+	place-items: center;
+	padding: 16px;
+	background: rgb(23 48 66 / 0.5);
+}
+
+.leave-dialog {
+	max-width: 400px;
+	padding: 28px;
+	border-radius: 22px;
+	background: var(--paper);
+	color: var(--ink);
+	text-align: center;
+}
+
+.leave-dialog h2 {
+	margin: 0 0 8px;
+	font-size: 24px;
+}
+
+.leave-dialog p {
+	margin: 0 0 24px;
+	color: var(--muted);
+}
+
+.leave-dialog__actions {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+}
+
+.leave-dialog__actions button {
+	padding: 12px 24px;
+	border-radius: 14px;
+	font-size: 18px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+/* Glavni gumb, ker je varnejša izbira */
+.leave-dialog__stay {
+	border: none;
+	background: var(--leaf);
+	color: var(--paper);
+}
+
+.leave-dialog__leave {
+	border: 2px solid var(--line);
+	background: var(--paper);
+	color: var(--ink);
+}
+
+.leave-dialog button:focus-visible {
+	outline: 3px solid var(--sun);
+	outline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+	.navbar {
+		flex-direction: column;
+		gap: 0;
+		padding: 0 16px;
+	}
+
+	.navbar__brand {
+		padding: 10px 0 0;
+		font-size: 22px;
+	}
+
+	.navbar__links {
+		align-self: stretch;
+		font-size: 17px;
+	}
+
+	.navbar__link {
+		padding-top: 8px;
+	}
+}
