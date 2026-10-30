@@ -12,6 +12,7 @@ import {
 	getDocs,
 	runTransaction,
 	serverTimestamp,
+	updateDoc,
 } from "firebase/firestore";
 import { AVATARS } from "../data/avatars";
 import { auth, db } from "../firebase";
@@ -86,6 +87,14 @@ export async function register(
 	);
 	await updateProfile(user, { displayName: profile.displayName });
 	await ensureUserProfile(user, profile);
+}
+
+export async function updateUser(user: User, profile: UserProfile) {
+	await updateDoc(doc(db, "users", user.uid), { ...profile });
+	// uporabniško ime je shranjeno tudi v Firebase Auth
+	if (user.displayName !== profile.displayName) {
+		await updateProfile(user, { displayName: profile.displayName });
+	}
 }
 
 export async function logIn(email: string, password: string) {
