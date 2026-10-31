@@ -9,7 +9,7 @@ interface LessonPageProps {
 	number: number; // zaporedna številka lekcije na poti
 }
 
-// Tri igre, ki so enake za vse lekcije
+// Štiri igre, ki so enake za vse lekcije
 const GAMES = [
 	{
 		id: "match",
@@ -31,6 +31,13 @@ const GAMES = [
 		description: "Izberi pravo besedo v stavku",
 		icon: openmoji("270F"),
 		color: "var(--leaf-soft)",
+	},
+	{
+		id: "listen",
+		title: "Poslušaj",
+		description: "Poslušaj besedo in izberi pravo sliko",
+		icon: openmoji("1F442"),
+		color: "var(--sea-soft)",
 	},
 ];
 

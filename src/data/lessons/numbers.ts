@@ -18,6 +18,8 @@ export const numbersLesson: Lesson = {
 			"six",
 			"seven",
 			"eight",
+			"nine",
+			"ten"
 		],
 		grammarHints: [
 			{
