@@ -1,0 +1,246 @@
+.weekly-word-card,
+.weekly-word-card *,
+.weekly-word-modal,
+.weekly-word-modal * {
+    box-sizing: border-box;
+}
+
+.weekly-word-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    color: var(--ink);
+    text-align: center;
+}
+
+.weekly-word-card__label {
+    align-self: stretch;
+    margin: 0;
+    text-align: left;
+}
+
+.weekly-word-card__picture {
+    display: grid;
+    place-items: center;
+    width: 124px;
+    height: 124px;
+    background: var(--sun-soft);
+    border-radius: 50%;
+}
+
+.weekly-word-card__picture img,
+.weekly-word-detail__picture img {
+    display: block;
+    object-fit: contain;
+}
+
+.weekly-word-card .weekly-word-card__word {
+    max-width: 100%;
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.weekly-word-card .start-button {
+    margin-top: 4px;
+}
+
+.weekly-word-modal {
+    width: calc(100% - 32px);
+    max-width: 720px;
+    max-height: 90vh;
+    max-height: 90dvh;
+    margin: auto;
+    padding: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    color: var(--ink);
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgb(23 48 66 / 20%);
+    font-size: 18px;
+}
+
+.weekly-word-modal::backdrop {
+    background: rgb(23 48 66 / 45%);
+}
+
+.weekly-word-detail {
+    padding: 32px;
+}
+
+.weekly-word-detail__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.weekly-word-detail__heading {
+    min-width: 0;
+}
+
+.weekly-word-detail__title {
+    margin: 0;
+    color: var(--ink);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.weekly-word-detail__date {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.weekly-word-modal__close {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition:
+        background-color 0.15s,
+        color 0.15s;
+}
+
+.weekly-word-modal__close:hover {
+    color: var(--ink);
+    background: var(--sea-soft);
+}
+
+.weekly-word-modal__close:focus-visible {
+    outline: 3px solid var(--sun);
+    outline-offset: 3px;
+}
+
+.weekly-word-detail__hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    padding: 36px 0;
+}
+
+.weekly-word-detail__picture {
+    display: grid;
+    place-items: center;
+    flex: 0 0 200px;
+    width: 200px;
+    height: 200px;
+    background: var(--sun-soft);
+    border-radius: 50%;
+}
+
+.weekly-word-detail__words {
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.weekly-word-detail__word {
+    margin: 0 0 8px;
+    color: var(--sea);
+    font-size: clamp(36px, 6vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.weekly-word-detail__translation {
+    margin: 0;
+    color: var(--ink);
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.weekly-word-examples {
+    display: grid;
+    gap: 12px;
+}
+
+.weekly-word-examples h2 {
+    margin: 0 0 4px;
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.weekly-word-example {
+    display: grid;
+    gap: 10px;
+    padding: 18px 20px;
+    background: var(--sea-soft);
+    border-radius: 18px;
+}
+
+.weekly-word-examples h2 {
+    padding-left: 1%;
+}
+
+.weekly-word-example p {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.weekly-word-example__en {
+    color: var(--sea);
+    font-weight: 600;
+}
+
+.weekly-word-example__sl {
+    color: var(--ink);
+    font-weight: 400;
+}
+
+@media (max-width: 520px) {
+    .weekly-word-detail {
+        padding: 24px 20px;
+    }
+
+    .weekly-word-detail__hero {
+        gap: 16px;
+        padding: 28px 0;
+    }
+
+    .weekly-word-detail__picture {
+        flex-basis: 112px;
+        width: 112px;
+        height: 112px;
+    }
+
+    .weekly-word-detail__picture img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .weekly-word-detail__word {
+        font-size: 36px;
+    }
+
+    .weekly-word-detail__translation {
+        font-size: 24px;
+    }
+
+    .weekly-word-example p {
+        font-size: 20px;
+    }
+}

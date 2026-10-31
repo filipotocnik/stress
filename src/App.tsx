@@ -41,11 +41,6 @@ function App() {
 		}
 	}
 
-	// delete this, just for testing without auth bcs im lazy
-	/*if (import.meta.env.DEV) {
-		return <Roadmap lessons={lessons} onSelectLesson={() => { }} />;
-	}*/
-
 	if (loading || error || !user || submitting) {
 		return (
 			<main className="auth-layout">

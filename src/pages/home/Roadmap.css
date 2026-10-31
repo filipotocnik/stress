@@ -70,9 +70,11 @@ body {
 	align-self: flex-start;
 	margin-left: 10%;
 }
+
 .stop--center {
 	align-self: center;
 }
+
 .stop--right {
 	align-self: flex-end;
 	margin-right: 10%;
@@ -143,9 +145,11 @@ body {
 	gap: 2px;
 	font-size: 20px;
 }
+
 .star {
 	color: var(--sun);
 }
+
 .star--off {
 	color: var(--line);
 }
@@ -168,6 +172,7 @@ body {
 	border: 2px solid var(--line);
 	border-radius: 22px;
 	padding: 18px;
+	box-shadow: 0 5px 0 var(--sea-soft);
 }
 
 .card__title {
@@ -184,9 +189,11 @@ body {
 	align-items: center;
 	gap: 12px;
 }
+
 .hello__character {
 	font-size: 48px;
 }
+
 .hello__bubble {
 	background: var(--sun-soft);
 	border-radius: 16px;
@@ -203,10 +210,12 @@ body {
 	color: var(--muted);
 	margin: 0 0 8px;
 }
+
 .current__title {
 	font-size: 22px;
 	font-weight: 600;
 }
+
 .card .current__subtitle {
 	color: var(--muted);
 	margin-bottom: 16px;
@@ -227,10 +236,12 @@ body {
 	box-shadow: 0 6px 0 #1f6b2f;
 	transition: transform 0.1s;
 }
+
 .start-button:active {
 	transform: translateY(4px);
 	box-shadow: 0 2px 0 #1f6b2f;
 }
+
 .start-button:focus-visible {
 	outline: 3px solid var(--sun);
 	outline-offset: 3px;
@@ -243,6 +254,7 @@ body {
 	overflow: hidden;
 	margin-top: 8px;
 }
+
 .progress__fill {
 	height: 100%;
 	background: var(--leaf);
@@ -254,8 +266,10 @@ body {
 	.roadmap {
 		grid-template-columns: 1fr;
 	}
+
 	.roadmap__side {
-		order: -1; /* pozdrav naj bo na vrhu */
+		order: -1;
+		/* pozdrav naj bo na vrhu */
 	}
 }
 
