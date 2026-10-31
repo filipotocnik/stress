@@ -1,6 +1,7 @@
 import type { Lesson } from "../../models/lesson";
 import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
+import WeeklyWordCard from "../../components/weekly-word/WeeklyWordCard";
 
 interface RoadmapProps {
 	lessons: Lesson[];
@@ -87,8 +88,11 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 					</div>
 				)}
 
+				{/* Beseda tedna */}
+				<WeeklyWordCard />
+
 				<div className="card">
-					<h2 className="card__title">Tvoj napredek</h2>
+					<h2 className="card__label">Tvoj napredek</h2>
 					<p>
 						{doneCount} od {orderedLessons.length} lekcij
 					</p>
