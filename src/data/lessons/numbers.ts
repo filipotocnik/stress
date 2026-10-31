@@ -19,7 +19,7 @@ export const numbersLesson: Lesson = {
 			"seven",
 			"eight",
 			"nine",
-			"ten"
+			"ten",
 		],
 		grammarHints: [
 			{

@@ -5,7 +5,7 @@ import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
 
 interface RoadmapProps {
-	lessons: Lesson[];
+	lessons: Lesson[]; // že razvrščene (data/lessons)
 	onSelectLesson: (lessonId: string) => void;
 }
 
@@ -67,23 +67,16 @@ function useRoutePath() {
 function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 	const { mapRef, path } = useRoutePath();
 
-	// Kopijo razvrstimo, da ne spreminjamo izvornih podatkov.
-	const orderedLessons = [...lessons].sort(
-		(a, b) => a.level - b.level || a.order - b.order,
-	);
-
 	// Koliko lekcij je že končanih (za vrstico napredka)
-	const doneCount = orderedLessons.filter(
+	const doneCount = lessons.filter(
 		(lesson) => MOCK_PROGRESS[lesson.id] !== undefined,
 	).length;
 
 	const percent =
-		orderedLessons.length > 0
-			? Math.round((doneCount / orderedLessons.length) * 100)
-			: 0;
+		lessons.length > 0 ? Math.round((doneCount / lessons.length) * 100) : 0;
 
 	// Trenutna lekcija (za kartico z gumbom "Začni lekcijo")
-	const currentLesson = orderedLessons.find(
+	const currentLesson = lessons.find(
 		(lesson) => MOCK_PROGRESS[lesson.id] === undefined,
 	);
 
@@ -98,12 +91,12 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 					<path d={path} />
 				</svg>
 
-				{orderedLessons.map((lesson, index) => {
+				{lessons.map((lesson, index) => {
 					const progress = MOCK_PROGRESS[lesson.id];
 					// Naslov nivoja pokažemo pred prvo lekcijo vsakega nivoja
 					const isFirstInLevel =
 						index === 0 ||
-						orderedLessons[index - 1].level !== lesson.level;
+						lessons[index - 1].level !== lesson.level;
 					const level = levels.find((l) => l.id === lesson.level);
 					const status =
 						progress !== undefined
@@ -160,7 +153,7 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 				<div className="card">
 					<h2 className="card__title">Tvoj napredek</h2>
 					<p>
-						{doneCount} od {orderedLessons.length} lekcij
+						{doneCount} od {lessons.length} lekcij
 					</p>
 					<div className="progress" aria-hidden="true">
 						<div
