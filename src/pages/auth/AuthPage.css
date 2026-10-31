@@ -21,17 +21,17 @@
 }
 
 .auth-brand {
-	color: var(--sea);
-	font-size: 20px;
-	font-weight: 700;
-	margin: 0 0 24px;
+  color: var(--sea);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 24px;
 }
 
 .auth-card h1 {
-	font-size: 30px;
-	font-weight: 700;
-	line-height: 1.2;
-	margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 8px;
 }
 
 .auth-description {
@@ -51,9 +51,9 @@
 }
 
 .auth-field {
-	display: grid;
-	gap: 8px;
-	font-weight: 400;
+  display: grid;
+  gap: 8px;
+  font-weight: 400;
 }
 
 .auth-field input {
@@ -82,7 +82,7 @@
 }
 
 .auth-avatars legend {
-	font-weight: 400;
+	font-weight: 500;
 	padding: 0;
 	margin-bottom: 8px;
 }

@@ -1,0 +1,217 @@
+.lesson {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 20px 16px 40px;
+}
+
+/* ---------- Glava ---------- */
+.lesson__head {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.lesson__eyebrow {
+	margin: 0;
+	color: var(--muted);
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.lesson__title {
+	margin: 2px 0;
+	font-size: 34px;
+}
+
+.lesson__subtitle {
+	margin: 0;
+	color: var(--muted);
+}
+
+/* ---------- Besede ---------- */
+.lesson__words {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 14px;
+}
+
+.word-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: 14px;
+	border: 2px solid var(--line);
+	border-radius: 20px;
+	background: var(--paper);
+	text-align: center;
+}
+
+.word-card__en {
+	color: var(--sea);
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.word-card__sl {
+	color: var(--muted);
+	font-size: 15px;
+}
+
+.word-card__say {
+	width: 44px;
+	height: 44px;
+	margin-top: 6px;
+	border: 2px solid var(--line);
+	border-radius: 50%;
+	background: var(--sea-soft);
+	font-size: 20px;
+	cursor: pointer;
+}
+
+/* ---------- Pravilo ---------- */
+.lesson__rule {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 16px;
+	align-items: start;
+	margin-top: 20px;
+	padding: 18px 20px;
+	border-radius: 20px;
+	background: var(--sun-soft);
+}
+
+.lesson__rule-icon {
+	font-size: 40px;
+}
+
+.lesson__rule-title {
+	margin: 0;
+	font-size: 22px;
+}
+
+.lesson__rule-text {
+	margin: 0;
+	color: var(--muted);
+}
+
+.lesson__rule-table {
+	margin-top: 8px;
+	border-collapse: collapse;
+	font-size: 17px;
+}
+
+.lesson__rule-table td {
+	padding: 4px 14px 4px 0;
+}
+
+.lesson__rule-table b {
+	color: var(--sea);
+}
+
+.lesson__rule-example {
+	color: var(--muted);
+}
+
+/* ---------- Vaje ---------- */
+.lesson__section-title {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: 12px;
+	margin-top: 30px;
+}
+
+.lesson__section-title h2 {
+	margin: 0;
+	font-size: 26px;
+}
+
+.lesson__section-title span {
+	color: var(--muted);
+}
+
+.lesson__games {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 16px;
+	margin-top: 14px;
+}
+
+.game-card {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 18px;
+	border: 2px solid var(--line);
+	border-radius: 22px;
+	background: var(--paper);
+}
+
+.game-card:hover {
+	border-color: var(--sea);
+}
+
+.game-card__icon {
+	display: grid;
+	place-items: center;
+	width: 56px;
+	height: 56px;
+	border-radius: 16px;
+	font-size: 28px;
+}
+
+.game-card__title {
+	margin: 0;
+	font-size: 22px;
+}
+
+.game-card__description {
+	margin: 0;
+	color: var(--muted);
+}
+
+.game-card__meta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: auto;
+}
+
+.game-card__stars {
+	color: var(--line);
+	font-size: 20px;
+}
+
+.game-card__play {
+	padding: 6px 16px;
+	border: 2px solid var(--line);
+	border-radius: 999px;
+	background: var(--paper);
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.game-card__play:hover {
+	border-color: var(--sea);
+}
+
+@media (max-width: 820px) {
+	.lesson__games {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 520px) {
+	.lesson__rule {
+		grid-template-columns: 1fr;
+	}
+
+	.lesson__title {
+		font-size: 28px;
+	}
+}
