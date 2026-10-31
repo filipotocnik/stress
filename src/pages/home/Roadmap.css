@@ -11,22 +11,45 @@
 
 /* ---------- Zemljevid ---------- */
 .roadmap__map {
+	position: relative; /* da se pot (svg) postavi čez zemljevid */
 	background: var(--sea-soft);
 	border-radius: 28px;
 	padding: 24px 16px 40px;
+	overflow: hidden;
+}
+
+/* Črtkana pot pod otoki */
+.roadmap__route {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.roadmap__route path {
+	fill: none;
+	stroke: var(--sea);
+	stroke-width: 4;
+	stroke-dasharray: 2 12;
+	stroke-linecap: round;
+	opacity: 0.6;
 }
 
 .roadmap__row {
+	position: relative; /* otoki in naslovi so nad potjo */
 	display: flex;
 	flex-direction: column;
 }
 
-.roadmap__month {
-	text-align: center;
-	color: var(--sea);
-	font-size: 20px;
-	font-weight: 700;
+.roadmap__level {
 	margin: 20px 0 8px;
+	color: var(--sea);
+	font-size: 15px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-align: center;
+	text-transform: uppercase;
 }
 
 /* ---------- Ena postaja ---------- */
