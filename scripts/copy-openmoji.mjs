@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 
-const dataFiles = ["src/data/words.ts", "src/data/lessons.ts"];
+const dataFiles = ["src/data/words.ts", "src/data/lessons/index.ts", "src/data/weekly-words.ts"];
 
 const codes = new Set();
 
