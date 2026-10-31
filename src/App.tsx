@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router";
+import {
+	Navigate,
+	Outlet,
+	Route,
+	Routes,
+	useNavigate,
+	useParams,
+} from "react-router";
 import { logIn, register } from "./auth/auth";
 import { useAuth } from "./auth/useAuth";
 import Navbar from "./components/navbar/Navbar";
@@ -86,7 +93,7 @@ function App() {
 					path="/profil/uredi"
 					element={<EditProfile key={user.uid} user={user} />}
 				/>
-				<Route path="/lekcija/:lessonId" element={<LessonPage />} />
+				<Route path="/lekcija/:lessonId" element={<LessonRoute />} />
 			</Route>
 			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
@@ -100,6 +107,20 @@ function AppLayout() {
 			<Navbar />
 			<Outlet />
 		</>
+	);
+}
+
+// Lekcijo poiščemo po id-ju iz naslova, neznan id vrne na zemljevid
+function LessonRoute() {
+	const { lessonId } = useParams();
+	const index = lessons.findIndex((lesson) => lesson.id === lessonId);
+
+	if (index === -1) {
+		return <Navigate to="/" replace />;
+	}
+
+	return (
+		<LessonPage key={lessonId} lesson={lessons[index]} number={index + 1} />
 	);
 }
 

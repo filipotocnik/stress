@@ -1,47 +1,12 @@
-import { openmoji } from "../../data/images";
-import type { GrammarHint } from "../../models/grammar";
+import { wordsById } from "../../data";
+import type { Lesson } from "../../models/lesson";
 import type { Word } from "../../models/word";
 import "./LessonPage.css";
 
-// TODO: začasni testni podatki, v 2. koraku jih zamenjamo z data/lessons
-const LESSON = {
-	title: "Wild animals",
-	titleSl: "Divje živali",
-	icon: openmoji("1F981"),
-	levelSl: "Nivo 3",
-	unitSl: "Lekcija 11",
-};
-
-const WORDS: Word[] = [
-	{ id: "lion", en: "lion", sl: "lev", imageSrc: openmoji("1F981") },
-	{ id: "bear", en: "bear", sl: "medved", imageSrc: openmoji("1F43B") },
-	{ id: "wolf", en: "wolf", sl: "volk", imageSrc: openmoji("1F43A") },
-	{ id: "snake", en: "snake", sl: "kača", imageSrc: openmoji("1F40D") },
-	{ id: "eagle", en: "eagle", sl: "orel", imageSrc: openmoji("1F985") },
-	{ id: "deer", en: "deer", sl: "jelen", imageSrc: openmoji("1F98C") },
-	{ id: "horse", en: "horse", sl: "konj", imageSrc: openmoji("1F40E") },
-	{ id: "swan", en: "swan", sl: "labod", imageSrc: openmoji("1F9A2") },
-];
-
-const GRAMMAR_HINTS: GrammarHint[] = [
-	{
-		id: "have-got",
-		titleSl: "have got / has got",
-		explanationSl: "Ko govorimo o tem, kaj kdo ima.",
-		rows: [
-			{
-				label: "I, you, we, they",
-				pattern: "have got",
-				example: "I have got a dog.",
-			},
-			{
-				label: "he, she, it",
-				pattern: "has got",
-				example: "She has got a cat.",
-			},
-		],
-	},
-];
+interface LessonPageProps {
+	lesson: Lesson;
+	number: number; // zaporedna številka lekcije na poti
+}
 
 // Tri igre, ki so enake za vse lekcije
 const GAMES = [
@@ -77,24 +42,29 @@ function speak(text: string) {
 }
 
 // Prva stran lekcije: besede, pravila in izbira igre
-function LessonPage() {
+function LessonPage({ lesson, number }: LessonPageProps) {
+	// Besede poiščemo po id-ju, neznane id-je izpustimo
+	const words = lesson.content.wordIds
+		.map((id) => wordsById.get(id))
+		.filter((word): word is Word => word !== undefined);
+
 	return (
 		<main className="lesson">
 			<header className="lesson__head">
-				<img src={LESSON.icon} alt="" width={64} height={64} />
+				<img src={lesson.icon} alt="" width={64} height={64} />
 				<div>
 					<p className="lesson__eyebrow">
-						{LESSON.levelSl} · {LESSON.unitSl}
+						Nivo {lesson.level} · Lekcija {number}
 					</p>
-					<h1 className="lesson__title">Lekcija: {LESSON.title}</h1>
+					<h1 className="lesson__title">Lekcija: {lesson.title}</h1>
 					<p className="lesson__subtitle">
-						{LESSON.titleSl} · preglej besede, nato reši vaje
+						{lesson.titleSl} · preglej besede, nato reši vaje
 					</p>
 				</div>
 			</header>
 
 			<section className="lesson__words" aria-label="Besede">
-				{WORDS.map((word) => (
+				{words.map((word) => (
 					<div key={word.id} className="word-card">
 						{word.imageSrc && (
 							<img
@@ -118,7 +88,7 @@ function LessonPage() {
 			</section>
 
 			{/* Nekatere lekcije nimajo pravil */}
-			{GRAMMAR_HINTS.map((hint) => (
+			{lesson.content.grammarHints.map((hint) => (
 				<section key={hint.id} className="lesson__rule">
 					<span className="lesson__rule-icon" aria-hidden="true">
 						💡
