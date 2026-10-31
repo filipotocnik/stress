@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
 import type { Lesson } from "../../models/lesson";
@@ -41,6 +42,9 @@ const GAMES = [
 	},
 ];
 
+// Največ kartic besed v eni vrsti
+const MAX_COLUMNS = 5;
+
 // Poiščemo britanski glas. Brskalnik sicer vzame privzetega (lahko slovenskega).
 // Najprej poskusimo kakovostnejše glasove (Google, Microsoft "Natural"/"Online").
 function findBritishVoice() {
@@ -73,6 +77,10 @@ function LessonPage({ lesson, number }: LessonPageProps) {
 		.map((id) => wordsById.get(id))
 		.filter((word): word is Word => word !== undefined);
 
+	// Čim manj vrst, kartice pa enakomerno razdelimo (8 → 4 + 4, 10 → 5 + 5)
+	const rows = Math.ceil(words.length / MAX_COLUMNS);
+	const columns = Math.max(1, Math.ceil(words.length / rows));
+
 	return (
 		<main className="lesson">
 			<header className="lesson__head">
@@ -88,7 +96,11 @@ function LessonPage({ lesson, number }: LessonPageProps) {
 				</div>
 			</header>
 
-			<section className="lesson__words" aria-label="Besede">
+			<section
+				className="lesson__words"
+				aria-label="Besede"
+				style={{ "--columns": columns } as CSSProperties}
+			>
 				{words.map((word) => (
 					<div key={word.id} className="word-card">
 						{word.imageSrc && (
