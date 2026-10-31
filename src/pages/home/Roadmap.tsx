@@ -1,79 +1,107 @@
-import type { Lesson } from "../../data/lessons";
+import type { Lesson } from "../../models/lesson";
 import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
 
 interface RoadmapProps {
-  lessons: Lesson[];
-  onSelectLesson: (lessonId: string) => void;
+	lessons: Lesson[];
+	onSelectLesson: (lessonId: string) => void;
 }
 
 // Vzorec cik-cak: levo, sredina, desno, sredina, levo ...
 const SIDES = ["left", "center", "right", "center"] as const;
 
+// Začasni napredek. Kasneje ga dobimo iz uporabniškega profila.
+const MOCK_PROGRESS: Record<string, { stars: number } | undefined> = {
+	colours: { stars: 3 },
+};
+
 function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
-  // Koliko lekcij je že končanih (za vrstico napredka)
-  const doneCount = lessons.filter((l) => l.status === "done").length;
-  const percent = Math.round((doneCount / lessons.length) * 100);
+	// Kopijo razvrstimo, da ne spreminjamo izvornih podatkov.
+	const orderedLessons = [...lessons].sort(
+		(a, b) => a.level - b.level || a.order - b.order,
+	);
 
-  // Trenutna lekcija (za kartico z gumbom "Začni lekcijo")
-  const currentLesson = lessons.find((l) => l.status === "current");
+	// Koliko lekcij je že končanih (za vrstico napredka)
+	const doneCount = orderedLessons.filter(
+		(lesson) => MOCK_PROGRESS[lesson.id] !== undefined,
+	).length;
 
-  return (
-    <div className="roadmap">
-      <section className="roadmap__map" aria-label="Pot učenja">
-        {lessons.map((lesson, index) => {
-          // Ime meseca pokažemo samo, ko se mesec zamenja
-          const isNewMonth =
-            index === 0 || lessons[index - 1].month !== lesson.month;
+	const percent =
+		orderedLessons.length > 0
+			? Math.round((doneCount / orderedLessons.length) * 100)
+			: 0;
 
-          return (
-            <div key={lesson.id} className="roadmap__row">
-              {isNewMonth && <h2 className="roadmap__month">{lesson.month}</h2>}
-              <RoadmapStop
-                lesson={lesson}
-                side={SIDES[index % SIDES.length]}
-                onSelect={onSelectLesson}
-              />
-            </div>
-          );
-        })}
-      </section>
+	// Trenutna lekcija (za kartico z gumbom "Začni lekcijo")
+	const currentLesson = orderedLessons.find(
+		(lesson) => MOCK_PROGRESS[lesson.id] === undefined,
+	);
 
-      <aside className="roadmap__side">
-        <div className="card hello">
-          <span className="hello__character" aria-hidden="true">
-            🦊
-          </span>
-          <p className="hello__bubble">Hi! Let's learn!</p>
-        </div>
+	return (
+		<div className="roadmap">
+			<section className="roadmap__map" aria-label="Pot učenja">
+				{orderedLessons.map((lesson, index) => {
+					const progress = MOCK_PROGRESS[lesson.id];
+					const status =
+						progress !== undefined
+							? "done"
+							: lesson.id === currentLesson?.id
+								? "current"
+								: "locked";
 
-        {/* Kartico pokažemo samo, če trenutna lekcija obstaja */}
-        {currentLesson && (
-          <div className="card">
-            <h2 className="card__label">Ta lekcija</h2>
-            <p className="current__title">{currentLesson.title}</p>
-            <p className="current__subtitle">{currentLesson.titleSl}</p>
-            <button
-              className="start-button"
-              onClick={() => onSelectLesson(currentLesson.id)}
-            >
-              Začni lekcijo
-            </button>
-          </div>
-        )}
+					return (
+						<div key={lesson.id} className="roadmap__row">
+							<RoadmapStop
+								lesson={lesson}
+								status={status}
+								stars={progress?.stars ?? 0}
+								side={SIDES[index % SIDES.length]}
+								onSelect={onSelectLesson}
+							/>
+						</div>
+					);
+				})}
+			</section>
 
-        <div className="card">
-          <h2 className="card__title">Tvoj napredek</h2>
-          <p>
-            {doneCount} od {lessons.length} lekcij
-          </p>
-          <div className="progress" aria-hidden="true">
-            <div className="progress__fill" style={{ width: `${percent}%` }} />
-          </div>
-        </div>
-      </aside>
-    </div>
-  );
+			<aside className="roadmap__side">
+				<div className="card hello">
+					<span className="hello__character" aria-hidden="true">
+						🦊
+					</span>
+					<p className="hello__bubble">Hi! Let's learn!</p>
+				</div>
+
+				{/* Kartico pokažemo samo, če trenutna lekcija obstaja */}
+				{currentLesson && (
+					<div className="card">
+						<h2 className="card__label">Ta lekcija</h2>
+						<p className="current__title">{currentLesson.title}</p>
+						<p className="current__subtitle">
+							{currentLesson.titleSl}
+						</p>
+						<button
+							className="start-button"
+							onClick={() => onSelectLesson(currentLesson.id)}
+						>
+							Začni lekcijo
+						</button>
+					</div>
+				)}
+
+				<div className="card">
+					<h2 className="card__title">Tvoj napredek</h2>
+					<p>
+						{doneCount} od {orderedLessons.length} lekcij
+					</p>
+					<div className="progress" aria-hidden="true">
+						<div
+							className="progress__fill"
+							style={{ width: `${percent}%` }}
+						/>
+					</div>
+				</div>
+			</aside>
+		</div>
+	);
 }
 
 export default Roadmap;

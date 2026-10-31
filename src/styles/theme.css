@@ -4,23 +4,30 @@
 /* Barve shranjene kot spremenljivke.
    Uporabljajo jih vse strani. */
 :root {
-  --bg: #e6f2f7;
-  --paper: #ffffff;
-  --ink: #173042;
-  --muted: #55707f;
-  --line: #c7dce6;
-  --sea: #1c82b0;
-  --sea-soft: #d4eaf4;
-  --sun: #ffc23c;
-  --sun-soft: #fff0c7;
-  --leaf: #2f9a45;
-  --leaf-soft: #dcf1df;
+	--bg: #e6f2f7;
+	--paper: #ffffff;
+	--ink: #173042;
+	--muted: #55707f;
+	--line: #c7dce6;
+	--sea: #1c82b0;
+	--sea-soft: #d4eaf4;
+	--sun: #ffc23c;
+	--sun-soft: #fff0c7;
+	--leaf: #2f9a45;
+	--leaf-soft: #dcf1df;
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
-  font-size: 18px;
+	margin: 0;
+	background: var(--bg);
+	color: var(--ink);
+	font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+	font-size: 18px;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+	font-family: inherit;
 }

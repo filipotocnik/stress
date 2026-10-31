@@ -1,0 +1,154 @@
+.edit-profile {
+	max-width: 520px;
+	margin: 40px auto;
+	padding: 32px;
+	background: var(--paper);
+	border: 2px solid var(--line);
+	border-radius: 22px;
+	box-sizing: border-box;
+}
+
+.edit-profile h1 {
+	font-size: 30px;
+	margin: 0 0 8px;
+}
+
+.edit-profile__description {
+	color: var(--muted);
+	margin: 0 0 24px;
+}
+
+.edit-profile__fields {
+	display: grid;
+	gap: 18px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	min-width: 0;
+}
+
+.edit-profile__row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+}
+
+.edit-profile__field {
+	display: grid;
+	gap: 8px;
+	font-weight: 700;
+	min-width: 0;
+}
+
+.edit-profile__field input {
+	width: 100%;
+	min-width: 0;
+	padding: 12px 14px;
+	border: 2px solid var(--line);
+	border-radius: 14px;
+	background: var(--paper);
+	color: var(--ink);
+	font: inherit;
+	font-weight: 400;
+	box-sizing: border-box;
+}
+
+.edit-profile__field input:focus-visible {
+	border-color: var(--sea);
+}
+
+.edit-profile__avatars {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 10px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	min-width: 0;
+}
+
+.edit-profile__avatars legend {
+	font-weight: 700;
+	padding: 0;
+	margin-bottom: 8px;
+}
+
+.edit-profile__avatar input {
+	position: absolute;
+	opacity: 0;
+}
+
+.edit-profile__avatar img {
+	display: block;
+	width: 100%;
+	border-radius: 50%;
+	background: var(--sea-soft);
+	border: 3px solid transparent;
+	box-sizing: border-box;
+	cursor: pointer;
+	padding: 6px;
+}
+
+.edit-profile__avatar input:checked + img {
+	border-color: var(--sea);
+}
+
+.edit-profile__avatar input:focus-visible + img {
+	outline: 3px solid var(--sun);
+	outline-offset: 3px;
+}
+
+.edit-profile__email {
+	color: var(--muted);
+	font-size: 16px;
+	margin: 0;
+}
+
+.edit-profile__actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.edit-profile__actions button {
+	padding: 12px 24px;
+	border-radius: 14px;
+	font-family: inherit;
+	font-size: 18px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.edit-profile__cancel {
+	border: 2px solid var(--line);
+	background: var(--paper);
+	color: var(--ink);
+}
+
+.edit-profile__save {
+	border: 0;
+	background: var(--leaf);
+	color: var(--paper);
+	box-shadow: 0 4px 0 #1f6b2f;
+}
+
+.edit-profile :is(input, button):focus-visible {
+	outline: 3px solid var(--sun);
+	outline-offset: 3px;
+}
+
+.edit-profile :disabled {
+	opacity: 0.65;
+	cursor: wait;
+}
+
+@media (max-width: 560px) {
+	.edit-profile {
+		margin: 16px;
+		padding: 24px;
+	}
+
+	.edit-profile__row {
+		grid-template-columns: 1fr;
+	}
+}
