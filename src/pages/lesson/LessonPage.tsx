@@ -1,4 +1,5 @@
 import { wordsById } from "../../data";
+import { openmoji } from "../../data/images";
 import type { Lesson } from "../../models/lesson";
 import type { Word } from "../../models/word";
 import "./LessonPage.css";
@@ -14,21 +15,21 @@ const GAMES = [
 		id: "match",
 		title: "Poveži besede",
 		description: "Slovenska beseda ↔ angleška beseda",
-		icon: "🔗",
+		icon: openmoji("1F517"),
 		color: "var(--sea-soft)",
 	},
 	{
 		id: "memory",
 		title: "Spomin",
 		description: "Poišči par: slika + angleška beseda",
-		icon: "🃏",
+		icon: openmoji("1F0CF"),
 		color: "var(--sun-soft)",
 	},
 	{
 		id: "fill",
 		title: "Dopolni stavek",
 		description: "Izberi pravo besedo v stavku",
-		icon: "✏️",
+		icon: openmoji("270F"),
 		color: "var(--leaf-soft)",
 	},
 ];
@@ -81,7 +82,12 @@ function LessonPage({ lesson, number }: LessonPageProps) {
 							onClick={() => speak(word.en)}
 							aria-label={`Poslušaj: ${word.en}`}
 						>
-							🔊
+							<img
+								src={openmoji("1F50A")}
+								alt=""
+								width={28}
+								height={28}
+							/>
 						</button>
 					</div>
 				))}
@@ -90,9 +96,12 @@ function LessonPage({ lesson, number }: LessonPageProps) {
 			{/* Nekatere lekcije nimajo pravil */}
 			{lesson.content.grammarHints.map((hint) => (
 				<section key={hint.id} className="lesson__rule">
-					<span className="lesson__rule-icon" aria-hidden="true">
-						💡
-					</span>
+					<img
+						src={openmoji("1F4A1")}
+						alt=""
+						width={48}
+						height={48}
+					/>
 					<div>
 						<h2 className="lesson__rule-title">
 							Pravilo lekcije: {hint.titleSl}
@@ -132,9 +141,13 @@ function LessonPage({ lesson, number }: LessonPageProps) {
 						<span
 							className="game-card__icon"
 							style={{ background: game.color }}
-							aria-hidden="true"
 						>
-							{game.icon}
+							<img
+								src={game.icon}
+								alt=""
+								width={40}
+								height={40}
+							/>
 						</span>
 						<h3 className="game-card__title">{game.title}</h3>
 						<p className="game-card__description">

@@ -62,13 +62,15 @@
 }
 
 .word-card__say {
+	display: grid;
+	place-items: center;
 	width: 44px;
 	height: 44px;
 	margin-top: 6px;
+	padding: 0;
 	border: 2px solid var(--line);
 	border-radius: 50%;
 	background: var(--sea-soft);
-	font-size: 20px;
 	cursor: pointer;
 }
 
@@ -82,10 +84,6 @@
 	padding: 18px 20px;
 	border-radius: 20px;
 	background: var(--sun-soft);
-}
-
-.lesson__rule-icon {
-	font-size: 40px;
 }
 
 .lesson__rule-title {
@@ -162,7 +160,6 @@
 	width: 56px;
 	height: 56px;
 	border-radius: 16px;
-	font-size: 28px;
 }
 
 .game-card__title {

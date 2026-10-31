@@ -1,3 +1,4 @@
+import { openmoji } from "../../data/images";
 import type { Lesson } from "../../models/lesson";
 
 // "Props" so podatki, ki jih komponenta dobi od starša.
@@ -33,7 +34,12 @@ function RoadmapStop({
 				)}
 
 				{isLocked ? (
-					<span aria-hidden="true">🔒</span>
+					<img
+						src={openmoji("1F512")}
+						alt=""
+						width={48}
+						height={48}
+					/>
 				) : (
 					<img src={lesson.icon} alt="" width={48} height={48} />
 				)}
