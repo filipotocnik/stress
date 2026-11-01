@@ -1,38 +1,19 @@
-import { useEffect, useState } from "react";
-import type { User as AuthUser } from "firebase/auth";
-import { getAuthErrorMessage, loadUser, logOut } from "../../auth/auth";
+import { useState } from "react";
+import { getAuthErrorMessage, logOut } from "../../auth/auth";
+import { lessons } from "../../data/lessons";
+import { getTotalXp, getUserLevel } from "../../game/scoring";
 import { getAvatar } from "../../data/avatars";
 import { getCompletedCount, getTotalStars, type User } from "../../models/user";
 import "./Profile.css";
 
-// TODO: zamenjati z LESSONS.length
-const TOTAL_LEVELS = 12;
-
 interface ProfileProps {
-	user: AuthUser;
+	user: User;
 	onEdit?: () => void;
 }
 
-function Profile({ user: authUser, onEdit }: ProfileProps) {
-	const [user, setUser] = useState<User | null>(null);
-	const [loadError, setLoadError] = useState(false);
+function Profile({ user, onEdit }: ProfileProps) {
 	const [logoutError, setLogoutError] = useState("");
 	const [signingOut, setSigningOut] = useState(false);
-
-	useEffect(() => {
-		let active = true;
-		loadUser(authUser).then(
-			(loaded) => {
-				if (active) setUser(loaded);
-			},
-			() => {
-				if (active) setLoadError(true);
-			},
-		);
-		return () => {
-			active = false;
-		};
-	}, [authUser]);
 
 	async function handleLogOut() {
 		setSigningOut(true);
@@ -62,24 +43,14 @@ function Profile({ user: authUser, onEdit }: ProfileProps) {
 		</>
 	);
 
-	if (!user) {
-		return (
-			<section className="profile">
-				{loadError ? (
-					<p className="auth-error" role="alert">
-						Profila ni bilo mogoče naložiti. Poskusi znova.
-					</p>
-				) : (
-					<p role="status">Nalaganje profila…</p>
-				)}
-				{logoutButton}
-			</section>
-		);
-	}
-
 	const completed = getCompletedCount(user);
 	const stars = getTotalStars(user);
-	const percent = Math.round((completed / TOTAL_LEVELS) * 100);
+	const percent =
+		lessons.length === 0
+			? 0
+			: Math.round((completed / lessons.length) * 100);
+	const xp = getTotalXp(stars);
+	const userLevel = getUserLevel(xp);
 	const avatar = getAvatar(user.avatar);
 
 	return (
@@ -94,7 +65,7 @@ function Profile({ user: authUser, onEdit }: ProfileProps) {
 			<section className="profile__stats">
 				<div className="profile__stat">
 					<span className="profile__value">
-						{completed}/{TOTAL_LEVELS}
+						{completed}/{lessons.length}
 					</span>
 					<span className="profile__label">Končane</span>
 				</div>
@@ -111,6 +82,9 @@ function Profile({ user: authUser, onEdit }: ProfileProps) {
 				/>
 			</div>
 			<p className="profile__percent">{percent}% poti</p>
+			<p>
+				{xp} XP · Raven {userLevel}
+			</p>
 
 			<h2 className="profile__info-title">Moji podatki</h2>
 			<section className="profile__info">

@@ -1,29 +1,27 @@
 import type { Lesson } from "../../models/lesson";
+import { isLessonCompleted, type LessonProgress } from "../../models/user";
+import { getLessonAvailability } from "../../game/progression";
 import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
 
 interface RoadmapProps {
 	lessons: Lesson[];
+	progress: Record<string, LessonProgress>;
 	onSelectLesson: (lessonId: string) => void;
 }
 
 // Vzorec cik-cak: levo, sredina, desno, sredina, levo ...
 const SIDES = ["left", "center", "right", "center"] as const;
 
-// Začasni napredek. Kasneje ga dobimo iz uporabniškega profila.
-const MOCK_PROGRESS: Record<string, { stars: number } | undefined> = {
-	colours: { stars: 3 },
-};
-
-function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
+function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 	// Kopijo razvrstimo, da ne spreminjamo izvornih podatkov.
 	const orderedLessons = [...lessons].sort(
 		(a, b) => a.level - b.level || a.order - b.order,
 	);
 
 	// Koliko lekcij je že končanih (za vrstico napredka)
-	const doneCount = orderedLessons.filter(
-		(lesson) => MOCK_PROGRESS[lesson.id] !== undefined,
+	const doneCount = orderedLessons.filter((lesson) =>
+		isLessonCompleted(progress[lesson.id]),
 	).length;
 
 	const percent =
@@ -33,27 +31,28 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 
 	// Trenutna lekcija (za kartico z gumbom "Začni lekcijo")
 	const currentLesson = orderedLessons.find(
-		(lesson) => MOCK_PROGRESS[lesson.id] === undefined,
+		(lesson) =>
+			getLessonAvailability(orderedLessons, progress, lesson.id) ===
+			"current",
 	);
 
 	return (
 		<div className="roadmap">
 			<section className="roadmap__map" aria-label="Pot učenja">
 				{orderedLessons.map((lesson, index) => {
-					const progress = MOCK_PROGRESS[lesson.id];
-					const status =
-						progress !== undefined
-							? "done"
-							: lesson.id === currentLesson?.id
-								? "current"
-								: "locked";
+					const lessonProgress = progress[lesson.id];
+					const status = getLessonAvailability(
+						orderedLessons,
+						progress,
+						lesson.id,
+					);
 
 					return (
 						<div key={lesson.id} className="roadmap__row">
 							<RoadmapStop
 								lesson={lesson}
 								status={status}
-								stars={progress?.stars ?? 0}
+								stars={lessonProgress?.stars ?? 0}
 								side={SIDES[index % SIDES.length]}
 								onSelect={onSelectLesson}
 							/>
@@ -82,7 +81,9 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 							className="start-button"
 							onClick={() => onSelectLesson(currentLesson.id)}
 						>
-							Začni lekcijo
+							{progress[currentLesson.id]
+								? "Nadaljuj lekcijo"
+								: "Začni lekcijo"}
 						</button>
 					</div>
 				)}
