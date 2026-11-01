@@ -1,22 +1,46 @@
 import type { CSSProperties } from "react";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
+import { getGameStars } from "../../game/scoring";
+import type { GameType } from "../../models/game";
 import type { Lesson } from "../../models/lesson";
+import type { LessonProgress } from "../../models/user";
 import type { Word } from "../../models/word";
 import "./LessonPage.css";
 
 interface LessonPageProps {
 	lesson: Lesson;
 	number: number; // zaporedna številka lekcije na poti
+	progress?: LessonProgress;
 }
 
 // Štiri igre, ki so enake za vse lekcije
-const GAMES = [
+const GAMES: {
+	id: GameType;
+	title: string;
+	description: string;
+	icon: string;
+	color: string;
+}[] = [
 	{
-		id: "match",
+		id: "matching",
 		title: "Poveži besede",
 		description: "Slovenska beseda ↔ angleška beseda",
 		icon: openmoji("1F517"),
+		color: "var(--sea-soft)",
+	},
+	{
+		id: "grammar",
+		title: "Dopolni stavek",
+		description: "Izberi pravo besedo v stavku",
+		icon: openmoji("270F"),
+		color: "var(--leaf-soft)",
+	},
+	{
+		id: "listening",
+		title: "Poslušaj",
+		description: "Poslušaj besedo in izberi pravo sliko",
+		icon: openmoji("1F442"),
 		color: "var(--sea-soft)",
 	},
 	{
@@ -25,20 +49,6 @@ const GAMES = [
 		description: "Poišči par: slika + angleška beseda",
 		icon: openmoji("1F0CF"),
 		color: "var(--sun-soft)",
-	},
-	{
-		id: "fill",
-		title: "Dopolni stavek",
-		description: "Izberi pravo besedo v stavku",
-		icon: openmoji("270F"),
-		color: "var(--leaf-soft)",
-	},
-	{
-		id: "listen",
-		title: "Poslušaj",
-		description: "Poslušaj besedo in izberi pravo sliko",
-		icon: openmoji("1F442"),
-		color: "var(--sea-soft)",
 	},
 ];
 
@@ -71,7 +81,7 @@ function speak(text: string) {
 }
 
 // Prva stran lekcije: besede, pravila in izbira igre
-function LessonPage({ lesson, number }: LessonPageProps) {
+function LessonPage({ lesson, number, progress }: LessonPageProps) {
 	// Besede poiščemo po id-ju, neznane id-je izpustimo
 	const words = lesson.content.wordIds
 		.map((id) => wordsById.get(id))
@@ -172,39 +182,63 @@ function LessonPage({ lesson, number }: LessonPageProps) {
 			</div>
 
 			<section className="lesson__games">
-				{GAMES.map((game) => (
-					<div key={game.id} className="game-card">
-						<span
-							className="game-card__icon"
-							style={{ background: game.color }}
-						>
-							<img
-								src={game.icon}
-								alt=""
-								width={40}
-								height={40}
-							/>
-						</span>
-						<h3 className="game-card__title">{game.title}</h3>
-						<p className="game-card__description">
-							{game.description}
-						</p>
-						<div className="game-card__meta">
+				{GAMES.map((game) => {
+					const result = progress?.games?.[game.id];
+					const stars =
+						game.id === "memory"
+							? null
+							: result
+								? getGameStars(result)
+								: 0;
+					return (
+						<div key={game.id} className="game-card">
 							<span
-								className="game-card__stars"
-								aria-label="0 od 3 zvezdic"
+								className="game-card__icon"
+								style={{ background: game.color }}
 							>
-								{[1, 2, 3].map((n) => (
-									<span key={n} aria-hidden="true">
-										★
-									</span>
-								))}
+								<img
+									src={game.icon}
+									alt=""
+									width={40}
+									height={40}
+								/>
 							</span>
-							{/* TODO: odpri igro, ko bo narejena */}
-							<button className="game-card__play">Igraj</button>
+							<h3 className="game-card__title">{game.title}</h3>
+							<p className="game-card__description">
+								{game.description}
+							</p>
+							<div className="game-card__meta">
+								<span
+									className="game-card__stars"
+									aria-label={
+										stars === null
+											? undefined
+											: `${stars} od 3 zvezdic`
+									}
+								>
+									{stars !== null &&
+										[1, 2, 3].map((n) => (
+											<span
+												key={n}
+												aria-hidden="true"
+												className={
+													n <= stars
+														? "game-card__star--earned"
+														: undefined
+												}
+											>
+												★
+											</span>
+										))}
+								</span>
+								{/* TODO: odpri igro, ko bo narejena */}
+								<button className="game-card__play">
+									Igraj
+								</button>
+							</div>
 						</div>
-					</div>
-				))}
+					);
+				})}
 			</section>
 		</main>
 	);

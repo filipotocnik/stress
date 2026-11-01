@@ -4,10 +4,12 @@ import type { User as AuthUser } from "firebase/auth";
 import { ensureUserProfile, updateUser } from "../../auth/auth";
 import { AVATARS } from "../../data/avatars";
 import type { UserProfile } from "../../models/user";
+import { useProgress } from "../../progress/useProgress";
 import "./EditProfile.css";
 
 function EditProfile({ user }: { user: AuthUser }) {
 	const navigate = useNavigate();
+	const { refresh } = useProgress();
 	const [profile, setProfile] = useState<UserProfile | null>(null);
 	const [loadError, setLoadError] = useState(false);
 	const [error, setError] = useState("");
@@ -51,6 +53,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 		setSaving(true);
 		try {
 			await updateUser(user, newProfile);
+			await refresh();
 			navigate("/profil");
 		} catch {
 			setError("Shranjevanje ni uspelo. Poskusi znova.");
