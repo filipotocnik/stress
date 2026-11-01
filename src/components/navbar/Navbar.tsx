@@ -10,17 +10,17 @@ const LINKS = [
 
 function Navbar() {
 	const navigate = useNavigate();
-	const inLesson = useMatch("/lekcija/*") !== null;
-	// Kam želi uporabnik, dokler ne potrdi odhoda iz lekcije
+	const inGame = useMatch("/lekcija/:lessonId/igra/*") !== null;
+	// Kam želi uporabnik, dokler ne potrdi odhoda iz igre
 	const [pendingPath, setPendingPath] = useState<string | null>(null);
 
 	function handleClick(event: MouseEvent, to: string) {
-		if (!inLesson) return;
+		if (!inGame) return;
 		event.preventDefault();
 		setPendingPath(to);
 	}
 
-	function leaveLesson() {
+	function leaveGame() {
 		if (pendingPath) navigate(pendingPath);
 		setPendingPath(null);
 	}
@@ -51,7 +51,7 @@ function Navbar() {
 						aria-modal="true"
 						aria-labelledby="leave-title"
 					>
-						<h2 id="leave-title">Res želiš zapustiti lekcijo?</h2>
+						<h2 id="leave-title">Res želiš zapustiti igro?</h2>
 						<div className="leave-dialog__actions">
 							<button
 								className="leave-dialog__stay"
@@ -62,7 +62,7 @@ function Navbar() {
 							</button>
 							<button
 								className="leave-dialog__leave"
-								onClick={leaveLesson}
+								onClick={leaveGame}
 							>
 								Zapusti
 							</button>
