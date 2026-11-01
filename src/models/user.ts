@@ -1,7 +1,13 @@
-// Zapis nastane šele, ko je lekcija končana
-export interface LessonProgress {
-	stars: 1 | 2 | 3;
-	completedAt: string;
+import type { GameResults, LessonStars } from "./game";
+
+export type LessonProgress =
+	| { stars: 0; completedAt?: never; games: GameResults }
+	| { stars: LessonStars; completedAt: string; games?: GameResults };
+
+export function isLessonCompleted(
+	progress: LessonProgress | undefined,
+): boolean {
+	return progress !== undefined && progress.stars > 0;
 }
 
 // Shranjeno v users/{uid}
@@ -26,5 +32,5 @@ export function getTotalStars(user: User): number {
 }
 
 export function getCompletedCount(user: User): number {
-	return Object.keys(user.lessonProgress).length;
+	return Object.values(user.lessonProgress).filter(isLessonCompleted).length;
 }

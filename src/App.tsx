@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { User as AuthUser } from "firebase/auth";
 import {
 	Navigate,
 	Outlet,
@@ -7,8 +8,9 @@ import {
 	useNavigate,
 	useParams,
 } from "react-router";
-import { logIn, register } from "./auth/auth";
+import { getAuthErrorMessage, logIn, logOut, register } from "./auth/auth";
 import { useAuth } from "./auth/useAuth";
+import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
@@ -18,11 +20,12 @@ import MyLessons from "./pages/my-lessons/MyLessons";
 import EditProfile from "./pages/profile/EditProfile";
 import Profile from "./pages/profile/Profile";
 import { lessons } from "./data";
+import { ProgressProvider } from "./progress/ProgressProvider";
+import { useProgress } from "./progress/useProgress";
 
 function App() {
 	const { user, loading, error } = useAuth();
 	const [submitting, setSubmitting] = useState(false);
-	const navigate = useNavigate();
 
 	async function handleAuthenticate(values: AuthFormValues) {
 		setSubmitting(true);
@@ -41,11 +44,6 @@ function App() {
 			setSubmitting(false);
 		}
 	}
-
-	// delete this, just for testing without auth bcs im lazy
-	/*if (import.meta.env.DEV) {
-		return <Roadmap lessons={lessons} onSelectLesson={() => { }} />;
-	}*/
 
 	if (loading || error || !user || submitting) {
 		return (
@@ -67,6 +65,16 @@ function App() {
 	}
 
 	return (
+		<ProgressProvider user={user}>
+			<AuthenticatedRoutes authUser={user} />
+		</ProgressProvider>
+	);
+}
+
+function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
+	const navigate = useNavigate();
+	const { user } = useProgress();
+	return (
 		<Routes>
 			<Route element={<AppLayout />}>
 				<Route
@@ -74,6 +82,7 @@ function App() {
 					element={
 						<Roadmap
 							lessons={lessons}
+							progress={user?.lessonProgress ?? {}}
 							onSelectLesson={(id) => navigate(`/lekcija/${id}`)}
 						/>
 					}
@@ -82,18 +91,22 @@ function App() {
 				<Route
 					path="/profil"
 					element={
-						<Profile
-							key={user.uid}
-							user={user}
-							onEdit={() => navigate("/profil/uredi")}
-						/>
+						user && (
+							<Profile
+								key={user.id}
+								user={user}
+								onEdit={() => navigate("/profil/uredi")}
+							/>
+						)
 					}
 				/>
 				<Route
 					path="/profil/uredi"
-					element={<EditProfile key={user.uid} user={user} />}
+					element={<EditProfile key={authUser.uid} user={authUser} />}
 				/>
-				<Route path="/lekcija/:lessonId" element={<LessonRoute />} />
+				<Route path="/lekcija/:lessonId" element={<LessonAccess />}>
+					<Route index element={<LessonRoute />} />
+				</Route>
 			</Route>
 			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
@@ -102,10 +115,56 @@ function App() {
 
 // Strani z navigacijo na vrhu
 function AppLayout() {
+	const { user, loading, error, refresh } = useProgress();
+	const [logoutError, setLogoutError] = useState("");
+
+	async function handleLogOut() {
+		try {
+			await logOut();
+		} catch (error) {
+			setLogoutError(getAuthErrorMessage(error));
+		}
+	}
+
 	return (
 		<>
 			<Navbar />
-			<Outlet />
+			{!user ? (
+				<main className="auth-layout">
+					<section className="auth-card">
+						{loading ? (
+							<p role="status">Nalaganje napredka…</p>
+						) : (
+							<>
+								<p className="auth-error" role="alert">
+									Podatkov ni bilo mogoče naložiti.
+								</p>
+								<button onClick={() => void refresh()}>
+									Poskusi znova
+								</button>
+							</>
+						)}
+						{logoutError && <p role="alert">{logoutError}</p>}
+						<button onClick={handleLogOut}>Odjavi se</button>
+					</section>
+				</main>
+			) : (
+				<>
+					{error && (
+						<section>
+							<p className="auth-error" role="alert">
+								Napredka ni bilo mogoče osvežiti. Prikazani so
+								zadnji naloženi podatki.
+							</p>
+							<button onClick={() => void refresh()}>
+								Poskusi znova
+							</button>
+						</section>
+					)}
+					{loading && <p role="status">Osveževanje napredka…</p>}
+					<Outlet />
+				</>
+			)}
 		</>
 	);
 }
@@ -113,6 +172,7 @@ function AppLayout() {
 // Lekcijo poiščemo po id-ju iz naslova, neznan id vrne na zemljevid
 function LessonRoute() {
 	const { lessonId } = useParams();
+	const { user } = useProgress();
 	const index = lessons.findIndex((lesson) => lesson.id === lessonId);
 
 	if (index === -1) {
@@ -120,7 +180,12 @@ function LessonRoute() {
 	}
 
 	return (
-		<LessonPage key={lessonId} lesson={lessons[index]} number={index + 1} />
+		<LessonPage
+			key={lessonId}
+			lesson={lessons[index]}
+			number={index + 1}
+			progress={user?.lessonProgress[lessons[index].id]}
+		/>
 	);
 }
 

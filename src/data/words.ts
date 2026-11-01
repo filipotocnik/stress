@@ -100,7 +100,7 @@ export const words: Word[] = [
 		en: "eight",
 		sl: "osem",
 		imageSrc: openmoji("0038-FE0F-20E3"),
-	}, 
+	},
 	{
 		id: "nine",
 		en: "nine",

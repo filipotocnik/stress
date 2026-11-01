@@ -1,21 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { levels } from "../../data";
 import type { Lesson } from "../../models/lesson";
+import type { LessonProgress } from "../../models/user";
+import { getLessonProgression } from "../../game/progression";
 import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
+import WeeklyWordCard from "../../components/weekly-word/WeeklyWordCard";
 
 interface RoadmapProps {
 	lessons: Lesson[]; // že razvrščene (data/lessons)
+	progress: Record<string, LessonProgress>;
 	onSelectLesson: (lessonId: string) => void;
 }
 
 // Vzorec cik-cak: levo, sredina, desno, sredina, levo ...
 const SIDES = ["left", "center", "right", "center"] as const;
-
-// Začasni napredek. Kasneje ga dobimo iz uporabniškega profila.
-const MOCK_PROGRESS: Record<string, { stars: number } | undefined> = {
-	colours: { stars: 3 },
-};
 
 // Črtkana pot: izmerimo, kje so otoki, in jih povežemo s krivuljami.
 // Pot narišemo znova, ko se spremeni velikost zemljevida (npr. širina okna).
@@ -64,21 +63,23 @@ function useRoutePath() {
 	return { mapRef, path };
 }
 
-function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
+function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 	const { mapRef, path } = useRoutePath();
+	const progression = getLessonProgression(lessons, progress);
 
 	// Koliko lekcij je že končanih (za vrstico napredka)
-	const doneCount = lessons.filter(
-		(lesson) => MOCK_PROGRESS[lesson.id] !== undefined,
+	const doneCount = progression.filter(
+		(entry) => entry.status === "done",
 	).length;
-
 	const percent =
-		lessons.length > 0 ? Math.round((doneCount / lessons.length) * 100) : 0;
+		progression.length > 0
+			? Math.round((doneCount / progression.length) * 100)
+			: 0;
 
 	// Trenutna lekcija (za kartico z gumbom "Začni lekcijo")
-	const currentLesson = lessons.find(
-		(lesson) => MOCK_PROGRESS[lesson.id] === undefined,
-	);
+	const currentLesson = progression.find(
+		(entry) => entry.status === "current",
+	)?.lesson;
 
 	return (
 		<div className="roadmap">
@@ -91,19 +92,13 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 					<path d={path} />
 				</svg>
 
-				{lessons.map((lesson, index) => {
-					const progress = MOCK_PROGRESS[lesson.id];
+				{progression.map(({ lesson, status }, index) => {
+					const lessonProgress = progress[lesson.id];
 					// Naslov nivoja pokažemo pred prvo lekcijo vsakega nivoja
 					const isFirstInLevel =
 						index === 0 ||
-						lessons[index - 1].level !== lesson.level;
+						progression[index - 1].lesson.level !== lesson.level;
 					const level = levels.find((l) => l.id === lesson.level);
-					const status =
-						progress !== undefined
-							? "done"
-							: lesson.id === currentLesson?.id
-								? "current"
-								: "locked";
 
 					return (
 						<div key={lesson.id} className="roadmap__row">
@@ -116,7 +111,7 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 							<RoadmapStop
 								lesson={lesson}
 								status={status}
-								stars={progress?.stars ?? 0}
+								stars={lessonProgress?.stars ?? 0}
 								side={SIDES[index % SIDES.length]}
 								onSelect={onSelectLesson}
 							/>
@@ -145,15 +140,20 @@ function Roadmap({ lessons, onSelectLesson }: RoadmapProps) {
 							className="start-button"
 							onClick={() => onSelectLesson(currentLesson.id)}
 						>
-							Začni lekcijo
+							{progress[currentLesson.id]
+								? "Nadaljuj lekcijo"
+								: "Začni lekcijo"}
 						</button>
 					</div>
 				)}
 
+				{/* Beseda tedna */}
+				<WeeklyWordCard />
+
 				<div className="card">
-					<h2 className="card__title">Tvoj napredek</h2>
+					<h2 className="card__label">Tvoj napredek</h2>
 					<p>
-						{doneCount} od {lessons.length} lekcij
+						{doneCount} od {progression.length} lekcij
 					</p>
 					<div className="progress" aria-hidden="true">
 						<div

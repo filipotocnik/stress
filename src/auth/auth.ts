@@ -7,20 +7,15 @@ import {
 	type User,
 } from "firebase/auth";
 import {
-	collection,
 	doc,
-	getDocs,
 	runTransaction,
 	serverTimestamp,
 	updateDoc,
 } from "firebase/firestore";
 import { AVATARS } from "../data/avatars";
 import { auth, db } from "../firebase";
-import type {
-	LessonProgress,
-	User as AppUser,
-	UserProfile,
-} from "../models/user";
+import type { User as AppUser, UserProfile } from "../models/user";
+import { loadLessonProgress } from "../services/progress";
 
 export async function ensureUserProfile(
 	user: User,
@@ -57,15 +52,7 @@ export async function ensureUserProfile(
 
 export async function loadUser(user: User): Promise<AppUser> {
 	const profile = await ensureUserProfile(user);
-	const snapshot = await getDocs(
-		collection(db, "users", user.uid, "progress"),
-	);
-
-	// id dokumenta je id lekcije
-	const lessonProgress: Record<string, LessonProgress> = {};
-	for (const progress of snapshot.docs) {
-		lessonProgress[progress.id] = progress.data() as LessonProgress;
-	}
+	const lessonProgress = await loadLessonProgress(db, user.uid);
 
 	return {
 		...profile,
