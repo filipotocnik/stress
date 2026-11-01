@@ -8,7 +8,7 @@ import "./Roadmap.css";
 import WeeklyWordCard from "../../components/weekly-word/WeeklyWordCard";
 
 interface RoadmapProps {
-	lessons: Lesson[];
+	lessons: Lesson[]; // že razvrščene (data/lessons)
 	progress: Record<string, LessonProgress>;
 	onSelectLesson: (lessonId: string) => void;
 }
@@ -66,6 +66,8 @@ function useRoutePath() {
 function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 	const { mapRef, path } = useRoutePath();
 	const progression = getLessonProgression(lessons, progress);
+
+	// Koliko lekcij je že končanih (za vrstico napredka)
 	const doneCount = progression.filter(
 		(entry) => entry.status === "done",
 	).length;
@@ -73,6 +75,8 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 		progression.length > 0
 			? Math.round((doneCount / progression.length) * 100)
 			: 0;
+
+	// Trenutna lekcija (za kartico z gumbom "Začni lekcijo")
 	const currentLesson = progression.find(
 		(entry) => entry.status === "current",
 	)?.lesson;
@@ -90,6 +94,7 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 
 				{progression.map(({ lesson, status }, index) => {
 					const lessonProgress = progress[lesson.id];
+					// Naslov nivoja pokažemo pred prvo lekcijo vsakega nivoja
 					const isFirstInLevel =
 						index === 0 ||
 						progression[index - 1].lesson.level !== lesson.level;
@@ -123,6 +128,7 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 					<p className="hello__bubble">Hi! Let's learn!</p>
 				</div>
 
+				{/* Kartico pokažemo samo, če trenutna lekcija obstaja */}
 				{currentLesson && (
 					<div className="card">
 						<h2 className="card__label">Ta lekcija</h2>
@@ -141,6 +147,7 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 					</div>
 				)}
 
+				{/* Beseda tedna */}
 				<WeeklyWordCard />
 
 				<div className="card">

@@ -113,6 +113,7 @@ function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 	);
 }
 
+// Strani z navigacijo na vrhu
 function AppLayout() {
 	const { user, loading, error, refresh } = useProgress();
 	const [logoutError, setLogoutError] = useState("");
@@ -168,6 +169,7 @@ function AppLayout() {
 	);
 }
 
+// Lekcijo poiščemo po id-ju iz naslova, neznan id vrne na zemljevid
 function LessonRoute() {
 	const { lessonId } = useParams();
 	const { user } = useProgress();

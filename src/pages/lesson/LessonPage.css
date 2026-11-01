@@ -199,13 +199,8 @@
 	cursor: pointer;
 }
 
-.game-card__play:hover:not(:disabled) {
+.game-card__play:hover {
 	border-color: var(--sea);
-}
-
-.game-card__play:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
 }
 
 @media (max-width: 820px) {

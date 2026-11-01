@@ -30,13 +30,6 @@ const GAMES: {
 		color: "var(--sea-soft)",
 	},
 	{
-		id: "memory",
-		title: "Spomin",
-		description: "Poišči par: slika + angleška beseda",
-		icon: openmoji("1F0CF"),
-		color: "var(--sun-soft)",
-	},
-	{
 		id: "grammar",
 		title: "Dopolni stavek",
 		description: "Izberi pravo besedo v stavku",
@@ -49,6 +42,13 @@ const GAMES: {
 		description: "Poslušaj besedo in izberi pravo sliko",
 		icon: openmoji("1F442"),
 		color: "var(--sea-soft)",
+	},
+	{
+		id: "memory",
+		title: "Spomin",
+		description: "Poišči par: slika + angleška beseda",
+		icon: openmoji("1F0CF"),
+		color: "var(--sun-soft)",
 	},
 ];
 
@@ -88,7 +88,7 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 		.filter((word): word is Word => word !== undefined);
 
 	// Čim manj vrst, kartice pa enakomerno razdelimo (8 → 4 + 4, 10 → 5 + 5)
-	const rows = Math.max(1, Math.ceil(words.length / MAX_COLUMNS));
+	const rows = Math.ceil(words.length / MAX_COLUMNS);
 	const columns = Math.max(1, Math.ceil(words.length / rows));
 
 	return (
@@ -178,16 +178,20 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 
 			<div className="lesson__section-title">
 				<h2>Vaje</h2>
-				<span>Do 3 zvezdice za vajo · Spomin brez zvezdic</span>
+				<span>Za vsako vajo dobiš do 3 zvezdice</span>
 			</div>
 
-			<p>Igre bodo kmalu na voljo.</p>
 			<section className="lesson__games">
 				{GAMES.map((game) => {
 					const result = progress?.games?.[game.id];
-					const stars = result ? getGameStars(result) : null;
+					const stars =
+						game.id === "memory"
+							? null
+							: result
+								? getGameStars(result)
+								: 0;
 					return (
-						<article key={game.id} className="game-card">
+						<div key={game.id} className="game-card">
 							<span
 								className="game-card__icon"
 								style={{ background: game.color }}
@@ -204,27 +208,21 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 								{game.description}
 							</p>
 							<div className="game-card__meta">
-								{game.id === "memory" ? (
-									<span>
-										{result
-											? "Končano"
-											: "Še ni opravljeno"}
-									</span>
-								) : (
-									<span
-										className="game-card__stars"
-										aria-label={
-											stars === null
-												? "Še ni opravljeno"
-												: `${stars} od 3 zvezdic`
-										}
-									>
-										{[1, 2, 3].map((n) => (
+								<span
+									className="game-card__stars"
+									aria-label={
+										stars === null
+											? undefined
+											: `${stars} od 3 zvezdic`
+									}
+								>
+									{stars !== null &&
+										[1, 2, 3].map((n) => (
 											<span
 												key={n}
 												aria-hidden="true"
 												className={
-													n <= (stars ?? 0)
+													n <= stars
 														? "game-card__star--earned"
 														: undefined
 												}
@@ -232,14 +230,13 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 												★
 											</span>
 										))}
-									</span>
-								)}
-								{/* TODO: connect the playable game routes when available. */}
-								<button className="game-card__play" disabled>
+								</span>
+								{/* TODO: odpri igro, ko bo narejena */}
+								<button className="game-card__play">
 									Igraj
 								</button>
 							</div>
-						</article>
+						</div>
 					);
 				})}
 			</section>

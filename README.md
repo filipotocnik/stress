@@ -27,18 +27,4 @@ To run just the app without starting emulators, use `npm run dev:app`.
 ## Checks
 
 - `npm run check` — formatting, linting, and build.
-- `npm run test:game-stars` — per-game star regression tests (Node.js 24).
 - `npm run format` — format files.
-
-## Game stars
-
-`getGameStars(result)` in `src/game/scoring.ts` derives 1–3 stars from a
-finished matching, grammar or listening result: at least 90% first-try accuracy
-gets 3, at least 70% gets 2, otherwise 1. Pass the current attempt for result
-feedback or the saved best result for lesson cards. For unfinished games, show
-an unplayed state rather than calling this helper without a result.
-
-Memory returns `null`: its UI should omit stars entirely. Stars are not stored
-on game results, so existing saved results need no migration. Lesson stars still
-use the average best accuracy across the three scored games, require all four
-games to finish, and remain the only source of XP.
