@@ -100,6 +100,18 @@ export const words: Word[] = [
 		en: "eight",
 		sl: "osem",
 		imageSrc: openmoji("0038-FE0F-20E3"),
+	}, 
+	{
+		id: "nine",
+		en: "nine",
+		sl: "devet",
+		imageSrc: openmoji("0039-FE0F-20E3"),
+	},
+	{
+		id: "ten",
+		en: "ten",
+		sl: "deset",
+		imageSrc: openmoji("1F51F"),
 	},
 
 	// School things
