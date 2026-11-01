@@ -23,13 +23,13 @@
 .auth-brand {
 	color: var(--sea);
 	font-size: 20px;
-	font-weight: 600;
+	font-weight: 700;
 	margin: 0 0 24px;
 }
 
 .auth-card h1 {
 	font-size: 30px;
-	font-weight: 600;
+	font-weight: 700;
 	line-height: 1.2;
 	margin: 0 0 8px;
 }
@@ -53,7 +53,7 @@
 .auth-field {
 	display: grid;
 	gap: 8px;
-	font-weight: 500;
+	font-weight: 400;
 }
 
 .auth-field input {
@@ -125,7 +125,7 @@
 	color: var(--paper);
 	font-family: inherit;
 	font-size: 22px;
-	font-weight: 600;
+	font-weight: 700;
 	cursor: pointer;
 	box-shadow: 0 6px 0 #1f6b2f;
 	transition:
@@ -188,7 +188,7 @@
 	background: none;
 	color: var(--sea);
 	font: inherit;
-	font-weight: 600;
+	font-weight: 700;
 	text-decoration: underline;
 	text-underline-offset: 3px;
 	cursor: pointer;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { User as AuthUser } from "firebase/auth";
 import {
 	Navigate,
 	Outlet,
@@ -14,9 +15,11 @@ import Navbar from "./components/navbar/Navbar";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
 import Roadmap from "./pages/home/Roadmap";
+import LessonPage from "./pages/lesson/LessonPage";
 import MyLessons from "./pages/my-lessons/MyLessons";
+import EditProfile from "./pages/profile/EditProfile";
 import Profile from "./pages/profile/Profile";
-import { lessons, lessonsById } from "./data";
+import { lessons } from "./data";
 import { ProgressProvider } from "./progress/ProgressProvider";
 import { useProgress } from "./progress/useProgress";
 
@@ -63,12 +66,12 @@ function App() {
 
 	return (
 		<ProgressProvider user={user}>
-			<AuthenticatedRoutes />
+			<AuthenticatedRoutes authUser={user} />
 		</ProgressProvider>
 	);
 }
 
-function AuthenticatedRoutes() {
+function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 	const navigate = useNavigate();
 	const { user } = useProgress();
 	return (
@@ -87,10 +90,22 @@ function AuthenticatedRoutes() {
 				<Route path="/lekcije" element={<MyLessons />} />
 				<Route
 					path="/profil"
-					element={user && <Profile key={user.id} user={user} />}
+					element={
+						user && (
+							<Profile
+								key={user.id}
+								user={user}
+								onEdit={() => navigate("/profil/uredi")}
+							/>
+						)
+					}
+				/>
+				<Route
+					path="/profil/uredi"
+					element={<EditProfile key={authUser.uid} user={authUser} />}
 				/>
 				<Route path="/lekcija/:lessonId" element={<LessonAccess />}>
-					<Route index element={<LessonPreview />} />
+					<Route index element={<LessonRoute />} />
 				</Route>
 			</Route>
 			<Route path="*" element={<Navigate to="/" replace />} />
@@ -153,14 +168,22 @@ function AppLayout() {
 	);
 }
 
-function LessonPreview() {
+function LessonRoute() {
 	const { lessonId } = useParams();
-	const lesson = lessonsById.get(lessonId ?? "");
+	const { user } = useProgress();
+	const index = lessons.findIndex((lesson) => lesson.id === lessonId);
+
+	if (index === -1) {
+		return <Navigate to="/" replace />;
+	}
 
 	return (
-		<main style={{ padding: 24 }}>
-			<h1>{lesson?.title}</h1>
-		</main>
+		<LessonPage
+			key={lessonId}
+			lesson={lessons[index]}
+			number={index + 1}
+			progress={user?.lessonProgress[lessons[index].id]}
+		/>
 	);
 }
 

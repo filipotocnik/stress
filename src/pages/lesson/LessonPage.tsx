@@ -1,0 +1,250 @@
+import type { CSSProperties } from "react";
+import { wordsById } from "../../data";
+import { openmoji } from "../../data/images";
+import { getGameStars } from "../../game/scoring";
+import type { GameType } from "../../models/game";
+import type { Lesson } from "../../models/lesson";
+import type { LessonProgress } from "../../models/user";
+import type { Word } from "../../models/word";
+import "./LessonPage.css";
+
+interface LessonPageProps {
+	lesson: Lesson;
+	number: number; // zaporedna številka lekcije na poti
+	progress?: LessonProgress;
+}
+
+// Štiri igre, ki so enake za vse lekcije
+const GAMES: {
+	id: GameType;
+	title: string;
+	description: string;
+	icon: string;
+	color: string;
+}[] = [
+	{
+		id: "matching",
+		title: "Poveži besede",
+		description: "Slovenska beseda ↔ angleška beseda",
+		icon: openmoji("1F517"),
+		color: "var(--sea-soft)",
+	},
+	{
+		id: "memory",
+		title: "Spomin",
+		description: "Poišči par: slika + angleška beseda",
+		icon: openmoji("1F0CF"),
+		color: "var(--sun-soft)",
+	},
+	{
+		id: "grammar",
+		title: "Dopolni stavek",
+		description: "Izberi pravo besedo v stavku",
+		icon: openmoji("270F"),
+		color: "var(--leaf-soft)",
+	},
+	{
+		id: "listening",
+		title: "Poslušaj",
+		description: "Poslušaj besedo in izberi pravo sliko",
+		icon: openmoji("1F442"),
+		color: "var(--sea-soft)",
+	},
+];
+
+// Največ kartic besed v eni vrsti
+const MAX_COLUMNS = 5;
+
+// Poiščemo britanski glas. Brskalnik sicer vzame privzetega (lahko slovenskega).
+// Najprej poskusimo kakovostnejše glasove (Google, Microsoft "Natural"/"Online").
+function findBritishVoice() {
+	const voices = speechSynthesis.getVoices();
+	const british = voices.filter(
+		(voice) => voice.lang.replace("_", "-") === "en-GB",
+	);
+
+	return (
+		british.find((voice) => /natural|online|google/i.test(voice.name)) ??
+		british[0] ??
+		voices.find((voice) => voice.lang.startsWith("en"))
+	);
+}
+
+// Brskalnik prebere besedo na glas
+function speak(text: string) {
+	const utterance = new SpeechSynthesisUtterance(text);
+	utterance.lang = "en-GB";
+	utterance.voice = findBritishVoice() ?? null;
+	utterance.rate = 0.9; // malo počasneje, da otroci lažje slišijo
+	speechSynthesis.cancel();
+	speechSynthesis.speak(utterance);
+}
+
+// Prva stran lekcije: besede, pravila in izbira igre
+function LessonPage({ lesson, number, progress }: LessonPageProps) {
+	// Besede poiščemo po id-ju, neznane id-je izpustimo
+	const words = lesson.content.wordIds
+		.map((id) => wordsById.get(id))
+		.filter((word): word is Word => word !== undefined);
+
+	// Čim manj vrst, kartice pa enakomerno razdelimo (8 → 4 + 4, 10 → 5 + 5)
+	const rows = Math.max(1, Math.ceil(words.length / MAX_COLUMNS));
+	const columns = Math.max(1, Math.ceil(words.length / rows));
+
+	return (
+		<main className="lesson">
+			<header className="lesson__head">
+				<img src={lesson.icon} alt="" width={64} height={64} />
+				<div>
+					<p className="lesson__eyebrow">
+						Nivo {lesson.level} · Lekcija {number}
+					</p>
+					<h1 className="lesson__title">Lekcija: {lesson.title}</h1>
+					<p className="lesson__subtitle">
+						{lesson.titleSl} · preglej besede, nato reši vaje
+					</p>
+				</div>
+			</header>
+
+			<section
+				className="lesson__words"
+				aria-label="Besede"
+				style={{ "--columns": columns } as CSSProperties}
+			>
+				{words.map((word) => (
+					<div key={word.id} className="word-card">
+						{word.imageSrc && (
+							<img
+								src={word.imageSrc}
+								alt=""
+								width={64}
+								height={64}
+							/>
+						)}
+						<span className="word-card__en">{word.en}</span>
+						<span className="word-card__sl">{word.sl}</span>
+						<button
+							className="word-card__say"
+							onClick={() => speak(word.en)}
+							aria-label={`Poslušaj: ${word.en}`}
+						>
+							<img
+								src={openmoji("1F50A")}
+								alt=""
+								width={28}
+								height={28}
+							/>
+						</button>
+					</div>
+				))}
+			</section>
+
+			{/* Nekatere lekcije nimajo pravil */}
+			{lesson.content.grammarHints.map((hint) => (
+				<section key={hint.id} className="lesson__rule">
+					<img
+						src={openmoji("1F4A1")}
+						alt=""
+						width={48}
+						height={48}
+					/>
+					<div>
+						<h2 className="lesson__rule-title">
+							Pravilo lekcije: {hint.titleSl}
+						</h2>
+						<p className="lesson__rule-text">
+							{hint.explanationSl}
+						</p>
+						{hint.rows && (
+							<table className="lesson__rule-table">
+								<tbody>
+									{hint.rows.map((row) => (
+										<tr key={row.pattern}>
+											<td>{row.label}</td>
+											<td>
+												<b>{row.pattern}</b>
+											</td>
+											<td className="lesson__rule-example">
+												{row.example}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						)}
+					</div>
+				</section>
+			))}
+
+			<div className="lesson__section-title">
+				<h2>Vaje</h2>
+				<span>Do 3 zvezdice za vajo · Spomin brez zvezdic</span>
+			</div>
+
+			<p>Igre bodo kmalu na voljo.</p>
+			<section className="lesson__games">
+				{GAMES.map((game) => {
+					const result = progress?.games?.[game.id];
+					const stars = result ? getGameStars(result) : null;
+					return (
+						<article key={game.id} className="game-card">
+							<span
+								className="game-card__icon"
+								style={{ background: game.color }}
+							>
+								<img
+									src={game.icon}
+									alt=""
+									width={40}
+									height={40}
+								/>
+							</span>
+							<h3 className="game-card__title">{game.title}</h3>
+							<p className="game-card__description">
+								{game.description}
+							</p>
+							<div className="game-card__meta">
+								{game.id === "memory" ? (
+									<span>
+										{result
+											? "Končano"
+											: "Še ni opravljeno"}
+									</span>
+								) : (
+									<span
+										className="game-card__stars"
+										aria-label={
+											stars === null
+												? "Še ni opravljeno"
+												: `${stars} od 3 zvezdic`
+										}
+									>
+										{[1, 2, 3].map((n) => (
+											<span
+												key={n}
+												aria-hidden="true"
+												className={
+													n <= (stars ?? 0)
+														? "game-card__star--earned"
+														: undefined
+												}
+											>
+												★
+											</span>
+										))}
+									</span>
+								)}
+								{/* TODO: connect the playable game routes when available. */}
+								<button className="game-card__play" disabled>
+									Igraj
+								</button>
+							</div>
+						</article>
+					);
+				})}
+			</section>
+		</main>
+	);
+}
+
+export default LessonPage;
