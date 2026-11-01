@@ -1,0 +1,105 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function isCount(value) {
+      return value is int && value >= 0 && value <= 9007199254740991;
+    }
+
+    function validGame(game, kind) {
+      return game is map
+        && game.keys().hasOnly(['gameType', 'totalItems', 'rawIncorrectSubmissions', 'firstAttemptErrorItems', 'memoryMismatches', 'firstTryCorrect'])
+        && game.gameType == kind
+        && isCount(game.totalItems) && game.totalItems > 0
+        && isCount(game.rawIncorrectSubmissions)
+        && isCount(game.firstAttemptErrorItems)
+        && isCount(game.memoryMismatches)
+        && (kind == 'memory'
+          ? game.firstTryCorrect == null && game.rawIncorrectSubmissions == 0 && game.firstAttemptErrorItems == 0
+          : isCount(game.firstTryCorrect)
+            && game.firstTryCorrect <= game.totalItems
+            && game.firstAttemptErrorItems == game.totalItems - game.firstTryCorrect
+            && game.rawIncorrectSubmissions >= game.firstAttemptErrorItems
+            && (game.firstAttemptErrorItems > 0 || game.rawIncorrectSubmissions == 0)
+            && game.memoryMismatches == 0);
+    }
+
+    function validGames(games, oldGames) {
+      return games is map && games.size() > 0
+        && games.keys().hasOnly(['memory', 'matching', 'grammar', 'listening'])
+        && (!('memory' in games) || games.memory == oldGames.get('memory', null) || validGame(games.memory, 'memory'))
+        && (!('matching' in games) || games.matching == oldGames.get('matching', null) || validGame(games.matching, 'matching'))
+        && (!('grammar' in games) || games.grammar == oldGames.get('grammar', null) || validGame(games.grammar, 'grammar'))
+        && (!('listening' in games) || games.listening == oldGames.get('listening', null) || validGame(games.listening, 'listening'));
+    }
+
+    function earnedStars(games) {
+      let ready = games.keys().hasAll(['memory', 'matching', 'grammar', 'listening']);
+      let accuracy = ready
+        ? (1.0 * games.matching.firstTryCorrect / games.matching.totalItems
+          + 1.0 * games.grammar.firstTryCorrect / games.grammar.totalItems
+          + 1.0 * games.listening.firstTryCorrect / games.listening.totalItems) / 3
+        : 0.0;
+      let roundingTolerance = 0.0000000000000002;
+      return !ready ? 0
+        : accuracy >= 0.9 - roundingTolerance ? 3
+        : accuracy >= 0.7 - roundingTolerance ? 2 : 1;
+    }
+
+    function validProgress(data, oldStars, oldGames) {
+      let earned = earnedStars(data.games);
+      return data.keys().hasOnly(['stars', 'games', 'completedAt'])
+        && data.keys().hasAll(['stars', 'games'])
+        && validGames(data.games, oldGames)
+        && data.stars is int && data.stars >= 0 && data.stars <= 3
+        && data.stars == (earned > oldStars ? earned : oldStars)
+        && (data.stars == 0
+          ? !('completedAt' in data)
+          : data.keys().hasAll(['completedAt'])
+            && (data.completedAt is timestamp || data.completedAt is string));
+    }
+
+    function keepsGame(before, after, kind) {
+      let previous = before.get(kind, null);
+      let next = after.get(kind, null);
+      return previous == null || previous == next
+        || (next != null && kind != 'memory'
+          && 1.0 * next.firstTryCorrect / next.totalItems
+            > 1.0 * previous.firstTryCorrect / previous.totalItems);
+    }
+
+    function keepsGames(before, after) {
+      return keepsGame(before, after, 'memory')
+        && keepsGame(before, after, 'matching')
+        && keepsGame(before, after, 'grammar')
+        && keepsGame(before, after, 'listening');
+    }
+
+    function validUpdate() {
+      let before = resource.data;
+      let after = request.resource.data;
+      let oldGames = before.get('games', {});
+      return validProgress(after, before.stars, oldGames)
+        && keepsGames(oldGames, after.games)
+        && (before.stars > 0
+          ? after.completedAt == before.completedAt
+          : after.stars == 0 || after.completedAt == request.time);
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      match /progress/{lessonId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && validProgress(request.resource.data, 0, {})
+          && (request.resource.data.stars == 0 || request.resource.data.completedAt == request.time);
+        allow update: if isOwner(userId) && validUpdate();
+        allow delete: if false;
+      }
+    }
+  }
+}

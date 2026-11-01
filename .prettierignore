@@ -1,5 +1,7 @@
 node_modules/
 dist/
+.firebase/
+*-debug.log
 package-lock.json
 flake.lock
 flake.nix
