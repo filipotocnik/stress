@@ -13,7 +13,7 @@ import { mealTimesLesson } from "./meal-times";
 import { wildAnimalsLesson } from "./wild-animals";
 import { monthsAndFestivalsLesson } from "./months-and-festivals";
 
-export const lessons: Lesson[] = [
+const allLessons: Lesson[] = [
 	coloursLesson,
 	numbersLesson,
 	schoolThingsLesson,
@@ -27,6 +27,12 @@ export const lessons: Lesson[] = [
 	wildAnimalsLesson,
 	monthsAndFestivalsLesson,
 ];
+
+// Vrstni red določata level in order, ne vrstni red v zgornjem seznamu.
+// Vse strani (zemljevid, številka lekcije …) uporabljajo ta razvrščeni seznam.
+export const lessons: Lesson[] = [...allLessons].sort(
+	(a, b) => a.level - b.level || a.order - b.order,
+);
 
 export const lessonsById = new Map<string, Lesson>(
 	lessons.map((lesson) => [lesson.id, lesson]),

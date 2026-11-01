@@ -13,10 +13,11 @@ import Navbar from "./components/navbar/Navbar";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
 import Roadmap from "./pages/home/Roadmap";
+import LessonPage from "./pages/lesson/LessonPage";
 import MyLessons from "./pages/my-lessons/MyLessons";
 import EditProfile from "./pages/profile/EditProfile";
 import Profile from "./pages/profile/Profile";
-import { lessons, lessonsById } from "./data";
+import { lessons } from "./data";
 
 function App() {
 	const { user, loading, error } = useAuth();
@@ -92,7 +93,7 @@ function App() {
 					path="/profil/uredi"
 					element={<EditProfile key={user.uid} user={user} />}
 				/>
-				<Route path="/lekcija/:lessonId" element={<LessonPreview />} />
+				<Route path="/lekcija/:lessonId" element={<LessonRoute />} />
 			</Route>
 			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
@@ -109,15 +110,17 @@ function AppLayout() {
 	);
 }
 
-// Zaenkrat pokažemo samo naslov lekcije
-function LessonPreview() {
+// Lekcijo poiščemo po id-ju iz naslova, neznan id vrne na zemljevid
+function LessonRoute() {
 	const { lessonId } = useParams();
-	const lesson = lessonsById.get(lessonId ?? "");
+	const index = lessons.findIndex((lesson) => lesson.id === lessonId);
+
+	if (index === -1) {
+		return <Navigate to="/" replace />;
+	}
 
 	return (
-		<main style={{ padding: 24 }}>
-			<h1>{lesson?.title}</h1>
-		</main>
+		<LessonPage key={lessonId} lesson={lessons[index]} number={index + 1} />
 	);
 }
 

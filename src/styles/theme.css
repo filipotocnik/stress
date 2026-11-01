@@ -1,5 +1,8 @@
+/* Pisava Atkinson Hyperlegible */
 @import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap");
 
+/* Barve shranjene kot spremenljivke.
+   Uporabljajo jih vse strani. */
 :root {
 	--bg: #e6f2f7;
 	--paper: #ffffff;
