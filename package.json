@@ -9,6 +9,7 @@
 		"emulators": "firebase emulators:start --only auth,firestore --project demo-stress --import=.firebase/emulator-data --export-on-exit=.firebase/emulator-data",
 		"emulators:seed": "node scripts/seed-emulators.mjs",
 		"build": "tsc -b && vite build",
+		"test:game-stars": "node --test scripts/test-game-stars.mjs",
 		"format": "prettier --write .",
 		"check": "prettier --check . && eslint . --max-warnings 0 && npm run build"
 	},

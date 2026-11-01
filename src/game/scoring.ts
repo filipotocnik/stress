@@ -24,6 +24,13 @@ export function getStarsForAccuracy(accuracy: number): LessonStars {
 	return 1;
 }
 
+// Derive display stars from a finished attempt or saved best result.
+// Memory has no accuracy grade and must not display stars.
+export function getGameStars(result: GameResult): LessonStars | null {
+	const accuracy = getGameAccuracy(result);
+	return accuracy === null ? null : getStarsForAccuracy(accuracy);
+}
+
 export function getBestGameResult(
 	previous: GameResult | undefined,
 	attempt: GameResult,
