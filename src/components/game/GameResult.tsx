@@ -1,60 +1,64 @@
 import "./Game.css";
-
-type GameStars = 0 | 1 | 2 | 3;
+import type { LessonStars } from "../../models/game";
 
 interface GameResultProps {
 	title: string;
-	stars: GameStars; // 0 = igra izgubljena
-	mistakes: number;
+	stars: LessonStars | null; // null = igra brez ocene (Spomin)
+	firstTryCorrect: number | null;
+	total: number;
 	onReplay: () => void;
 	onBack: () => void;
 }
 
-const MESSAGES: Record<GameStars, string> = {
-	0: "Ostal si brez srčkov. Poskusi znova!",
+const MESSAGES: Record<LessonStars, string> = {
 	1: "Dobro! Z vajo bo še bolje.",
 	2: "Zelo dobro!",
-	3: "Odlično! Brez napake!",
+	3: "Odlično!",
 };
 
 // Zaslon po koncu igre
 function GameResult({
 	title,
 	stars,
-	mistakes,
+	firstTryCorrect,
+	total,
 	onReplay,
 	onBack,
 }: GameResultProps) {
-	const lost = stars === 0;
-
 	return (
 		<section className="game-result" aria-live="polite">
 			<p className="game-result__eyebrow">{title}</p>
-			<h1 className="game-result__title">
-				{lost ? "Konec igre" : "Igra končana!"}
-			</h1>
+			<h1 className="game-result__title">Igra končana!</h1>
 
-			<span
-				className="game-result__stars"
-				aria-label={`${stars} od 3 zvezdic`}
-			>
-				{[1, 2, 3].map((n) => (
-					<span
-						key={n}
-						className={
-							n <= stars
-								? "game-result__star"
-								: "game-result__star game-result__star--off"
-						}
-						aria-hidden="true"
-					>
-						★
-					</span>
-				))}
-			</span>
+			{stars !== null && (
+				<span
+					className="game-result__stars"
+					aria-label={`${stars} od 3 zvezdic`}
+				>
+					{[1, 2, 3].map((n) => (
+						<span
+							key={n}
+							className={
+								n <= stars
+									? "game-result__star"
+									: "game-result__star game-result__star--off"
+							}
+							aria-hidden="true"
+						>
+							★
+						</span>
+					))}
+				</span>
+			)}
 
-			<p className="game-result__message">{MESSAGES[stars]}</p>
-			<p className="game-result__mistakes">Napake: {mistakes}</p>
+			<p className="game-result__message">
+				{stars === null ? "Našel si vse pare!" : MESSAGES[stars]}
+			</p>
+			{firstTryCorrect !== null && (
+				<p className="game-result__score">
+					Pravilni odgovori: {firstTryCorrect} / {total}
+				</p>
+			)}
 
 			<div className="game-result__actions">
 				<button className="game-result__replay" onClick={onReplay}>
