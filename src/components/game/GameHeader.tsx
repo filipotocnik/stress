@@ -6,8 +6,7 @@ interface GameHeaderProps {
 	total: number;
 }
 
-// Vrstica nad igro: naslov in napredek.
-// Samo prikaz
+// Vrstica nad igro: naslov in napredek
 function GameHeader({ title, done, total }: GameHeaderProps) {
 	const percent = total > 0 ? Math.round((done / total) * 100) : 0;
 
