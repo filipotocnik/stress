@@ -1,28 +1,13 @@
-import {
-	REQUIRED_GAMES,
-	type GameResults,
-	type GameType,
-} from "../models/game";
+import { REQUIRED_GAMES, type GameResults } from "../models/game";
 import type { Lesson } from "../models/lesson";
 import { isLessonCompleted, type LessonProgress } from "../models/user";
 import { getGameAccuracy, getStarsForAccuracy, getTotalXp } from "./scoring";
 
-export function getLessonGrade(
-	games: GameResults,
-	previous?: LessonProgress,
-	requiredGames: readonly GameType[] = REQUIRED_GAMES,
-) {
-	if (
-		requiredGames.length === 0 ||
-		new Set(requiredGames).size !== requiredGames.length ||
-		!requiredGames.some((game) => game !== "memory")
-	) {
-		throw new Error("Require unique games and at least one scored game.");
-	}
-	const allRequiredFinished = requiredGames.every(
+export function getLessonGrade(games: GameResults, previous?: LessonProgress) {
+	const allRequiredFinished = REQUIRED_GAMES.every(
 		(game) => games[game] !== undefined,
 	);
-	const accuracies = requiredGames.flatMap((game) => {
+	const accuracies = REQUIRED_GAMES.flatMap((game) => {
 		const result = games[game];
 		if (!result) return [];
 		if (result.gameType !== game)

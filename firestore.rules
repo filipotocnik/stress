@@ -37,10 +37,11 @@ service cloud.firestore {
     }
 
     function earnedStars(games) {
-      let ready = games.keys().hasAll(['memory', 'matching', 'grammar']);
+      let ready = games.keys().hasAll(['memory', 'matching', 'grammar', 'listening']);
       let accuracy = ready
         ? (1.0 * games.matching.firstTryCorrect / games.matching.totalItems
-          + 1.0 * games.grammar.firstTryCorrect / games.grammar.totalItems) / 2
+          + 1.0 * games.grammar.firstTryCorrect / games.grammar.totalItems
+          + 1.0 * games.listening.firstTryCorrect / games.listening.totalItems) / 3
         : 0.0;
       let roundingTolerance = 0.0000000000000002;
       return !ready ? 0

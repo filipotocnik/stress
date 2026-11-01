@@ -6,6 +6,7 @@ export const REQUIRED_GAMES: readonly GameType[] = [
 	"memory",
 	"matching",
 	"grammar",
+	"listening",
 ];
 
 interface FinishedGame {
