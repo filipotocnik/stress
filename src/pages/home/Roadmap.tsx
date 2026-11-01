@@ -1,6 +1,6 @@
 import type { Lesson } from "../../models/lesson";
-import { isLessonCompleted, type LessonProgress } from "../../models/user";
-import { getLessonAvailability } from "../../game/progression";
+import type { LessonProgress } from "../../models/user";
+import { getLessonProgression } from "../../game/progression";
 import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
 
@@ -14,38 +14,28 @@ interface RoadmapProps {
 const SIDES = ["left", "center", "right", "center"] as const;
 
 function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
-	// Kopijo razvrstimo, da ne spreminjamo izvornih podatkov.
-	const orderedLessons = [...lessons].sort(
-		(a, b) => a.level - b.level || a.order - b.order,
-	);
+	const progression = getLessonProgression(lessons, progress);
 
 	// Koliko lekcij je že končanih (za vrstico napredka)
-	const doneCount = orderedLessons.filter((lesson) =>
-		isLessonCompleted(progress[lesson.id]),
+	const doneCount = progression.filter(
+		(entry) => entry.status === "done",
 	).length;
 
 	const percent =
-		orderedLessons.length > 0
-			? Math.round((doneCount / orderedLessons.length) * 100)
+		progression.length > 0
+			? Math.round((doneCount / progression.length) * 100)
 			: 0;
 
 	// Trenutna lekcija (za kartico z gumbom "Začni lekcijo")
-	const currentLesson = orderedLessons.find(
-		(lesson) =>
-			getLessonAvailability(orderedLessons, progress, lesson.id) ===
-			"current",
-	);
+	const currentLesson = progression.find(
+		(entry) => entry.status === "current",
+	)?.lesson;
 
 	return (
 		<div className="roadmap">
 			<section className="roadmap__map" aria-label="Pot učenja">
-				{orderedLessons.map((lesson, index) => {
+				{progression.map(({ lesson, status }, index) => {
 					const lessonProgress = progress[lesson.id];
-					const status = getLessonAvailability(
-						orderedLessons,
-						progress,
-						lesson.id,
-					);
 
 					return (
 						<div key={lesson.id} className="roadmap__row">
@@ -91,7 +81,7 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 				<div className="card">
 					<h2 className="card__title">Tvoj napredek</h2>
 					<p>
-						{doneCount} od {orderedLessons.length} lekcij
+						{doneCount} od {progression.length} lekcij
 					</p>
 					<div className="progress" aria-hidden="true">
 						<div

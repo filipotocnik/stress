@@ -46,18 +46,37 @@ export function getLessonGrade(
 	};
 }
 
+type LessonAvailability = "locked" | "current" | "done";
+
+export function getLessonProgression(
+	lessons: readonly Lesson[],
+	progress: Readonly<Record<string, LessonProgress>>,
+) {
+	const ordered = [...lessons].sort(
+		(a, b) => a.level - b.level || a.order - b.order,
+	);
+	return ordered.map((lesson, index) => {
+		let status: LessonAvailability = "locked";
+		if (isLessonCompleted(progress[lesson.id])) {
+			status = "done";
+		} else if (
+			index === 0 ||
+			isLessonCompleted(progress[ordered[index - 1].id])
+		) {
+			status = "current";
+		}
+		return { lesson, status };
+	});
+}
+
 export function getLessonAvailability(
 	lessons: readonly Lesson[],
 	progress: Readonly<Record<string, LessonProgress>>,
 	lessonId: string,
-): "locked" | "current" | "done" {
-	const ordered = [...lessons].sort(
-		(a, b) => a.level - b.level || a.order - b.order,
+): LessonAvailability {
+	return (
+		getLessonProgression(lessons, progress).find(
+			(entry) => entry.lesson.id === lessonId,
+		)?.status ?? "locked"
 	);
-	const index = ordered.findIndex((lesson) => lesson.id === lessonId);
-	if (index < 0) return "locked";
-	if (isLessonCompleted(progress[lessonId])) return "done";
-	return index === 0 || isLessonCompleted(progress[ordered[index - 1].id])
-		? "current"
-		: "locked";
 }

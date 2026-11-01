@@ -14,13 +14,9 @@ import {
 import { lessonsById } from "../data/lessons";
 import { getLessonGrade } from "../game/progression";
 import { getBestGameResult } from "../game/scoring";
-import type { GameResult } from "../models/game";
+import type { GameResult, GameResults } from "../models/game";
 import type { LessonProgress } from "../models/user";
-import {
-	parseGameResult,
-	parseGameResults,
-	parseLessonProgress,
-} from "./progressValidation";
+import { parseGameResult, parseLessonProgress } from "./progressValidation";
 
 export interface SaveGameResult {
 	attemptResult: GameResult;
@@ -70,10 +66,10 @@ export async function saveFinishedGame(
 					previousBest,
 					attemptResult,
 				);
-				const games = parseGameResults({
+				const games: GameResults = {
 					...previous?.games,
 					[attemptResult.gameType]: bestResult,
-				});
+				};
 				const grade = getLessonGrade(games, previous);
 				const data: DocumentData = { stars: grade.stars, games };
 				if (grade.isComplete) {

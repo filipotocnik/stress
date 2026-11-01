@@ -9,11 +9,11 @@ interface GameSaveState {
 }
 
 export function useGameResultSave(
-	result: GameResult,
-	saveResult: (attempt: GameResult) => Promise<SaveGameResult>,
+	initialResult: GameResult,
+	initialSaveResult: (attempt: GameResult) => Promise<SaveGameResult>,
 ) {
-	const [attemptResult] = useState<GameResult>(() => ({ ...result }));
-	const [saveAttempt] = useState(() => saveResult);
+	const [attemptResult] = useState<GameResult>(() => ({ ...initialResult }));
+	const [saveAttempt] = useState(() => initialSaveResult);
 	const [state, setState] = useState<GameSaveState>({
 		status: "idle",
 		savedResult: null,
