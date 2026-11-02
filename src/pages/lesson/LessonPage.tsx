@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { useNavigate } from "react-router";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
 import { getGameStars } from "../../game/scoring";
@@ -82,6 +83,8 @@ function speak(text: string) {
 
 // Prva stran lekcije: besede, pravila in izbira igre
 function LessonPage({ lesson, number, progress }: LessonPageProps) {
+	const navigate = useNavigate();
+
 	// Besede poiščemo po id-ju, neznane id-je izpustimo
 	const words = lesson.content.wordIds
 		.map((id) => wordsById.get(id))
@@ -231,8 +234,16 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 											</span>
 										))}
 								</span>
-								{/* TODO: odpri igro, ko bo narejena */}
-								<button className="game-card__play">
+								{/* TODO: odpri ostale igre, ko bodo narejene */}
+								<button
+									className="game-card__play"
+									disabled={game.id !== "matching"}
+									onClick={() =>
+										navigate(
+											`/lekcija/${lesson.id}/igra/${game.id}`,
+										)
+									}
+								>
 									Igraj
 								</button>
 							</div>

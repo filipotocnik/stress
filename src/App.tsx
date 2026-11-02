@@ -14,6 +14,7 @@ import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
+import MatchGame from "./pages/games/MatchGame";
 import Roadmap from "./pages/home/Roadmap";
 import LessonPage from "./pages/lesson/LessonPage";
 import MyLessons from "./pages/my-lessons/MyLessons";
@@ -106,6 +107,7 @@ function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 				/>
 				<Route path="/lekcija/:lessonId" element={<LessonAccess />}>
 					<Route index element={<LessonRoute />} />
+					<Route path="igra/:gameId" element={<GameRoute />} />
 				</Route>
 			</Route>
 			<Route path="*" element={<Navigate to="/" replace />} />
@@ -187,6 +189,22 @@ function LessonRoute() {
 			progress={user?.lessonProgress[lessons[index].id]}
 		/>
 	);
+}
+
+// Igro izberemo po id-ju iz naslova, neznana igra vrne na lekcijo
+function GameRoute() {
+	const { lessonId, gameId } = useParams();
+	const lesson = lessons.find((lesson) => lesson.id === lessonId);
+
+	if (!lesson) {
+		return <Navigate to="/" replace />;
+	}
+
+	if (gameId === "matching") {
+		return <MatchGame key={lesson.id} lesson={lesson} />;
+	}
+
+	return <Navigate to={`/lekcija/${lesson.id}`} replace />;
 }
 
 export default App;
