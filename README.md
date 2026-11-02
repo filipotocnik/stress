@@ -24,6 +24,24 @@ Firebase. To override either, set `VITE_USE_FIREBASE_EMULATORS=true` (local) or
 
 To run just the app without starting emulators, use `npm run dev:app`.
 
+## Vocabulary audio
+
+Word recordings in `public/audio/<word-id>.mp3` are generated locally with
+[ElevenLabs](https://elevenlabs.io). Set `ELEVENLABS_API_KEY` in `.env.local`,
+then run:
+
+```sh
+npm run audio:generate
+```
+
+Only missing recordings are generated. To replace existing recordings, use
+`npm run audio:generate -- --word red --force` or `--all --force`.
+Change `VOICE_ID` near the top of `scripts/generate-audio.mjs` to switch voices.
+
+`npm run audio:check` reports missing recordings or changes to the text, voice,
+or model without calling the API (exit status 1 if anything needs updating).
+The settings for each recording are saved in `scripts/audio-manifest.json`.
+
 ## Checks
 
 - `npm run check` — formatting, linting, and build.

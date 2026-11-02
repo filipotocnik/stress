@@ -1,5 +1,5 @@
 import type { Word } from "../models/word";
-import { openmoji } from "./images";
+import { openmoji } from "./images.ts";
 
 export const words: Word[] = [
 	// Colours

@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
 import { getGameStars } from "../../game/scoring";
+import { useWordAudio } from "../../hooks/useWordAudio";
 import type { GameType } from "../../models/game";
 import type { Lesson } from "../../models/lesson";
 import type { LessonProgress } from "../../models/user";
@@ -55,37 +56,14 @@ const GAMES: {
 // Največ kartic besed v eni vrsti
 const MAX_COLUMNS = 5;
 
-// Poiščemo britanski glas. Brskalnik sicer vzame privzetega (lahko slovenskega).
-// Najprej poskusimo kakovostnejše glasove (Google, Microsoft "Natural"/"Online").
-function findBritishVoice() {
-	const voices = speechSynthesis.getVoices();
-	const british = voices.filter(
-		(voice) => voice.lang.replace("_", "-") === "en-GB",
-	);
-
-	return (
-		british.find((voice) => /natural|online|google/i.test(voice.name)) ??
-		british[0] ??
-		voices.find((voice) => voice.lang.startsWith("en"))
-	);
-}
-
-// Brskalnik prebere besedo na glas
-function speak(text: string) {
-	const utterance = new SpeechSynthesisUtterance(text);
-	utterance.lang = "en-GB";
-	utterance.voice = findBritishVoice() ?? null;
-	utterance.rate = 0.9; // malo počasneje, da otroci lažje slišijo
-	speechSynthesis.cancel();
-	speechSynthesis.speak(utterance);
-}
-
 // Prva stran lekcije: besede, pravila in izbira igre
 function LessonPage({ lesson, number, progress }: LessonPageProps) {
 	// Besede poiščemo po id-ju, neznane id-je izpustimo
 	const words = lesson.content.wordIds
 		.map((id) => wordsById.get(id))
 		.filter((word): word is Word => word !== undefined);
+
+	const { play, playingWordId, error } = useWordAudio();
 
 	// Čim manj vrst, kartice pa enakomerno razdelimo (8 → 4 + 4, 10 → 5 + 5)
 	const rows = Math.ceil(words.length / MAX_COLUMNS);
@@ -124,8 +102,12 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 						<span className="word-card__en">{word.en}</span>
 						<span className="word-card__sl">{word.sl}</span>
 						<button
-							className="word-card__say"
-							onClick={() => speak(word.en)}
+							className={
+								playingWordId === word.id
+									? "word-card__say word-card__say--playing"
+									: "word-card__say"
+							}
+							onClick={() => play(word)}
 							aria-label={`Poslušaj: ${word.en}`}
 						>
 							<img
@@ -138,6 +120,12 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 					</div>
 				))}
 			</section>
+
+			{error && (
+				<p className="lesson__audio-error" role="alert">
+					{error}
+				</p>
+			)}
 
 			{/* Nekatere lekcije nimajo pravil */}
 			{lesson.content.grammarHints.map((hint) => (
