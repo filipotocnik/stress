@@ -11,7 +11,7 @@
 }
 
 .fill__sentence {
-	margin: 0 0 24px;
+	margin: 64px 0 24px;
 	text-align: center;
 	color: var(--ink);
 	font-size: 28px;
@@ -76,6 +76,7 @@
 .fill__option--correct {
 	border-color: var(--leaf);
 	background: var(--leaf-soft);
+	color: var(--leaf);
 	box-shadow: 0 4px 0 var(--leaf);
 }
 
