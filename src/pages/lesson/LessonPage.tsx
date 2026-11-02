@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { useNavigate } from "react-router";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
 import { getGameStars } from "../../game/scoring";
@@ -6,6 +7,7 @@ import type { GameType } from "../../models/game";
 import type { Lesson } from "../../models/lesson";
 import type { LessonProgress } from "../../models/user";
 import type { Word } from "../../models/word";
+import { speak } from "../../utils/speech";
 import "./LessonPage.css";
 
 interface LessonPageProps {
@@ -55,33 +57,10 @@ const GAMES: {
 // Največ kartic besed v eni vrsti
 const MAX_COLUMNS = 5;
 
-// Poiščemo britanski glas. Brskalnik sicer vzame privzetega (lahko slovenskega).
-// Najprej poskusimo kakovostnejše glasove (Google, Microsoft "Natural"/"Online").
-function findBritishVoice() {
-	const voices = speechSynthesis.getVoices();
-	const british = voices.filter(
-		(voice) => voice.lang.replace("_", "-") === "en-GB",
-	);
-
-	return (
-		british.find((voice) => /natural|online|google/i.test(voice.name)) ??
-		british[0] ??
-		voices.find((voice) => voice.lang.startsWith("en"))
-	);
-}
-
-// Brskalnik prebere besedo na glas
-function speak(text: string) {
-	const utterance = new SpeechSynthesisUtterance(text);
-	utterance.lang = "en-GB";
-	utterance.voice = findBritishVoice() ?? null;
-	utterance.rate = 0.9; // malo počasneje, da otroci lažje slišijo
-	speechSynthesis.cancel();
-	speechSynthesis.speak(utterance);
-}
-
 // Prva stran lekcije: besede, pravila in izbira igre
 function LessonPage({ lesson, number, progress }: LessonPageProps) {
+	const navigate = useNavigate();
+
 	// Besede poiščemo po id-ju, neznane id-je izpustimo
 	const words = lesson.content.wordIds
 		.map((id) => wordsById.get(id))
@@ -231,8 +210,16 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 											</span>
 										))}
 								</span>
-								{/* TODO: odpri igro, ko bo narejena */}
-								<button className="game-card__play">
+								{/* TODO: odpri ostale igre, ko bodo narejene */}
+								<button
+									className="game-card__play"
+									disabled={game.id !== "grammar"}
+									onClick={() =>
+										navigate(
+											`/lekcija/${lesson.id}/igra/${game.id}`,
+										)
+									}
+								>
 									Igraj
 								</button>
 							</div>
