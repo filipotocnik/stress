@@ -1,0 +1,590 @@
+{
+	"apple": {
+		"text": "apple",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"art": {
+		"text": "Art",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"baby": {
+		"text": "baby",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"bacon": {
+		"text": "bacon",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"bag": {
+		"text": "bag",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"banana": {
+		"text": "banana",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"basketball": {
+		"text": "basketball",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"bat": {
+		"text": "bat",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"bear": {
+		"text": "bear",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"bike": {
+		"text": "bike",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"biscuits": {
+		"text": "biscuits",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"black": {
+		"text": "black",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"blue": {
+		"text": "blue",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"blueberries": {
+		"text": "blueberries",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"book": {
+		"text": "book",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"bread": {
+		"text": "bread",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"breakfast": {
+		"text": "breakfast",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"brother": {
+		"text": "brother",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"cake": {
+		"text": "cake",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"carrot": {
+		"text": "carrot",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"cereal": {
+		"text": "cereal",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"chair": {
+		"text": "chair",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"cheese": {
+		"text": "cheese",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"christmas-tree": {
+		"text": "Christmas tree",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"dad": {
+		"text": "dad",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"dance": {
+		"text": "dance",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"deer": {
+		"text": "deer",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"desk": {
+		"text": "desk",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"dinner": {
+		"text": "dinner",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"dress": {
+		"text": "dress",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"eagle": {
+		"text": "eagle",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"ears": {
+		"text": "ears",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"easter-egg": {
+		"text": "Easter egg",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"egg": {
+		"text": "egg",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"eight": {
+		"text": "eight",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"english": {
+		"text": "English",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"eyes": {
+		"text": "eyes",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"family": {
+		"text": "family",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"five": {
+		"text": "five",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"football": {
+		"text": "football",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"four": {
+		"text": "four",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"geography": {
+		"text": "Geography",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"ghost": {
+		"text": "ghost",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grandma": {
+		"text": "grandma",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grandpa": {
+		"text": "grandpa",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"green": {
+		"text": "green",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"hair": {
+		"text": "hair",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"hand": {
+		"text": "hand",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"hat": {
+		"text": "hat",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"head": {
+		"text": "head",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"history": {
+		"text": "History",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"honey": {
+		"text": "honey",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"horse": {
+		"text": "horse",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"jacket": {
+		"text": "jacket",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"leg": {
+		"text": "leg",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"lion": {
+		"text": "lion",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"lunch": {
+		"text": "lunch",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"maths": {
+		"text": "Maths",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"milk": {
+		"text": "milk",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"mouth": {
+		"text": "mouth",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"mum": {
+		"text": "mum",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"music": {
+		"text": "Music",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"nine": {
+		"text": "nine",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"nose": {
+		"text": "nose",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"one": {
+		"text": "one",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"orange": {
+		"text": "orange",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"pe": {
+		"text": "PE",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"pen": {
+		"text": "pen",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"pencil": {
+		"text": "pencil",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"present": {
+		"text": "present",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"pumpkin": {
+		"text": "pumpkin",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"purple": {
+		"text": "purple",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"rabbit": {
+		"text": "rabbit",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"red": {
+		"text": "red",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"rubber": {
+		"text": "rubber",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"ruler": {
+		"text": "ruler",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"run": {
+		"text": "run",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"science": {
+		"text": "Science",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"seven": {
+		"text": "seven",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"shoes": {
+		"text": "shoes",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"sing": {
+		"text": "sing",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"sister": {
+		"text": "sister",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"six": {
+		"text": "six",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"skirt": {
+		"text": "skirt",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"snake": {
+		"text": "snake",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"socks": {
+		"text": "socks",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"swan": {
+		"text": "swan",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"swim": {
+		"text": "swim",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"t-shirt": {
+		"text": "T-shirt",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"ten": {
+		"text": "ten",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"tennis": {
+		"text": "tennis",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"three": {
+		"text": "three",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"trousers": {
+		"text": "trousers",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"two": {
+		"text": "two",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"white": {
+		"text": "white",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"witch": {
+		"text": "witch",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"wolf": {
+		"text": "wolf",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"yellow": {
+		"text": "yellow",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	}
+}
