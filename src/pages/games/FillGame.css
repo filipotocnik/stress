@@ -33,7 +33,7 @@
 	border-color: var(--leaf);
 	border-radius: 8px 8px 0 0;
 	background: var(--leaf-soft);
-	color: var(--ink);
+	color: var(--leaf);
 }
 
 .fill__options {
@@ -53,10 +53,20 @@
 	font-size: 18px;
 	font-weight: 700;
 	cursor: pointer;
+	box-shadow: 0 4px 0 var(--line);
+	transition:
+		transform 0.1s,
+		box-shadow 0.1s;
 }
 
 .fill__option:hover:not(:disabled) {
 	border-color: var(--sea);
+}
+
+/* ob pritisku se gumb spusti na mesto sence */
+.fill__option:active:not(:disabled) {
+	transform: translateY(4px);
+	box-shadow: none;
 }
 
 .fill__option:disabled {
@@ -66,11 +76,14 @@
 .fill__option--correct {
 	border-color: var(--leaf);
 	background: var(--leaf-soft);
+	box-shadow: 0 4px 0 var(--leaf);
 }
 
 .fill__option--wrong {
-	border-color: #d9534f;
-	background: #fbe3e2;
+	border-color: var(--berry);
+	background: var(--berry-soft);
+	color: var(--berry);
+	box-shadow: 0 4px 0 var(--berry);
 }
 
 .fill__feedback {
@@ -90,7 +103,7 @@
 }
 
 .fill__message--wrong {
-	color: #d9534f;
+	color: var(--berry);
 }
 
 .fill__next,
