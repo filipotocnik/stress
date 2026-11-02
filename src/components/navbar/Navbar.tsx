@@ -52,6 +52,7 @@ function Navbar() {
 						aria-labelledby="leave-title"
 					>
 						<h2 id="leave-title">Res želiš zapustiti igro?</h2>
+						<p>Tvoj napredek v tej igri se ne bo shranil</p>
 						<div className="leave-dialog__actions">
 							<button
 								className="leave-dialog__stay"
