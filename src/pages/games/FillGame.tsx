@@ -137,7 +137,7 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 						<p className="fill__message fill__message--correct">
 							✓ Pravilno!
 						</p>
-						<button className="fill__next" onClick={handleNext}>
+						<button className="start-button" onClick={handleNext}>
 							Naprej
 						</button>
 					</>

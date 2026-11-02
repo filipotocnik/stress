@@ -32,11 +32,12 @@
 .fill__blank--done {
 	border-color: var(--leaf);
 	border-radius: 8px 8px 0 0;
-	background: var(--leaf-soft);
+	/*background: var(--leaf-soft);*/
 	color: var(--leaf);
 }
 
 .fill__options {
+	margin: 32px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -107,7 +108,12 @@
 	color: var(--berry);
 }
 
-.fill__next,
+.fill .start-button { 
+	margin: 64px;
+	width: auto; 
+	padding: 14px 40px; 
+}
+
 .fill__retry {
 	display: block;
 	margin: 12px auto 0;
