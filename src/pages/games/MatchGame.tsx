@@ -10,7 +10,7 @@ import type { GameResult as GameResultData } from "../../models/game";
 import { getGameStars } from "../../game/scoring";
 import { useGameResultSave } from "../../game/useGameResultSave";
 import GameResult from "../../components/game/GameResult";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 
 interface MatchGameProps {
 	lesson: Lesson;
@@ -41,6 +41,11 @@ function shuffle<T>(items: T[]) {
 // Nov key ob ponovni igri začne krog od začetka in znova premeša besede
 function MatchGame({ lesson }: MatchGameProps) {
 	const [round, setRound] = useState(0);
+
+	// Lekcija brez veljavnih besed nima igre
+	if (!lesson.content.wordIds.some((id) => wordsById.has(id))) {
+		return <Navigate to={`/lekcija/${lesson.id}`} replace />;
+	}
 
 	return (
 		<MatchRound
