@@ -1,22 +1,97 @@
-import { AVATARS, getMissingStars, isAvatarUnlocked } from "../../data/avatars";
-import { getTotalStars } from "../../models/user";
+import { useState, type ReactNode } from "react";
+import {
+	AVATARS,
+	getAvatar,
+	getMissingStars,
+	isAvatarUnlocked,
+} from "../../data/avatars";
+import { FRAMES, isOwned, THEMES, type ShopItem } from "../../data/shop";
+import { getTotalStars, type User } from "../../models/user";
 import { useProgress } from "../../progress/useProgress";
+import { plural } from "../../utils/plural";
 import "./Rewards.css";
 
-// Nagrade za zvezdice, kasneje bodo tu tudi teme
+type Tab = "avatarji" | "trgovina";
+
+// Nagrade za zvezdice in trgovina s temami in okvirji
 function Rewards() {
 	const { user } = useProgress();
 	const totalStars = user ? getTotalStars(user) : 0;
+	const [tab, setTab] = useState<Tab>("avatarji");
+
+	return (
+		<main className="rewards">
+			<h1 className="rewards__title">Nagrade</h1>
+			<div className="rewards__chips">
+				<span className="rewards__chip rewards__chip--stars">
+					⭐{" "}
+					{plural(totalStars, [
+						"zvezdica",
+						"zvezdici",
+						"zvezdice",
+						"zvezdic",
+					])}
+				</span>
+				<span className="rewards__chip rewards__chip--shells">
+					🐚{" "}
+					{plural(user?.shells ?? 0, [
+						"školjka",
+						"školjki",
+						"školjke",
+						"školjk",
+					])}
+				</span>
+			</div>
+
+			<div className="rewards__tabs" role="tablist">
+				<button
+					type="button"
+					role="tab"
+					id="rewards-tab-avatarji"
+					aria-selected={tab === "avatarji"}
+					aria-controls="rewards-panel"
+					className="rewards__tab"
+					onClick={() => setTab("avatarji")}
+				>
+					Avatarji
+				</button>
+				<button
+					type="button"
+					role="tab"
+					id="rewards-tab-trgovina"
+					aria-selected={tab === "trgovina"}
+					aria-controls="rewards-panel"
+					className="rewards__tab"
+					onClick={() => setTab("trgovina")}
+				>
+					Trgovina
+				</button>
+			</div>
+
+			<div
+				id="rewards-panel"
+				role="tabpanel"
+				aria-labelledby={`rewards-tab-${tab}`}
+			>
+				{tab === "avatarji" ? (
+					<AvatarsTab totalStars={totalStars} />
+				) : (
+					user && <ShopTab user={user} />
+				)}
+			</div>
+		</main>
+	);
+}
+
+// Naslednji avatar in mreža vseh avatarjev
+function AvatarsTab({ totalStars }: { totalStars: number }) {
 	// AVATARS so razvrščeni po zvezdicah, prvi zaklenjen je naslednji
 	const next = AVATARS.find(
 		(avatar) => !isAvatarUnlocked(avatar, totalStars),
 	);
 
 	return (
-		<main className="rewards">
-			<h1 className="rewards__title">Nagrade</h1>
-			<p className="rewards__stars">Imaš ⭐ {totalStars}</p>
-
+		<>
 			{next ? (
 				<section className="rewards__next">
 					<img
@@ -77,7 +152,129 @@ function Rewards() {
 					);
 				})}
 			</ul>
-		</main>
+		</>
+	);
+}
+
+// Teme in okvirji, ki jih kupiš s školjkami
+function ShopTab({ user }: { user: User }) {
+	const avatar = getAvatar(user.avatar);
+
+	return (
+		<>
+			<h2 className="rewards__subtitle">Teme</h2>
+			<p className="rewards__description">
+				Spremeni barve cele aplikacije
+			</p>
+			<ul className="rewards__shop">
+				{THEMES.map((item) => (
+					<ShopCard key={item.id} item={item} user={user}>
+						<div
+							className="rewards__preview"
+							data-theme-preview={item.id}
+							aria-hidden="true"
+						>
+							<div className="rewards__preview-bar">
+								<span className="rewards__preview-dash" />
+							</div>
+							<div className="rewards__preview-body">
+								<span className="rewards__preview-circle" />
+								<span className="rewards__preview-rect" />
+							</div>
+						</div>
+					</ShopCard>
+				))}
+			</ul>
+
+			<h2 className="rewards__subtitle">Okvirji za avatar</h2>
+			<p className="rewards__description">
+				Okvir se pokaže okoli tvojega avatarja
+			</p>
+			<ul className="rewards__shop">
+				{FRAMES.map((item) => (
+					<ShopCard key={item.id} item={item} user={user}>
+						{/* Okvir je na ovoju, img ne podpira ::before/::after */}
+						<span className={`rewards__frame frame--${item.id}`}>
+							<img src={avatar.image} alt="" />
+						</span>
+					</ShopCard>
+				))}
+			</ul>
+		</>
+	);
+}
+
+interface ShopCardProps {
+	item: ShopItem;
+	user: User;
+	children: ReactNode; // predogled teme ali okvirja
+}
+
+// Kartica v trgovini: predogled, ime in gumb glede na stanje
+function ShopCard({ item, user, children }: ShopCardProps) {
+	const activeId =
+		item.type === "theme" ? user.activeTheme : user.activeFrame;
+	const isActive = item.id === activeId;
+	const owned = isOwned(item, user.ownedItems);
+	const canBuy = user.shells >= item.price;
+
+	// TODO: nakup in uporaba (korak 3)
+	let button;
+	if (isActive) {
+		button = (
+			<button
+				type="button"
+				className="rewards__buy rewards__buy--active"
+				disabled
+			>
+				✓ V uporabi
+			</button>
+		);
+	} else if (owned) {
+		button = (
+			<button type="button" className="rewards__buy rewards__buy--use">
+				Uporabi
+			</button>
+		);
+	} else if (canBuy) {
+		button = (
+			<button type="button" className="rewards__buy rewards__buy--buy">
+				Kupi 🐚 {item.price}
+			</button>
+		);
+	} else {
+		button = (
+			<button
+				type="button"
+				className="rewards__buy rewards__buy--locked"
+				disabled
+			>
+				🐚 {item.price}
+			</button>
+		);
+	}
+
+	return (
+		<li
+			className={
+				isActive
+					? "rewards__item rewards__item--active"
+					: "rewards__item"
+			}
+		>
+			{children}
+			<span className="rewards__item-name">{item.name}</span>
+			<div className="rewards__action">
+				{button}
+				{/* Vrstica je vedno tu, da so gumbi v isti višini */}
+				<span className="rewards__missing">
+					{!isActive &&
+						!owned &&
+						!canBuy &&
+						`še ${item.price - user.shells} 🐚`}
+				</span>
+			</div>
+		</li>
 	);
 }
 

@@ -34,3 +34,8 @@ export const DEFAULT_FRAME = "none";
 export function getShopItem(id: string): ShopItem | undefined {
 	return [...THEMES, ...FRAMES].find((item) => item.id === id);
 }
+
+// Brezplačne stvari ima vsak, ostale le, če jih je kupil
+export function isOwned(item: ShopItem, ownedItems: string[]): boolean {
+	return item.price === 0 || ownedItems.includes(item.id);
+}

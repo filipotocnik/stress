@@ -13,10 +13,53 @@
 	margin: 0 0 8px;
 }
 
-.rewards__stars {
-	margin: 0 0 24px;
+.rewards__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 20px;
+}
+
+.rewards__chip {
+	padding: 6px 14px;
+	border: 2px solid;
+	border-radius: 999px;
+	font-weight: 700;
+}
+
+.rewards__chip--stars {
+	border-color: var(--sun);
+	background: var(--sun-soft);
+}
+
+.rewards__chip--shells {
+	border-color: #e59a3c;
+	background: #fdeedd;
+}
+
+.rewards__tabs {
+	display: flex;
+	gap: 24px;
+	margin-bottom: 24px;
+	border-bottom: 2px solid var(--line);
+}
+
+.rewards__tab {
+	margin-bottom: -2px;
+	padding: 10px 4px;
+	border: 0;
+	border-bottom: 4px solid transparent;
+	background: none;
+	color: var(--muted);
+	font-family: inherit;
 	font-size: 18px;
 	font-weight: 700;
+	cursor: pointer;
+}
+
+.rewards__tab[aria-selected="true"] {
+	border-bottom-color: var(--sea);
+	color: var(--ink);
 }
 
 .rewards__next {
@@ -128,9 +171,165 @@
 	color: var(--muted);
 }
 
+.rewards__description {
+	margin: -8px 0 12px;
+	color: var(--muted);
+}
+
+/* Trgovina */
+.rewards__shop {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+	gap: 12px;
+	margin: 0 0 28px;
+	padding: 0;
+	list-style: none;
+}
+
+.rewards__item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	padding: 12px;
+	border: 2px solid var(--line);
+	border-radius: 14px;
+	text-align: center;
+}
+
+.rewards__item--active {
+	border-color: var(--sea);
+}
+
+.rewards__item-name {
+	font-weight: 700;
+}
+
+/* Mali predogled teme: vrstica zgoraj, krog in pravokotnik */
+.rewards__preview {
+	width: 100%;
+	height: 80px;
+	border-radius: 10px;
+	background: var(--bg);
+	overflow: hidden;
+}
+
+.rewards__preview-bar {
+	display: flex;
+	align-items: center;
+	height: 18px;
+	padding: 0 8px;
+	/* Kot navigacija, tudi v temni temi */
+	background: var(--nav, var(--ink));
+}
+
+.rewards__preview-dash {
+	width: 20px;
+	height: 4px;
+	border-radius: 2px;
+	background: var(--sun);
+}
+
+.rewards__preview-body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	height: 62px;
+}
+
+.rewards__preview-circle {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: var(--sea);
+}
+
+.rewards__preview-rect {
+	width: 40px;
+	height: 18px;
+	border-radius: 4px;
+	background: var(--sun);
+}
+
+.rewards__frame {
+	display: inline-block;
+}
+
+.rewards__frame img {
+	display: block;
+	width: 72px;
+	height: 72px;
+	padding: 6px;
+	border-radius: 50%;
+	background: var(--sea-soft);
+	box-sizing: border-box;
+}
+
+/* margin-top: auto potisne gumb na dno, da so vsi v isti vrstici */
+.rewards__action {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	width: 100%;
+	margin-top: auto;
+}
+
+.rewards__buy {
+	width: 100%;
+	padding: 8px 12px;
+	border: 2px solid transparent;
+	border-radius: 12px;
+	font-family: inherit;
+	font-size: 16px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.rewards__buy--active {
+	background: var(--sea-soft);
+	color: var(--sea);
+	cursor: default;
+}
+
+.rewards__buy--use {
+	border-color: var(--line);
+	background: var(--paper);
+	color: var(--ink);
+}
+
+.rewards__buy--buy {
+	background: var(--leaf);
+	color: var(--paper);
+	box-shadow: 0 3px 0 #1f6b2f;
+}
+
+.rewards__buy--locked {
+	background: var(--line);
+	color: var(--muted);
+	cursor: not-allowed;
+}
+
+.rewards__tab:focus-visible,
+.rewards__buy:focus-visible {
+	outline: 3px solid var(--sun);
+	outline-offset: 3px;
+}
+
+.rewards__missing {
+	min-height: 18px;
+	color: var(--muted);
+	font-size: 13px;
+}
+
 @media (max-width: 560px) {
 	.rewards {
 		margin: 16px;
 		padding: 24px;
+	}
+
+	.rewards__shop {
+		grid-template-columns: repeat(2, 1fr);
 	}
 }
