@@ -103,7 +103,12 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 			<p className="fill__sentence">
 				{before}
 				<span
-					className={picked !== null ? "fill__blank fill__blank--done" : "fill__blank"}>
+					className={
+						picked !== null
+							? "fill__blank fill__blank--done"
+							: "fill__blank"
+					}
+				>
 					{picked ?? "?"}
 				</span>
 				{after}

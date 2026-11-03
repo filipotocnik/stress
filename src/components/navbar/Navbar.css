@@ -46,6 +46,31 @@
 	opacity: 1;
 }
 
+.navbar__avatar {
+	flex-shrink: 0;
+	width: 40px;
+	height: 40px;
+	padding: 4px;
+	border: 3px solid transparent;
+	border-radius: 50%;
+	background: var(--sea-soft);
+	box-sizing: border-box;
+}
+
+.navbar__avatar img {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.navbar__avatar:hover {
+	border-color: rgb(255 255 255 / 0.5);
+}
+
+.navbar__avatar.active {
+	border-color: var(--sun);
+}
+
 .navbar a:focus-visible {
 	outline: 3px solid var(--sun);
 	outline-offset: 3px;
@@ -130,5 +155,14 @@
 
 	.navbar__link {
 		padding-top: 8px;
+	}
+
+	/* Navigacija je stolpec, avatar ostane v vrsti z logotipom */
+	.navbar__avatar {
+		position: absolute;
+		top: 6px;
+		right: 16px;
+		width: 34px;
+		height: 34px;
 	}
 }

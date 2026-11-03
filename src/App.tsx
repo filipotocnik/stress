@@ -18,9 +18,9 @@ import FillGame from "./pages/games/FillGame";
 import MatchGame from "./pages/games/MatchGame";
 import Roadmap from "./pages/home/Roadmap";
 import LessonPage from "./pages/lesson/LessonPage";
-import MyLessons from "./pages/my-lessons/MyLessons";
 import EditProfile from "./pages/profile/EditProfile";
 import Profile from "./pages/profile/Profile";
+import Rewards from "./pages/rewards/Rewards";
 import { lessons } from "./data";
 import { ProgressProvider } from "./progress/ProgressProvider";
 import { useProgress } from "./progress/useProgress";
@@ -89,7 +89,7 @@ function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 						/>
 					}
 				/>
-				<Route path="/lekcije" element={<MyLessons />} />
+				<Route path="/nagrade" element={<Rewards />} />
 				<Route
 					path="/profil"
 					element={
