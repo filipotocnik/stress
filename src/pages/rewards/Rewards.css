@@ -301,7 +301,7 @@
 
 .rewards__buy--buy {
 	background: var(--leaf);
-	color: var(--paper);
+	color: #fff;
 	box-shadow: 0 3px 0 #1f6b2f;
 }
 
@@ -327,47 +327,93 @@
 	color: var(--berry);
 }
 
-/* Potrditev nakupa namesto gumba "Kupi" */
-.rewards__confirm {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 6px;
+/* Okno za nakup, kot okno z avatarji v Uredi profil */
+.buy-dialog__backdrop {
+	position: fixed;
+	inset: 0;
+	/* Nad navigacijo, ki ima z-index 10 */
+	z-index: 100;
+	display: grid;
+	place-items: center;
+	padding: 16px;
+	background: rgb(23 48 66 / 0.5);
+}
+
+.buy-dialog {
 	width: 100%;
-	font-size: 14px;
+	max-width: 360px;
+	max-height: calc(100vh - 32px);
+	overflow-y: auto;
+	padding: 28px;
+	border-radius: 22px;
+	background: var(--paper);
+	color: var(--ink);
+	text-align: center;
+	box-sizing: border-box;
+}
+
+.buy-dialog h2 {
+	margin: 0 0 16px;
+	font-size: 24px;
+}
+
+.buy-dialog__preview {
+	display: flex;
+	justify-content: center;
+	max-width: 200px;
+	margin: 0 auto 16px;
+}
+
+.buy-dialog p {
+	margin: 0;
+}
+
+.buy-dialog__price {
+	font-size: 18px;
 	font-weight: 700;
 }
 
-.rewards__confirm-actions {
-	display: flex;
-	gap: 6px;
-	width: 100%;
+.buy-dialog__rest {
+	color: var(--muted);
 }
 
-.rewards__confirm-actions button {
-	flex: 1;
-	padding: 6px 8px;
+/* Dva razreda, da prepiše margin: 0 iz .buy-dialog p */
+.buy-dialog .buy-dialog__error {
+	margin-top: 12px;
+	color: var(--berry);
+	font-weight: 700;
+}
+
+.buy-dialog__actions {
+	display: flex;
+	gap: 12px;
+	justify-content: center;
+	margin-top: 24px;
+}
+
+.buy-dialog__actions button {
+	padding: 12px 24px;
 	border: 2px solid transparent;
-	border-radius: 10px;
+	border-radius: 14px;
 	font-family: inherit;
-	font-size: 14px;
+	font-size: 18px;
 	font-weight: 700;
 	cursor: pointer;
 }
 
-.rewards__confirm-yes {
+.buy-dialog__yes {
 	background: var(--leaf);
-	color: var(--paper);
-	box-shadow: 0 3px 0 #1f6b2f;
+	color: #fff;
+	box-shadow: 0 4px 0 #1f6b2f;
 }
 
-.rewards__confirm-no {
+.buy-dialog__no {
 	border-color: var(--line);
 	background: var(--paper);
 	color: var(--ink);
 }
 
-.rewards__confirm-actions button:focus-visible {
+.buy-dialog__actions button:focus-visible {
 	outline: 3px solid var(--sun);
 	outline-offset: 3px;
 }

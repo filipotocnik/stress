@@ -55,11 +55,16 @@ function Profile({ user, onEdit }: ProfileProps) {
 
 	return (
 		<section className="profile">
-			<img
-				className="profile__avatar"
-				src={avatar.image}
-				alt={avatar.name}
-			/>
+			{/* Okvir je na ovoju, img ne podpira ::before/::after */}
+			<span
+				className={`profile__avatar-frame frame--${user.activeFrame}`}
+			>
+				<img
+					className="profile__avatar"
+					src={avatar.image}
+					alt={avatar.name}
+				/>
+			</span>
 			<h1 className="profile__name">{user.displayName}</h1>
 
 			<section className="profile__stats">

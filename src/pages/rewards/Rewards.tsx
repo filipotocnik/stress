@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
 	AVATARS,
 	getAvatar,
@@ -214,10 +214,28 @@ interface ShopCardProps {
 // Kartica v trgovini: predogled, ime in gumb glede na stanje
 function ShopCard({ item, user, children }: ShopCardProps) {
 	const { refresh } = useProgress();
-	// Prvi klik na "Kupi" le vpraša, nakup šele po "Da"
-	const [confirming, setConfirming] = useState(false);
+	// Klik na "Kupi" odpre okno, nakup šele po "Da, kupim"
+	const [buyOpen, setBuyOpen] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState("");
+
+	function closeBuy() {
+		setBuyOpen(false);
+		setError("");
+	}
+
+	// Escape zapre okno, med nakupom pa ne
+	useEffect(() => {
+		if (!buyOpen || saving) return;
+		function handleKeyDown(event: KeyboardEvent) {
+			if (event.key === "Escape") {
+				setBuyOpen(false);
+				setError("");
+			}
+		}
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [buyOpen, saving]);
 
 	const activeId =
 		item.type === "theme" ? user.activeTheme : user.activeFrame;
@@ -234,7 +252,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 		try {
 			await action(user.id, item.id);
 			await refresh();
-			setConfirming(false);
+			setBuyOpen(false);
 		} catch (saveError) {
 			setError(
 				saveError instanceof Error &&
@@ -269,39 +287,12 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 				{saving ? "…" : "Uporabi"}
 			</button>
 		);
-	} else if (confirming) {
-		button = (
-			<div className="rewards__confirm">
-				<span>Kupim za 🐚 {item.price}?</span>
-				<div className="rewards__confirm-actions">
-					<button
-						type="button"
-						className="rewards__confirm-yes"
-						disabled={saving}
-						onClick={() => void save(buyItem)}
-					>
-						{saving ? "…" : "Da"}
-					</button>
-					<button
-						type="button"
-						className="rewards__confirm-no"
-						disabled={saving}
-						onClick={() => {
-							setConfirming(false);
-							setError("");
-						}}
-					>
-						Ne
-					</button>
-				</div>
-			</div>
-		);
 	} else if (canBuy) {
 		button = (
 			<button
 				type="button"
 				className="rewards__buy rewards__buy--buy"
-				onClick={() => setConfirming(true)}
+				onClick={() => setBuyOpen(true)}
 			>
 				Kupi 🐚 {item.price}
 			</button>
@@ -331,7 +322,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 			<div className="rewards__action">
 				{button}
 				{/* Vrstica je vedno tu, da so gumbi v isti višini */}
-				{error ? (
+				{error && !buyOpen ? (
 					<span className="rewards__missing rewards__missing--error">
 						{error}
 					</span>
@@ -344,6 +335,53 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 					</span>
 				)}
 			</div>
+
+			{buyOpen && (
+				<div className="buy-dialog__backdrop">
+					<div
+						className="buy-dialog"
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby={`buy-dialog-title-${item.id}`}
+					>
+						<h2 id={`buy-dialog-title-${item.id}`}>
+							Kupim {item.name}?
+						</h2>
+						{/* Isti predogled kot na kartici */}
+						<div className="buy-dialog__preview">{children}</div>
+						<p className="buy-dialog__price">
+							Cena: 🐚 {item.price}
+						</p>
+						<p className="buy-dialog__rest">
+							Ostane ti: 🐚 {user.shells - item.price}
+						</p>
+						{error && (
+							<p className="buy-dialog__error" role="alert">
+								{error}
+							</p>
+						)}
+						<div className="buy-dialog__actions">
+							<button
+								type="button"
+								className="buy-dialog__yes"
+								disabled={saving}
+								onClick={() => void save(buyItem)}
+							>
+								{saving ? "…" : "Da, kupim"}
+							</button>
+							<button
+								type="button"
+								className="buy-dialog__no"
+								disabled={saving}
+								onClick={closeBuy}
+								autoFocus
+							>
+								{saving ? "…" : "Ne"}
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</li>
 	);
 }

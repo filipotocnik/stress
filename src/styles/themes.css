@@ -68,18 +68,15 @@
 	--sun-soft: #fff0c7;
 }
 
-/* Temna tema, edina spremeni tudi --paper in ima svetlo besedilo,
-   zato navigacija dobi svojo temno barvo --nav */
 :root[data-theme="deep"],
 [data-theme-preview="deep"] {
-	--bg: #12202b;
-	--paper: #1d2f3d;
-	--ink: #e6f2f7;
-	--nav: #0a141c;
-	--muted: #9fb4c2;
-	--line: #2f4657;
-	--sea: #5fb3e0;
-	--sea-soft: #23465c;
-	--sun: #ffd166;
-	--sun-soft: #3d3520;
+	--bg: #eceaf8;
+	--ink: #241f4d;
+	--nav: #241f4d;
+	--muted: #625c8a;
+	--line: #d6d2ef;
+	--sea: #5b4fc4;
+	--sea-soft: #e0dcf7;
+	--sun: #ffc23c;
+	--sun-soft: #fff0c7;
 }
