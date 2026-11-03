@@ -2,14 +2,16 @@ import { useEffect, useState, type SubmitEvent } from "react";
 import { useNavigate } from "react-router";
 import type { User as AuthUser } from "firebase/auth";
 import { ensureUserProfile, updateUser } from "../../auth/auth";
-import { AVATARS } from "../../data/avatars";
-import type { UserProfile } from "../../models/user";
+import { AVATARS, isAvatarUnlocked } from "../../data/avatars";
+import { getTotalStars, type UserProfile } from "../../models/user";
 import { useProgress } from "../../progress/useProgress";
 import "./EditProfile.css";
 
 function EditProfile({ user }: { user: AuthUser }) {
 	const navigate = useNavigate();
-	const { refresh } = useProgress();
+	// Preimenujemo, ker je user že prijavljeni Firebase uporabnik
+	const { user: progressUser, refresh } = useProgress();
+	const totalStars = progressUser ? getTotalStars(progressUser) : 0;
 	const [profile, setProfile] = useState<UserProfile | null>(null);
 	const [loadError, setLoadError] = useState(false);
 	const [error, setError] = useState("");
@@ -75,6 +77,13 @@ function EditProfile({ user }: { user: AuthUser }) {
 		);
 	}
 
+	// Trenutni avatar ostane na izbiro, tudi če je zaklenjen
+	const avatars = AVATARS.filter(
+		(avatar) =>
+			isAvatarUnlocked(avatar, totalStars) ||
+			avatar.id === profile.avatar,
+	);
+
 	return (
 		<section className="edit-profile">
 			<h1>Uredi profil</h1>
@@ -119,7 +128,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 
 					<fieldset className="edit-profile__avatars">
 						<legend>Profilna slika</legend>
-						{AVATARS.map((avatar) => (
+						{avatars.map((avatar) => (
 							<label
 								key={avatar.id}
 								className="edit-profile__avatar"

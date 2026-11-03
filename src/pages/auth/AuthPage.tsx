@@ -2,6 +2,9 @@ import { useState, type SubmitEvent } from "react";
 import { getAuthErrorMessage } from "../../auth/auth";
 import { AVATARS } from "../../data/avatars";
 
+// Nov uporabnik še nima zvezdic, zato ponudimo le brezplačne avatarje
+const FREE_AVATARS = AVATARS.filter((avatar) => avatar.requiredStars === 0);
+
 export interface AuthFormValues {
 	mode: "login" | "register";
 	firstName: string;
@@ -101,7 +104,7 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
 							</label>
 							<fieldset className="auth-avatars">
 								<legend>Profilna slika</legend>
-								{AVATARS.map((avatar, index) => (
+								{FREE_AVATARS.map((avatar, index) => (
 									<label
 										key={avatar.id}
 										className="auth-avatar"
