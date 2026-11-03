@@ -323,6 +323,55 @@
 	font-size: 13px;
 }
 
+.rewards__missing--error {
+	color: var(--berry);
+}
+
+/* Potrditev nakupa namesto gumba "Kupi" */
+.rewards__confirm {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	width: 100%;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.rewards__confirm-actions {
+	display: flex;
+	gap: 6px;
+	width: 100%;
+}
+
+.rewards__confirm-actions button {
+	flex: 1;
+	padding: 6px 8px;
+	border: 2px solid transparent;
+	border-radius: 10px;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.rewards__confirm-yes {
+	background: var(--leaf);
+	color: var(--paper);
+	box-shadow: 0 3px 0 #1f6b2f;
+}
+
+.rewards__confirm-no {
+	border-color: var(--line);
+	background: var(--paper);
+	color: var(--ink);
+}
+
+.rewards__confirm-actions button:focus-visible {
+	outline: 3px solid var(--sun);
+	outline-offset: 3px;
+}
+
 @media (max-width: 560px) {
 	.rewards {
 		margin: 16px;

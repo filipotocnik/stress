@@ -8,6 +8,7 @@ import {
 import { FRAMES, isOwned, THEMES, type ShopItem } from "../../data/shop";
 import { getTotalStars, type User } from "../../models/user";
 import { useProgress } from "../../progress/useProgress";
+import { applyItem, buyItem } from "../../services/shop";
 import { plural } from "../../utils/plural";
 import "./Rewards.css";
 
@@ -212,13 +213,40 @@ interface ShopCardProps {
 
 // Kartica v trgovini: predogled, ime in gumb glede na stanje
 function ShopCard({ item, user, children }: ShopCardProps) {
+	const { refresh } = useProgress();
+	// Prvi klik na "Kupi" le vpraša, nakup šele po "Da"
+	const [confirming, setConfirming] = useState(false);
+	const [saving, setSaving] = useState(false);
+	const [error, setError] = useState("");
+
 	const activeId =
 		item.type === "theme" ? user.activeTheme : user.activeFrame;
 	const isActive = item.id === activeId;
 	const owned = isOwned(item, user.ownedItems);
 	const canBuy = user.shells >= item.price;
 
-	// TODO: nakup in uporaba (korak 3)
+	// Shrani v bazo in osveži podatke, da kartica pokaže novo stanje
+	async function save(
+		action: (uid: string, itemId: string) => Promise<void>,
+	) {
+		setSaving(true);
+		setError("");
+		try {
+			await action(user.id, item.id);
+			await refresh();
+			setConfirming(false);
+		} catch (saveError) {
+			setError(
+				saveError instanceof Error &&
+					saveError.message === "not-enough-shells"
+					? "Premalo školjk."
+					: "Ni uspelo. Poskusi znova.",
+			);
+		} finally {
+			setSaving(false);
+		}
+	}
+
 	let button;
 	if (isActive) {
 		button = (
@@ -232,13 +260,49 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 		);
 	} else if (owned) {
 		button = (
-			<button type="button" className="rewards__buy rewards__buy--use">
-				Uporabi
+			<button
+				type="button"
+				className="rewards__buy rewards__buy--use"
+				disabled={saving}
+				onClick={() => void save(applyItem)}
+			>
+				{saving ? "…" : "Uporabi"}
 			</button>
+		);
+	} else if (confirming) {
+		button = (
+			<div className="rewards__confirm">
+				<span>Kupim za 🐚 {item.price}?</span>
+				<div className="rewards__confirm-actions">
+					<button
+						type="button"
+						className="rewards__confirm-yes"
+						disabled={saving}
+						onClick={() => void save(buyItem)}
+					>
+						{saving ? "…" : "Da"}
+					</button>
+					<button
+						type="button"
+						className="rewards__confirm-no"
+						disabled={saving}
+						onClick={() => {
+							setConfirming(false);
+							setError("");
+						}}
+					>
+						Ne
+					</button>
+				</div>
+			</div>
 		);
 	} else if (canBuy) {
 		button = (
-			<button type="button" className="rewards__buy rewards__buy--buy">
+			<button
+				type="button"
+				className="rewards__buy rewards__buy--buy"
+				onClick={() => setConfirming(true)}
+			>
 				Kupi 🐚 {item.price}
 			</button>
 		);
@@ -267,12 +331,18 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 			<div className="rewards__action">
 				{button}
 				{/* Vrstica je vedno tu, da so gumbi v isti višini */}
-				<span className="rewards__missing">
-					{!isActive &&
-						!owned &&
-						!canBuy &&
-						`še ${item.price - user.shells} 🐚`}
-				</span>
+				{error ? (
+					<span className="rewards__missing rewards__missing--error">
+						{error}
+					</span>
+				) : (
+					<span className="rewards__missing">
+						{!isActive &&
+							!owned &&
+							!canBuy &&
+							`še ${item.price - user.shells} 🐚`}
+					</span>
+				)}
 			</div>
 		</li>
 	);
