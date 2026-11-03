@@ -187,8 +187,23 @@
 	gap: 12px;
 }
 
+/* Okrogla "maska": vse, kar pade iz kroga, se odreže.
+   Tobi je narisan 2× (144px = 72 enot × 2), zato 1 enota mreže = 2px.
+   Krog ima središče v točki (38, 35) in polmer 27 enot. */
 .hello__character {
-	font-size: 48px;
+	flex-shrink: 0; /* Tobi se ne stisne, ko je oblaček dolg */
+	width: 112px; /* premer: 2 × 27 enot × 2px */
+	height: 112px;
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+.hello__character svg {
+	display: block;
+	/* Zamik, da je središče kroga na (38, 35): (38 - 27) × 2, (35 - 27) × 2 */
+	margin-left: -22px;
+	margin-top: -4px;
+	background: var(--sea-soft);
 }
 
 .hello__bubble {
