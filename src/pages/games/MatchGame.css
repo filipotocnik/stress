@@ -45,8 +45,8 @@
 }
 
 .match__item--wrong {
-	border-color: #d9534f;
-	background: #fbe3e2;
+	border-color: var(--berry);
+	background: var(--berry-soft);
 	animation: match-shake 0.4s;
 }
 
