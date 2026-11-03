@@ -4,7 +4,7 @@ import "./Navbar.css";
 
 const LINKS = [
 	{ to: "/", label: "Učna pot" },
-	{ to: "/lekcije", label: "Moje lekcije" },
+	{ to: "/nagrade", label: "Nagrade" },
 	{ to: "/profil", label: "Profil" },
 ];
 
