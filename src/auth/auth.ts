@@ -16,6 +16,7 @@ import { AVATARS, isAvatarUnlocked } from "../data/avatars";
 import { auth, db } from "../firebase";
 import type { User as AppUser, UserProfile } from "../models/user";
 import { loadLessonProgress } from "../services/progress";
+import { loadShop } from "../services/shop";
 
 export async function ensureUserProfile(
 	user: User,
@@ -53,9 +54,11 @@ export async function ensureUserProfile(
 export async function loadUser(user: User): Promise<AppUser> {
 	const profile = await ensureUserProfile(user);
 	const lessonProgress = await loadLessonProgress(db, user.uid);
+	const shop = await loadShop(user.uid);
 
 	return {
 		...profile,
+		...shop,
 		id: user.uid,
 		email: user.email ?? "",
 		lessonProgress,

@@ -1,0 +1,59 @@
+/* Teme iz trgovine prepišejo barve iz theme.css.
+   Ocean je privzeta tema, zato nima data-theme */
+
+:root[data-theme="lagoon"] {
+	--bg: #e0f6f4;
+	--ink: #0f3b3d;
+	--muted: #4f7573;
+	--line: #bfe6e2;
+	--sea: #14a3a0;
+	--sea-soft: #cdeeec;
+	--sun: #ffb547;
+	--sun-soft: #ffefd6;
+}
+
+:root[data-theme="tropical"] {
+	--bg: #e8f3e4;
+	--ink: #1f3a24;
+	--muted: #56705a;
+	--line: #c9dfc4;
+	--sea: #2f8a4a;
+	--sea-soft: #d5ecd3;
+	--sun: #f2b632;
+	--sun-soft: #fdf0c8;
+}
+
+:root[data-theme="coral"] {
+	--bg: #fdeceb;
+	--ink: #3a1e2a;
+	--muted: #7d5862;
+	--line: #f3cfd0;
+	--sea: #e8577a;
+	--sea-soft: #fbd9e0;
+	--sun: #ffb347;
+	--sun-soft: #fff0d9;
+}
+
+:root[data-theme="sunset"] {
+	--bg: #fdebe1;
+	--ink: #3d1f2b;
+	--muted: #7d5a55;
+	--line: #f0cfc0;
+	--sea: #e0663f;
+	--sea-soft: #fbdccd;
+	--sun: #ffc23c;
+	--sun-soft: #fff0c7;
+}
+
+/* Temna tema, edina spremeni tudi --paper */
+:root[data-theme="deep"] {
+	--bg: #12202b;
+	--paper: #1d2f3d;
+	--ink: #0a141c;
+	--muted: #9fb4c2;
+	--line: #2f4657;
+	--sea: #5fb3e0;
+	--sea-soft: #23465c;
+	--sun: #ffd166;
+	--sun-soft: #3d3520;
+}
