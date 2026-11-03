@@ -10,7 +10,7 @@ export const myBodyLesson: Lesson = {
 	icon: openmoji("270B"),
 	content: {
 		wordIds: [
-			"head",
+			"finger",
 			"eyes",
 			"ears",
 			"nose",
