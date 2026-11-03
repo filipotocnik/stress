@@ -1,15 +1,17 @@
 import { useState, type MouseEvent } from "react";
 import { NavLink, useMatch, useNavigate } from "react-router";
+import { getAvatar } from "../../data/avatars";
+import { useProgress } from "../../progress/useProgress";
 import "./Navbar.css";
 
 const LINKS = [
 	{ to: "/", label: "Učna pot" },
-	{ to: "/lekcije", label: "Moje lekcije" },
-	{ to: "/profil", label: "Profil" },
+	{ to: "/nagrade", label: "Nagrade" },
 ];
 
 function Navbar() {
 	const navigate = useNavigate();
+	const { user } = useProgress();
 	const inGame = useMatch("/lekcija/:lessonId/igra/*") !== null;
 	// Kam želi uporabnik, dokler ne potrdi odhoda iz igre
 	const [pendingPath, setPendingPath] = useState<string | null>(null);
@@ -42,6 +44,18 @@ function Navbar() {
 					</NavLink>
 				))}
 			</nav>
+			{/* Avatar desno, simetrično z logotipom */}
+			{user && (
+				<NavLink
+					to="/profil"
+					className="navbar__avatar"
+					aria-label="Moj profil"
+					title="Moj profil"
+					onClick={(event) => handleClick(event, "/profil")}
+				>
+					<img src={getAvatar(user.avatar).image} alt="" />
+				</NavLink>
+			)}
 
 			{pendingPath !== null && (
 				<div className="leave-dialog__backdrop">
@@ -52,6 +66,7 @@ function Navbar() {
 						aria-labelledby="leave-title"
 					>
 						<h2 id="leave-title">Res želiš zapustiti igro?</h2>
+						<p>Tvoj napredek v tej igri se ne bo shranil</p>
 						<div className="leave-dialog__actions">
 							<button
 								className="leave-dialog__stay"

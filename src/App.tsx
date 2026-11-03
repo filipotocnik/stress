@@ -14,11 +14,13 @@ import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
+import FillGame from "./pages/games/FillGame";
+import MatchGame from "./pages/games/MatchGame";
 import Roadmap from "./pages/home/Roadmap";
 import LessonPage from "./pages/lesson/LessonPage";
-import MyLessons from "./pages/my-lessons/MyLessons";
 import EditProfile from "./pages/profile/EditProfile";
 import Profile from "./pages/profile/Profile";
+import Rewards from "./pages/rewards/Rewards";
 import { lessons } from "./data";
 import { ProgressProvider } from "./progress/ProgressProvider";
 import { useProgress } from "./progress/useProgress";
@@ -87,7 +89,7 @@ function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 						/>
 					}
 				/>
-				<Route path="/lekcije" element={<MyLessons />} />
+				<Route path="/nagrade" element={<Rewards />} />
 				<Route
 					path="/profil"
 					element={
@@ -106,6 +108,7 @@ function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 				/>
 				<Route path="/lekcija/:lessonId" element={<LessonAccess />}>
 					<Route index element={<LessonRoute />} />
+					<Route path="igra/:gameId" element={<GameRoute />} />
 				</Route>
 			</Route>
 			<Route path="*" element={<Navigate to="/" replace />} />
@@ -187,6 +190,26 @@ function LessonRoute() {
 			progress={user?.lessonProgress[lessons[index].id]}
 		/>
 	);
+}
+
+// Igro izberemo po id-ju iz naslova, neznana igra vrne na lekcijo
+function GameRoute() {
+	const { lessonId, gameId } = useParams();
+	const lesson = lessons.find((lesson) => lesson.id === lessonId);
+
+	if (!lesson) {
+		return <Navigate to="/" replace />;
+	}
+
+	if (gameId === "matching") {
+		return <MatchGame key={lesson.id} lesson={lesson} />;
+	}
+
+	if (gameId === "grammar") {
+		return <FillGame key={lesson.id} lesson={lesson} />;
+	}
+
+	return <Navigate to={`/lekcija/${lesson.id}`} replace />;
 }
 
 export default App;

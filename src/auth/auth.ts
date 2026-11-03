@@ -12,7 +12,7 @@ import {
 	serverTimestamp,
 	updateDoc,
 } from "firebase/firestore";
-import { AVATARS } from "../data/avatars";
+import { AVATARS, isAvatarUnlocked } from "../data/avatars";
 import { auth, db } from "../firebase";
 import type { User as AppUser, UserProfile } from "../models/user";
 import { loadLessonProgress } from "../services/progress";
@@ -77,6 +77,21 @@ export async function register(
 }
 
 export async function updateUser(user: User, profile: UserProfile) {
+	const current = await ensureUserProfile(user);
+
+	// Zvezdice preverimo le ob menjavi avatarja, obstoječi ostane dovoljen
+	if (profile.avatar !== current.avatar) {
+		const lessonProgress = await loadLessonProgress(db, user.uid);
+		const totalStars = Object.values(lessonProgress).reduce(
+			(sum, progress) => sum + progress.stars,
+			0,
+		);
+		const avatar = AVATARS.find((a) => a.id === profile.avatar);
+		if (!avatar || !isAvatarUnlocked(avatar, totalStars)) {
+			throw new Error("avatar-locked");
+		}
+	}
+
 	await updateDoc(doc(db, "users", user.uid), { ...profile });
 	// uporabniško ime je shranjeno tudi v Firebase Auth
 	if (user.displayName !== profile.displayName) {

@@ -143,6 +143,7 @@ export const words: Word[] = [
 		id: "rubber",
 		en: "rubber",
 		sl: "radirka",
+		imageSrc: openmoji("1FA8C"),
 	},
 	{
 		id: "bag",
@@ -151,9 +152,10 @@ export const words: Word[] = [
 		imageSrc: openmoji("1F392"),
 	},
 	{
-		id: "desk",
-		en: "desk",
-		sl: "šolska klop",
+		id: "scissors",
+		en: "scissors",
+		sl: "škarje",
+		imageSrc: openmoji("2702"),
 	},
 	{
 		id: "chair",
@@ -176,9 +178,10 @@ export const words: Word[] = [
 		imageSrc: openmoji("1F457"),
 	},
 	{
-		id: "skirt",
-		en: "skirt",
-		sl: "krilo",
+		id: "gloves",
+		en: "gloves",
+		sl: "rokavice",
+		imageSrc: openmoji("1F9E4"),
 	},
 	{
 		id: "trousers",
@@ -263,9 +266,10 @@ export const words: Word[] = [
 
 	// My body
 	{
-		id: "head",
-		en: "head",
-		sl: "glava",
+		id: "finger",
+		en: "finger",
+		sl: "prst",
+		imageSrc: openmoji("1F446"),
 	},
 	{
 		id: "eyes",
@@ -465,21 +469,25 @@ export const words: Word[] = [
 		id: "breakfast",
 		en: "breakfast",
 		sl: "zajtrk",
+		imageSrc: openmoji("1F95E"),
 	},
 	{
 		id: "lunch",
 		en: "lunch",
 		sl: "kosilo",
+		imageSrc: openmoji("1F96A"),
 	},
 	{
 		id: "dinner",
 		en: "dinner",
 		sl: "večerja",
+		imageSrc: openmoji("1F958"),
 	},
 	{
 		id: "cereal",
 		en: "cereal",
 		sl: "kosmiči",
+		imageSrc: openmoji("1F963"),
 	},
 	{
 		id: "honey",
@@ -573,6 +581,7 @@ export const words: Word[] = [
 		id: "witch",
 		en: "witch",
 		sl: "čarovnica",
+		imageSrc: openmoji("1F9D9-200D-2640-FE0F"),
 	},
 	{
 		id: "bat",
@@ -593,9 +602,10 @@ export const words: Word[] = [
 		imageSrc: openmoji("1F381"),
 	},
 	{
-		id: "easter-egg",
-		en: "Easter egg",
-		sl: "pirh",
+		id: "santa",
+		en: "santa",
+		sl: "božiček",
+		imageSrc: openmoji("1F385"),
 	},
 	{
 		id: "rabbit",

@@ -16,7 +16,7 @@ export const monthsAndFestivalsLesson: Lesson = {
 			"bat",
 			"christmas-tree",
 			"present",
-			"easter-egg",
+			"santa",
 			"rabbit",
 		],
 		grammarHints: [
