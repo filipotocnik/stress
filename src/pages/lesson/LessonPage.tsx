@@ -213,7 +213,10 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 								{/* TODO: odpri ostale igre, ko bodo narejene */}
 								<button
 									className="game-card__play"
-									disabled={game.id !== "grammar"}
+									disabled={
+										game.id !== "matching" &&
+										game.id !== "grammar"
+									}
 									onClick={() =>
 										navigate(
 											`/lekcija/${lesson.id}/igra/${game.id}`,
