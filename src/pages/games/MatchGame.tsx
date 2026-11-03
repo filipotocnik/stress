@@ -11,6 +11,7 @@ import { getGameStars } from "../../game/scoring";
 import { useGameResultSave } from "../../game/useGameResultSave";
 import GameResult from "../../components/game/GameResult";
 import { Navigate, useNavigate } from "react-router";
+import { speak } from "../../utils/speech";
 
 interface MatchGameProps {
 	lesson: Lesson;
@@ -101,6 +102,9 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 		if (en === sl) {
 			dispatch({ type: "answer", itemId: en, correct: true });
 			setSolved((prev) => new Set(prev).add(en));
+			// Pravilen par: angleško besedo preberemo na glas
+			const word = wordsById.get(en);
+			if (word) speak(word.en);
 		} else {
 			dispatch({ type: "answer", itemId: en, correct: false });
 			setWrong({ en, sl });

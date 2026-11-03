@@ -14,6 +14,7 @@ import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
+import FillGame from "./pages/games/FillGame";
 import MatchGame from "./pages/games/MatchGame";
 import Roadmap from "./pages/home/Roadmap";
 import LessonPage from "./pages/lesson/LessonPage";
@@ -202,6 +203,10 @@ function GameRoute() {
 
 	if (gameId === "matching") {
 		return <MatchGame key={lesson.id} lesson={lesson} />;
+	}
+
+	if (gameId === "grammar") {
+		return <FillGame key={lesson.id} lesson={lesson} />;
 	}
 
 	return <Navigate to={`/lekcija/${lesson.id}`} replace />;
