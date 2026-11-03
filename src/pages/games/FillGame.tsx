@@ -8,7 +8,8 @@ import { useGameSession } from "../../game/useGameSession";
 import type { GameResult as GameResultData } from "../../models/game";
 import type { Lesson } from "../../models/lesson";
 import { useProgress } from "../../progress/useProgress";
-import { speak } from "../../utils/speech";
+import { useRecordedAudio } from "../../hooks/useRecordedAudio";
+import { getGrammarAudioId } from "../../utils/audio";
 import "./FillGame.css";
 
 interface FillGameProps {
@@ -43,6 +44,7 @@ function FillGame({ lesson }: FillGameProps) {
 // stavki po vrsti, na koncu rezultat
 function FillRound({ lesson, onReplay }: FillRoundProps) {
 	const questions = lesson.content.grammar;
+	const { play, stop, error } = useRecordedAudio();
 
 	const { resolvedCount, totalCount, result, dispatch } = useGameSession({
 		gameType: "grammar",
@@ -75,7 +77,7 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 
 		if (correct) {
 			setPicked(option);
-			speak(`${before}${option}${after}`);
+			play(getGrammarAudioId(lesson.id, question.id));
 		} else {
 			setWrong((prev) => [...prev, option]);
 		}
@@ -83,6 +85,7 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 
 	// Premaknemo se na naslednji stavek in počistimo prikaz prejšnjega
 	function handleNext() {
+		stop();
 		setIndex((i) => i + 1);
 		setPicked(null);
 		setWrong([]);
@@ -135,6 +138,19 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 					);
 				})}
 			</div>
+
+			{error && (
+				<div role="alert">
+					<p>{error}</p>
+					<button
+						onClick={() =>
+							play(getGrammarAudioId(lesson.id, question.id))
+						}
+					>
+						Poslušaj znova
+					</button>
+				</div>
+			)}
 
 			<div className="fill__feedback" aria-live="polite">
 				{picked !== null ? (

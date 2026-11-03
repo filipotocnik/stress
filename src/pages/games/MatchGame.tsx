@@ -11,7 +11,7 @@ import { getGameStars } from "../../game/scoring";
 import { useGameResultSave } from "../../game/useGameResultSave";
 import GameResult from "../../components/game/GameResult";
 import { Navigate, useNavigate } from "react-router";
-import { speak } from "../../utils/speech";
+import { useWordAudio } from "../../hooks/useWordAudio";
 
 interface MatchGameProps {
 	lesson: Lesson;
@@ -73,6 +73,8 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 	const [enWords] = useState(() => shuffle(words));
 	const [slWords] = useState(() => shuffle(words));
 
+	const { play, error } = useWordAudio();
+
 	const [selectedEn, setSelectedEn] = useState<string | null>(null);
 	const [selectedSl, setSelectedSl] = useState<string | null>(null);
 	const [solved, setSolved] = useState<Set<string>>(new Set());
@@ -104,7 +106,7 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 			setSolved((prev) => new Set(prev).add(en));
 			// Pravilen par: angleško besedo preberemo na glas
 			const word = wordsById.get(en);
-			if (word) speak(word.en);
+			if (word) play(word);
 		} else {
 			dispatch({ type: "answer", itemId: en, correct: false });
 			setWrong({ en, sl });
@@ -153,6 +155,8 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 				done={resolvedCount}
 				total={totalCount}
 			/>
+
+			{error && <p role="alert">{error}</p>}
 
 			<div className="match__board">
 				<div className="match__column">

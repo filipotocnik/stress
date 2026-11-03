@@ -1,9 +1,10 @@
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { registerHooks } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import { words } from "../src/data/words.ts";
+import { getGrammarAudioId } from "../src/utils/audio.ts";
 
 const VOICE_ID = "XrExE9yKIg1WjnnlVkGX";
 const MODEL_ID = "eleven_v4";
@@ -13,16 +14,43 @@ const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const audioDirectory = path.join(projectRoot, "public/audio");
 const manifestFile = path.join(projectRoot, "scripts/audio-manifest.json");
 
-function recordingSettings(word) {
+// Podatki aplikacije uporabljajo uvoze brez končnice, Node pa zahteva .ts.
+const sourceImports = registerHooks({
+	resolve(specifier, context, nextResolve) {
+		if (specifier.startsWith(".") && !path.extname(specifier)) {
+			return nextResolve(`${specifier}.ts`, context);
+		}
+		return nextResolve(specifier, context);
+	},
+});
+let words, lessons;
+try {
+	({ words } = await import("../src/data/words.ts"));
+	({ lessons } = await import("../src/data/lessons/index.ts"));
+} finally {
+	sourceImports.deregister();
+}
+
+const recordings = [
+	...words.map((word) => ({ id: word.id, text: word.en })),
+	...lessons.flatMap((lesson) =>
+		lesson.content.grammar.map((question) => ({
+			id: getGrammarAudioId(lesson.id, question.id),
+			text: question.sentence.replace("___", question.correctAnswer),
+		})),
+	),
+];
+
+function recordingSettings(recording) {
 	return {
-		text: word.en,
+		text: recording.text,
 		voiceId: VOICE_ID,
 		modelId: MODEL_ID,
 		outputFormat: OUTPUT_FORMAT,
 	};
 }
 
-async function generateAudio(word, apiKey) {
+async function generateAudio(recording, apiKey) {
 	const response = await fetch(
 		`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}?output_format=${OUTPUT_FORMAT}`,
 		{
@@ -31,7 +59,7 @@ async function generateAudio(word, apiKey) {
 				"xi-api-key": apiKey,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ text: word.en, model_id: MODEL_ID }),
+			body: JSON.stringify({ text: recording.text, model_id: MODEL_ID }),
 			signal: AbortSignal.timeout(120_000),
 		},
 	);
@@ -49,41 +77,67 @@ async function main() {
 	const { values } = parseArgs({
 		options: {
 			word: { type: "string" },
+			sentence: { type: "string" },
 			all: { type: "boolean" },
 			force: { type: "boolean" },
 			check: { type: "boolean" },
 		},
 	});
-	if (values.word && values.all) {
-		throw new Error("Use either --word <id> or --all, not both.");
-	}
-	if (values.force && (values.check || (!values.word && !values.all))) {
+	if (
+		[
+			values.word !== undefined,
+			values.sentence !== undefined,
+			values.all,
+		].filter(Boolean).length > 1
+	) {
 		throw new Error(
-			"Use --force with --word <id> or --all, without --check.",
+			"Use only one of --word <id>, --sentence <lesson/question>, or --all.",
 		);
 	}
-	const selected =
+	if (
+		values.force &&
+		(values.check || (!values.word && !values.sentence && !values.all))
+	) {
+		throw new Error(
+			"Use --force with --word <id>, --sentence <lesson/question>, or --all, without --check.",
+		);
+	}
+	const selectedId =
 		values.word !== undefined
-			? words.filter((word) => word.id === values.word)
-			: words;
-	if (selected.length === 0) throw new Error(`Unknown word: ${values.word}`);
+			? values.word
+			: values.sentence !== undefined
+				? `grammar/${values.sentence}`
+				: undefined;
+	const selected =
+		selectedId !== undefined
+			? recordings.filter((recording) => recording.id === selectedId)
+			: recordings;
+	if (selected.length === 0)
+		throw new Error(`Unknown recording: ${selectedId}`);
 
-	const manifest = existsSync(manifestFile)
-		? JSON.parse(await readFile(manifestFile, "utf8"))
-		: {};
+	let manifest = {};
+	try {
+		if (existsSync(manifestFile)) {
+			manifest = JSON.parse(await readFile(manifestFile, "utf8"));
+		}
+	} catch (error) {
+		throw new Error(`Cannot read audio manifest: ${error.message}`, {
+			cause: error,
+		});
+	}
 	const missing = [];
 	const outdated = [];
-	for (const word of selected) {
-		if (!existsSync(path.join(audioDirectory, `${word.id}.mp3`))) {
-			missing.push(word);
+	for (const recording of selected) {
+		if (!existsSync(path.join(audioDirectory, `${recording.id}.mp3`))) {
+			missing.push(recording);
 		} else {
-			const expected = recordingSettings(word);
+			const expected = recordingSettings(recording);
 			if (
 				!Object.entries(expected).every(
-					([key, value]) => manifest[word.id]?.[key] === value,
+					([key, value]) => manifest[recording.id]?.[key] === value,
 				)
 			) {
-				outdated.push(word);
+				outdated.push(recording);
 			}
 		}
 	}
@@ -94,18 +148,18 @@ async function main() {
 		);
 		if (missing.length)
 			console.log(
-				`Missing: ${missing.map((word) => word.id).join(", ")}`,
+				`Missing: ${missing.map((recording) => recording.id).join(", ")}`,
 			);
 		if (outdated.length)
 			console.log(
-				`Outdated: ${outdated.map((word) => word.id).join(", ")}`,
+				`Outdated: ${outdated.map((recording) => recording.id).join(", ")}`,
 			);
 		if (missing.length || outdated.length) process.exitCode = 1;
 		return;
 	}
 	if (outdated.length && !values.force) {
 		console.log(
-			`Skipping ${outdated.length} outdated recordings. Replace them with --word <id> --force or --all --force.`,
+			`Skipping ${outdated.length} outdated recordings. Replace them with --word <id> --force, --sentence <lesson/question> --force, or --all --force.`,
 		);
 	}
 
@@ -126,17 +180,21 @@ async function main() {
 			"Set ELEVENLABS_API_KEY in .env.local or the environment.",
 		);
 
-	const characters = pending.reduce((sum, word) => sum + word.en.length, 0);
+	const characters = pending.reduce(
+		(sum, recording) => sum + recording.text.length,
+		0,
+	);
 	console.log(
 		`Generating ${pending.length} recordings (${characters} characters)...`,
 	);
-	await mkdir(audioDirectory, { recursive: true });
 	let generated = 0;
-	for (const word of pending) {
+	for (const recording of pending) {
 		try {
-			const audio = await generateAudio(word, apiKey);
-			await writeFile(path.join(audioDirectory, `${word.id}.mp3`), audio);
-			manifest[word.id] = recordingSettings(word);
+			const audio = await generateAudio(recording, apiKey);
+			const audioFile = path.join(audioDirectory, `${recording.id}.mp3`);
+			await mkdir(path.dirname(audioFile), { recursive: true });
+			await writeFile(audioFile, audio);
+			manifest[recording.id] = recordingSettings(recording);
 			const sorted = Object.fromEntries(
 				Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)),
 			);
@@ -146,11 +204,11 @@ async function main() {
 			);
 			generated++;
 			console.log(
-				`  ${generated}/${pending.length} ${word.id} (${word.en})`,
+				`  ${generated}/${pending.length} ${recording.id} (${recording.text})`,
 			);
 		} catch (error) {
 			throw new Error(
-				`Failed to generate "${word.id}" after ${generated} completed recordings: ${error.message}`,
+				`Failed to generate "${recording.id}" after ${generated} completed recordings: ${error.message}`,
 				{ cause: error },
 			);
 		}
