@@ -12,7 +12,7 @@ export const clothesLesson: Lesson = {
 		wordIds: [
 			"t-shirt",
 			"dress",
-			"skirt",
+			"gloves",
 			"trousers",
 			"shoes",
 			"socks",
