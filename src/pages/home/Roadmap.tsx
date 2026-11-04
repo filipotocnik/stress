@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { levels } from "../../data";
+import { levels, wordsById } from "../../data";
 import type { Lesson } from "../../models/lesson";
 import type { LessonProgress } from "../../models/user";
 import { getLessonProgression } from "../../game/progression";
@@ -75,6 +75,7 @@ function Roadmap({
 	const { mapRef, path } = useRoutePath();
 	// Naključno izbiro naredimo samo enkrat, ob prikazu strani
 	const [messageChoice] = useState(() => Math.random());
+	const [wordChoice] = useState(() => Math.random());
 	const progression = getLessonProgression(lessons, progress);
 
 	// Koliko lekcij je že končanih (za vrstico napredka)
@@ -92,9 +93,11 @@ function Roadmap({
 	)?.lesson;
 
 	const allDone = progression.length > 0 && doneCount === progression.length;
-	const tobiMessage = pickRoadmapMessage(messageChoice, allDone, {
+	const wordIds = currentLesson?.content.wordIds ?? [];
+	const tobi = pickRoadmapMessage(messageChoice, allDone, {
 		name: displayName,
 		lesson: currentLesson,
+		word: wordsById.get(wordIds[Math.floor(wordChoice * wordIds.length)]),
 	});
 
 	return (
@@ -139,8 +142,8 @@ function Roadmap({
 			<aside className="roadmap__side">
 				<div className="card">
 					<TobiBubble
-						mood={allDone ? "cheer" : "encourage"}
-						message={tobiMessage}
+						mood={tobi.mood}
+						message={tobi.message}
 						size={144}
 					/>
 				</div>
