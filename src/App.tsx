@@ -25,6 +25,7 @@ import { lessons } from "./data";
 import { DEFAULT_THEME, getShopItem } from "./data/shop";
 import { ProgressProvider } from "./progress/ProgressProvider";
 import { useProgress } from "./progress/useProgress";
+import MemoryGame from "./pages/games/MemoryGame";
 
 function App() {
 	const { user, loading, error } = useAuth();
@@ -225,6 +226,10 @@ function GameRoute() {
 
 	if (gameId === "grammar") {
 		return <FillGame key={lesson.id} lesson={lesson} />;
+	}
+
+	if (gameId === "memory") {
+		return <MemoryGame key={lesson.id} lesson={lesson} />;
 	}
 
 	return <Navigate to={`/lekcija/${lesson.id}`} replace />;
