@@ -83,7 +83,7 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 	}
 
 	return (
-		<main className="fill">
+		<main className="game-screen fill">
 			<GameHeader
 				title="Dopolni stavek"
 				done={resolvedCount}
@@ -127,9 +127,11 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 			</div>
 
 			{error && (
-				<div role="alert">
+				<div className="game-audio-error" role="alert">
 					<p>{error}</p>
 					<button
+						type="button"
+						className="game-retry"
 						onClick={() => {
 							stopFeedback();
 							play(getGrammarAudioId(lesson.id, question.id));
@@ -140,19 +142,19 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 				</div>
 			)}
 
-			<div className="fill__feedback" aria-live="polite">
+			<div className="game-feedback" aria-live="polite">
 				{picked !== null ? (
 					<>
-						<p className="fill__message fill__message--correct">
+						<p className="game-message game-message--correct">
 							✓ Pravilno!
 						</p>
-						<button className="start-button" onClick={handleNext}>
+						<button className="game-action" onClick={handleNext}>
 							Naprej
 						</button>
 					</>
 				) : (
 					wrong.length > 0 && (
-						<p className="fill__message fill__message--wrong">
+						<p className="game-message game-message--wrong">
 							✗ Skoraj! Poskusi še enkrat.
 						</p>
 					)

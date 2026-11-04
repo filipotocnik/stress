@@ -26,6 +26,7 @@ import Rewards from "./pages/rewards/Rewards";
 import { lessons } from "./data";
 import { ProgressProvider } from "./progress/ProgressProvider";
 import { useProgress } from "./hooks/useProgress";
+import MemoryGame from "./pages/games/MemoryGame";
 
 function App() {
 	useUiAudio();
@@ -213,6 +214,10 @@ function GameRoute() {
 
 	if (gameId === "listening") {
 		return <ListeningGame key={lesson.id} lesson={lesson} />;
+	}
+
+	if (gameId === "memory") {
+		return <MemoryGame key={lesson.id} lesson={lesson} />;
 	}
 
 	return <Navigate to={`/lekcija/${lesson.id}`} replace />;

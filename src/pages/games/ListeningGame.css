@@ -1,14 +1,3 @@
-.listening {
-	max-width: 640px;
-	margin: 32px auto;
-	padding: 0 16px;
-}
-
-.listening__status {
-	text-align: center;
-	color: var(--muted);
-}
-
 .listening__player {
 	margin: 32px 0;
 	text-align: center;
@@ -124,25 +113,6 @@
 	border-color: var(--sea);
 }
 
-.listening__sound,
-.listening__option,
-.listening__next,
-.listening__retry {
-	transition:
-		transform 0.1s,
-		box-shadow 0.1s;
-}
-
-.listening button:focus-visible {
-	outline: 3px solid var(--sea);
-	outline-offset: 5px;
-}
-
-.listening button:active:not(:disabled) {
-	transform: translateY(4px);
-	box-shadow: none;
-}
-
 .listening__option:disabled {
 	cursor: default;
 }
@@ -169,51 +139,9 @@
 	font-weight: 700;
 }
 
-.listening__feedback {
-	min-height: 124px;
-	padding: 24px 0;
-	text-align: center;
-}
-
-.listening__message {
-	margin: 0 0 16px;
-	font-size: 20px;
-	font-weight: 700;
-}
-
-.listening__message strong {
+.listening .game-message strong {
 	margin-left: 8px;
 	font-size: 28px;
-}
-
-.listening__message--correct {
-	color: var(--leaf);
-}
-
-.listening__message--wrong {
-	color: var(--berry);
-}
-
-.listening__next,
-.listening__retry {
-	min-height: 52px;
-	padding: 12px 36px;
-	border: 2px solid var(--leaf);
-	border-radius: 14px;
-	background: var(--leaf-soft);
-	color: var(--ink);
-	font-size: 20px;
-	font-weight: 700;
-	box-shadow: 0 4px 0 var(--leaf);
-	cursor: pointer;
-}
-
-.listening__retry {
-	display: block;
-	margin: 12px auto 0;
-	border-color: var(--line);
-	background: var(--paper);
-	box-shadow: 0 4px 0 var(--line);
 }
 
 @media (max-width: 480px) {

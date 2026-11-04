@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import { useNavigate } from "react-router";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
-import { getListeningWords } from "../../game/listening";
 import { getGameStars } from "../../game/scoring";
 import { useWordAudio } from "../../hooks/useWordAudio";
 import type { GameType } from "../../models/game";
@@ -68,7 +67,6 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 		.filter((word): word is Word => word !== undefined);
 
 	const { play, playingWordId, error } = useWordAudio();
-	const canListen = getListeningWords(lesson).length >= 2;
 
 	// Čim manj vrst, kartice pa enakomerno razdelimo (8 → 4 + 4, 10 → 5 + 5)
 	const rows = Math.ceil(words.length / MAX_COLUMNS);
@@ -171,7 +169,7 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 
 			<div className="lesson__section-title">
 				<h2>Vaje</h2>
-				<span>Za vsako vajo dobiš do 3 zvezdice</span>
+				<span>Pri vajah z ocenjevanjem dobiš do 3 zvezdice</span>
 			</div>
 
 			<section className="lesson__games">
@@ -227,11 +225,6 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 								<button
 									className="game-card__play"
 									data-ui-sound
-									disabled={
-										game.id !== "matching" &&
-										game.id !== "grammar" &&
-										(game.id !== "listening" || !canListen)
-									}
 									onClick={() =>
 										navigate(
 											`/lekcija/${lesson.id}/igra/${game.id}`,

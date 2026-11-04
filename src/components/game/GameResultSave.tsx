@@ -32,32 +32,39 @@ function GameResultSave({
 	}, [save]);
 
 	return (
-		<main className={className}>
+		<main className={`game-screen ${className}`}>
 			<GameResult
 				title={title}
 				stars={getGameStars(result)}
 				firstTryCorrect={result.firstTryCorrect}
 				total={result.totalItems}
+				turns={
+					result.gameType === "memory"
+						? result.totalItems + result.memoryMismatches
+						: undefined
+				}
 				onReplay={onReplay}
 				onBack={() => navigate(`/lekcija/${lessonId}`)}
 			/>
 			{status === "saving" && (
-				<p className={`${className}__status`} role="status">
+				<p className="game-save-status" role="status">
 					Shranjevanje rezultata…
 				</p>
 			)}
 			{status === "error" && (
-				<>
+				<div className="game-save-error">
 					<p className="auth-error" role="alert">
 						Rezultata ni bilo mogoče shraniti.
 					</p>
 					<button
-						className={`${className}__retry`}
+						type="button"
+						data-ui-sound
+						className="game-retry"
 						onClick={() => void retry()}
 					>
 						Poskusi znova
 					</button>
-				</>
+				</div>
 			)}
 		</main>
 	);

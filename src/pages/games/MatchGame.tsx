@@ -49,39 +49,50 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 	const [enWords] = useState(() => shuffle(words));
 	const [slWords] = useState(() => shuffle(words));
 
-	const { play, error } = useWordAudio();
-	const { play: playFeedback } = useFeedbackAudio();
+	const { play, stop, error } = useWordAudio();
+	const { play: playFeedback, stop: stopFeedback } = useFeedbackAudio();
+	const [lastWord, setLastWord] = useState<Word>();
 
 	const [selectedEn, setSelectedEn] = useState<string | null>(null);
 	const [selectedSl, setSelectedSl] = useState<string | null>(null);
 	const [solved, setSolved] = useState<Set<string>>(new Set());
 	const [showResult, setShowResult] = useState(false);
+	const [feedback, setFeedback] = useState<"correct" | "wrong">();
 	const [wrong, setWrong] = useState<{ en: string; sl: string } | null>(null);
 
 	useEffect(() => {
 		if (!wrong) return;
-		const timer = setTimeout(() => setWrong(null), 600);
+		const timer = setTimeout(() => {
+			setWrong(null);
+			setFeedback(undefined);
+		}, 600);
 		return () => clearTimeout(timer);
 	}, [wrong]);
 
 	function handleSelect(column: "en" | "sl", id: string) {
 		if (result !== null || wrong || solved.has(id)) return;
 
+		if (id === (column === "en" ? selectedEn : selectedSl)) return;
+		stopFeedback();
+		stop();
+		setFeedback(undefined);
+
 		const en = column === "en" ? id : selectedEn;
 		const sl = column === "sl" ? id : selectedSl;
 
 		if (en === null || sl === null) {
-			if (id !== (column === "en" ? selectedEn : selectedSl))
-				playFeedback("tap");
+			playFeedback("tap");
 			setSelectedEn(en);
 			setSelectedSl(sl);
 			return;
 		}
 
+		setFeedback(en === sl ? "correct" : "wrong");
 		if (en === sl) {
 			dispatch({ type: "answer", itemId: en, correct: true });
 			setSolved((prev) => new Set(prev).add(en));
 			const word = wordsById.get(en);
+			setLastWord(word);
 			const isLastPair = solved.size + 1 === words.length;
 			function finishRound() {
 				setShowResult(true);
@@ -136,14 +147,28 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 	}
 
 	return (
-		<main className="match">
+		<main className="game-screen match">
 			<GameHeader
 				title="Poveži besede"
 				done={resolvedCount}
 				total={totalCount}
 			/>
 
-			{error && <p role="alert">{error}</p>}
+			{error && (
+				<div className="game-audio-error" role="alert">
+					<p>{error}</p>
+					<button
+						type="button"
+						className="game-retry"
+						onClick={() => {
+							stopFeedback();
+							if (lastWord) play(lastWord);
+						}}
+					>
+						Poslušaj znova
+					</button>
+				</div>
+			)}
 
 			<div className="match__board">
 				<div className="match__column">
@@ -152,6 +177,15 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 				<div className="match__column">
 					{slWords.map((word) => renderItem(word, "sl"))}
 				</div>
+			</div>
+			<div className="game-feedback" aria-live="polite">
+				{feedback && (
+					<p className={`game-message game-message--${feedback}`}>
+						{feedback === "correct"
+							? "✓ Pravilno!"
+							: "✗ Skoraj! Poskusi še enkrat."}
+					</p>
+				)}
 			</div>
 		</main>
 	);

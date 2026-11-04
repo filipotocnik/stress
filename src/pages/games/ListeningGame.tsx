@@ -103,7 +103,7 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 	}
 
 	return (
-		<main className="listening">
+		<main className="game-screen listening">
 			<GameHeader
 				title="Poslušaj"
 				done={resolvedCount}
@@ -183,22 +183,19 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 				})}
 			</div>
 
-			<div className="listening__feedback" aria-live="polite">
+			<div className="game-feedback" aria-live="polite">
 				{picked !== null ? (
 					<>
-						<p className="listening__message listening__message--correct">
+						<p className="game-message game-message--correct">
 							✓ Pravilno!{" "}
 							<strong lang="en">{question.word.en}</strong>
 						</p>
-						<button
-							className="listening__next"
-							onClick={handleNext}
-						>
+						<button className="game-action" onClick={handleNext}>
 							Naprej
 						</button>
 					</>
 				) : wrong.length > 0 ? (
-					<p className="listening__message listening__message--wrong">
+					<p className="game-message game-message--wrong">
 						✗ Skoraj! Poskusi še enkrat.
 					</p>
 				) : null}
