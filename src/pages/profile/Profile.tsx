@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { getAuthErrorMessage, logOut } from "../../auth/auth";
 import { lessons } from "../../data/lessons";
-import { getTotalXp, getUserLevel } from "../../game/scoring";
 import { getAvatar } from "../../data/avatars";
 import { getCompletedCount, getTotalStars, type User } from "../../models/user";
 import "./Profile.css";
@@ -50,8 +49,6 @@ function Profile({ user, onEdit }: ProfileProps) {
 		lessons.length === 0
 			? 0
 			: Math.round((completed / lessons.length) * 100);
-	const xp = getTotalXp(stars);
-	const userLevel = getUserLevel(xp);
 	const avatar = getAvatar(user.avatar);
 
 	return (
@@ -96,9 +93,6 @@ function Profile({ user, onEdit }: ProfileProps) {
 				/>
 			</div>
 			<p className="profile__percent">{percent}% poti</p>
-			<p>
-				{xp} XP · Raven {userLevel}
-			</p>
 
 			<h2 className="profile__info-title">Moji podatki</h2>
 			<section className="profile__info">

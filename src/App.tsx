@@ -29,6 +29,7 @@ import { useProgress } from "./progress/useProgress";
 function App() {
 	const { user, loading, error } = useAuth();
 	const [submitting, setSubmitting] = useState(false);
+	const navigate = useNavigate();
 
 	async function handleAuthenticate(values: AuthFormValues) {
 		setSubmitting(true);
@@ -43,6 +44,7 @@ function App() {
 			} else {
 				await logIn(values.email, values.password);
 			}
+			navigate("/", { replace: true });
 		} finally {
 			setSubmitting(false);
 		}
