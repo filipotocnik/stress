@@ -51,7 +51,10 @@
 
 .frame--shells::before,
 .frame--shells::after {
-	content: "🐚";
+	content: "";
+	width: 20px;
+	height: 20px;
+	background: url("/openmoji/seashell.svg") center / contain no-repeat;
 }
 
 .frame--pearls {

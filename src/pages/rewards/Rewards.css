@@ -141,7 +141,7 @@
 	text-align: center;
 }
 
-.rewards__avatar img {
+.rewards__avatar > img {
 	width: 64px;
 	height: 64px;
 	margin-bottom: 4px;

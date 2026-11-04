@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useSearchParams } from "react-router";
+import { RewardIcon } from "../../components/RewardIcon";
 import {
 	AVATARS,
 	getAvatar,
@@ -33,7 +34,7 @@ function Rewards() {
 			<h1 className="rewards__title">Nagrade</h1>
 			<div className="rewards__chips">
 				<span className="rewards__chip rewards__chip--stars">
-					⭐{" "}
+					<RewardIcon kind="star" />{" "}
 					{plural(totalStars, [
 						"zvezdica",
 						"zvezdici",
@@ -42,7 +43,7 @@ function Rewards() {
 					])}
 				</span>
 				<span className="rewards__chip rewards__chip--shells">
-					🐚{" "}
+					<RewardIcon kind="shell" />{" "}
 					{plural(user?.shells ?? 0, [
 						"školjka",
 						"školjki",
@@ -129,7 +130,8 @@ function AvatarsTab({ totalStars }: { totalStars: number }) {
 							/>
 						</div>
 						<p className="rewards__next-missing">
-							še {getMissingStars(next, totalStars)} ⭐
+							še {getMissingStars(next, totalStars)}{" "}
+							<RewardIcon kind="star" />
 						</p>
 					</div>
 				</section>
@@ -155,7 +157,8 @@ function AvatarsTab({ totalStars }: { totalStars: number }) {
 								</span>
 							) : (
 								<span className="rewards__status">
-									{avatar.requiredStars} ⭐
+									{avatar.requiredStars}{" "}
+									<RewardIcon kind="star" />
 								</span>
 							)}
 						</li>
@@ -306,7 +309,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 				className="rewards__buy rewards__buy--buy"
 				onClick={() => setBuyOpen(true)}
 			>
-				Kupi 🐚 {item.price}
+				Kupi <RewardIcon kind="shell" /> {item.price}
 			</button>
 		);
 	} else {
@@ -317,7 +320,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 				className="rewards__buy rewards__buy--locked"
 				disabled
 			>
-				🐚 {item.price}
+				<RewardIcon kind="shell" /> {item.price}
 			</button>
 		);
 	}
@@ -341,10 +344,12 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 					</span>
 				) : (
 					<span className="rewards__missing">
-						{!isActive &&
-							!owned &&
-							!canBuy &&
-							`še ${item.price - user.shells} 🐚`}
+						{!isActive && !owned && !canBuy && (
+							<>
+								še {item.price - user.shells}{" "}
+								<RewardIcon kind="shell" />
+							</>
+						)}
 					</span>
 				)}
 			</div>
@@ -363,10 +368,11 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 						{/* Isti predogled kot na kartici */}
 						<div className="buy-dialog__preview">{children}</div>
 						<p className="buy-dialog__price">
-							Cena: 🐚 {item.price}
+							Cena: <RewardIcon kind="shell" /> {item.price}
 						</p>
 						<p className="buy-dialog__rest">
-							Ostane ti: 🐚 {user.shells - item.price}
+							Ostane ti: <RewardIcon kind="shell" />{" "}
+							{user.shells - item.price}
 						</p>
 						{error && (
 							<p className="buy-dialog__error" role="alert">

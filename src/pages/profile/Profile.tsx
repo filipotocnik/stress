@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { RewardIcon } from "../../components/RewardIcon";
 import { getAuthErrorMessage, logOut } from "../../auth/auth";
 import { lessons } from "../../data/lessons";
 import { getAvatar } from "../../data/avatars";
@@ -74,11 +75,15 @@ function Profile({ user, onEdit }: ProfileProps) {
 					<span className="profile__label">Končane</span>
 				</div>
 				<div className="profile__stat">
-					<span className="profile__value">⭐ {stars}</span>
+					<span className="profile__value">
+						<RewardIcon kind="star" /> {stars}
+					</span>
 					<span className="profile__label">Zvezdice</span>
 				</div>
 				<div className="profile__stat">
-					<span className="profile__value">🐚 {user.shells}</span>
+					<span className="profile__value">
+						<RewardIcon kind="shell" /> {user.shells}
+					</span>
 					<span className="profile__label">Školjke</span>
 				</div>
 			</section>
