@@ -141,6 +141,8 @@ function Roadmap({
 					<TobiBubble
 						mood={allDone ? "cheer" : "encourage"}
 						message={tobiMessage}
+						size={144}
+						cropped
 					/>
 				</div>
 
