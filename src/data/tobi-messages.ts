@@ -1,30 +1,57 @@
+import type { TobiMood } from "../components/mascot/Tobi";
 import type { Lesson } from "../models/lesson";
+import type { Word } from "../models/word";
 
 interface RoadmapMessageData {
 	name?: string; // ime otroka, ko je profil naložen
 	lesson?: Lesson; // naslednja lekcija
+	word?: Word; // naključna beseda iz naslednje lekcije
 }
 
-// Sporočilo vrne null, če zanj nimamo potrebnih podatkov
-type RoadmapMessage = (data: RoadmapMessageData) => string | null;
+interface RoadmapMessage {
+	mood: TobiMood;
+	// Besedilo je null, če zanj nimamo potrebnih podatkov
+	text: (data: RoadmapMessageData) => string | null;
+}
 
-// Novo sporočilo = nov vnos v seznamu
+// Novo sporočilo = nov vnos v seznamu, z razpoloženjem, ki se ujema z besedilom
 const ROADMAP_MESSAGES: RoadmapMessage[] = [
-	() => "Hi! Let's learn!",
-	() => "Ready for new words?",
-	({ name }) => (name ? `Hi, ${name}! Veselim se učenja s tabo!` : null),
-	({ name, lesson }) =>
-		name && lesson
-			? `Hi, ${name}! Naslednja postaja: ${lesson.title}. Greva?`
-			: null,
-	({ lesson }) =>
-		lesson ? `Naslednja postaja: ${lesson.title}. Greva?` : null,
+	{ mood: "encourage", text: () => "Hi! Let's learn!" },
+	{ mood: "encourage", text: () => "Ready for new words?" },
+	{
+		mood: "happy",
+		text: ({ name }) =>
+			name ? `Hi, ${name}! Veselim se učenja s tabo!` : null,
+	},
+	{
+		mood: "encourage",
+		text: ({ name, lesson }) =>
+			name && lesson
+				? `Hi, ${name}! Naslednja postaja: ${lesson.title}. Greva?`
+				: null,
+	},
+	{
+		mood: "encourage",
+		text: ({ lesson }) =>
+			lesson ? `Naslednja postaja: ${lesson.title}. Greva?` : null,
+	},
+	{
+		mood: "think",
+		text: ({ word }) =>
+			word
+				? `Hm ... kako se po angleško reče »${word.sl}«? Greva pogledat!`
+				: null,
+	},
 ];
 
 // Ko so vse lekcije končane
 const ALL_DONE_MESSAGES: RoadmapMessage[] = [
-	() => "Wow! Vse lekcije so končane!",
-	({ name }) => (name ? `Bravo, ${name}! Vse lekcije so končane!` : null),
+	{ mood: "cheer", text: () => "Wow! Vse lekcije so končane!" },
+	{
+		mood: "cheer",
+		text: ({ name }) =>
+			name ? `Bravo, ${name}! Vse lekcije so končane!` : null,
+	},
 ];
 
 // choice je naključno število med 0 in 1, ki ga komponenta izbere enkrat.
@@ -33,10 +60,13 @@ export function pickRoadmapMessage(
 	choice: number,
 	allDone: boolean,
 	data: RoadmapMessageData,
-): string {
-	const messages = (allDone ? ALL_DONE_MESSAGES : ROADMAP_MESSAGES)
-		.map((message) => message(data))
-		.filter((message) => message !== null);
+): { mood: TobiMood; message: string } {
+	const messages = (allDone ? ALL_DONE_MESSAGES : ROADMAP_MESSAGES).flatMap(
+		({ mood, text }) => {
+			const message = text(data);
+			return message === null ? [] : [{ mood, message }];
+		},
+	);
 	return messages[Math.floor(choice * messages.length)];
 }
 
