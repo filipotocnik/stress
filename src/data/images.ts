@@ -1,3 +1,5 @@
+const baseUrl = import.meta.env?.BASE_URL ?? "/";
+
 export function openmoji(code: string): string {
-	return `${import.meta.env.BASE_URL}openmoji/${code}.svg`;
+	return `${baseUrl}openmoji/${code}.svg`;
 }

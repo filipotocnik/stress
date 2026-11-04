@@ -4,26 +4,22 @@ import type { User as AuthUser } from "firebase/auth";
 import { ensureUserProfile, updateUser } from "../../auth/auth";
 import { AVATARS, isAvatarUnlocked } from "../../data/avatars";
 import { getTotalStars, type UserProfile } from "../../models/user";
-import { useProgress } from "../../progress/useProgress";
+import { useProgress } from "../../hooks/useProgress";
 import "./EditProfile.css";
 
-// Največ avatarjev v obrazcu, ostali so v oknu za "+N"
 const MAX_VISIBLE_AVATARS = 5;
 
 function EditProfile({ user }: { user: AuthUser }) {
 	const navigate = useNavigate();
-	// Preimenujemo, ker je user že prijavljeni Firebase uporabnik
 	const { user: progressUser, refresh } = useProgress();
 	const totalStars = progressUser ? getTotalStars(progressUser) : 0;
 	const [profile, setProfile] = useState<UserProfile | null>(null);
 	const [loadError, setLoadError] = useState(false);
 	const [error, setError] = useState("");
 	const [saving, setSaving] = useState(false);
-	// null = uporabnik še ni izbral, velja avatar iz profila
 	const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 
-	// Escape zapre okno z avatarji
 	useEffect(() => {
 		if (!dialogOpen) return;
 		function handleKeyDown(event: KeyboardEvent) {
@@ -98,7 +94,6 @@ function EditProfile({ user }: { user: AuthUser }) {
 		);
 	}
 
-	// Trenutni avatar ostane na izbiro, tudi če je zaklenjen
 	const avatars = AVATARS.filter(
 		(avatar) =>
 			isAvatarUnlocked(avatar, totalStars) ||
@@ -106,7 +101,6 @@ function EditProfile({ user }: { user: AuthUser }) {
 	);
 	const selected = selectedAvatar ?? profile.avatar;
 
-	// Pri več kot 5 avatarjih pokažemo 5, izbrani mora biti vedno viden
 	let visibleAvatars = avatars;
 	if (avatars.length > MAX_VISIBLE_AVATARS) {
 		visibleAvatars = avatars.slice(0, MAX_VISIBLE_AVATARS);
@@ -173,6 +167,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 								className="edit-profile__avatar"
 							>
 								<input
+									data-ui-sound
 									type="radio"
 									name="avatar"
 									value={avatar.id}
@@ -184,9 +179,9 @@ function EditProfile({ user }: { user: AuthUser }) {
 								<img src={avatar.image} alt={avatar.name} />
 							</label>
 						))}
-						{/* 6. krog: "+N", ključavnica ali nič */}
 						{hiddenCount > 0 ? (
 							<button
+								data-ui-sound
 								type="button"
 								className="edit-profile__more"
 								aria-label="Prikaži vse avatarje"
@@ -197,6 +192,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 						) : (
 							hasLocked && (
 								<button
+									data-ui-sound
 									type="button"
 									className="edit-profile__more"
 									aria-label="Odkleni več avatarjev"
@@ -220,20 +216,24 @@ function EditProfile({ user }: { user: AuthUser }) {
 
 					<div className="edit-profile__actions">
 						<button
+							data-ui-sound
 							type="button"
 							className="edit-profile__cancel"
 							onClick={() => navigate("/profil")}
 						>
 							Prekliči
 						</button>
-						<button type="submit" className="edit-profile__save">
+						<button
+							data-ui-sound
+							type="submit"
+							className="edit-profile__save"
+						>
 							{saving ? "Shranjevanje…" : "Shrani"}
 						</button>
 					</div>
 				</fieldset>
 			</form>
 
-			{/* Izven obrazca, da gumbi ne pošljejo obrazca */}
 			{dialogOpen && (
 				<div className="avatar-dialog__backdrop">
 					<div
@@ -246,6 +246,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 						<div className="avatar-dialog__grid">
 							{avatars.map((avatar) => (
 								<button
+									data-ui-sound
 									key={avatar.id}
 									type="button"
 									className={
@@ -264,6 +265,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 							))}
 							{hasLocked && (
 								<button
+									data-ui-sound
 									type="button"
 									className="avatar-dialog__option avatar-dialog__option--unlock"
 									onClick={() => navigate("/nagrade")}
@@ -274,6 +276,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 							)}
 						</div>
 						<button
+							data-ui-sound
 							type="button"
 							className="avatar-dialog__close"
 							onClick={() => setDialogOpen(false)}

@@ -173,7 +173,6 @@
 		padding-top: 8px;
 	}
 
-	/* Navigacija je stolpec, avatar ostane v vrsti z logotipom */
 	.navbar__avatar {
 		position: absolute;
 		top: 6px;

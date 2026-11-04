@@ -1,195 +1,137 @@
-.memory {
-    max-width: 1100px;
-    margin: 32px auto;
-    padding: 0 16px 40px;
-    color: var(--ink);
-}
-
 .memory__turns {
-    margin: 16px 0 20px;
-    color: var(--ink);
-    text-align: center;
-    font-size: 22px;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
+	margin: 16px 0 20px;
+	color: var(--ink);
+	text-align: center;
+	font-size: 22px;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
 }
 
 /* 16 kartic: na velikem zaslonu štiri vrste po štiri */
 .memory__board {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    width: 100%;
-    max-width: 520px;
-    margin: 0 auto;
-    gap: 12px;
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	width: 100%;
+	max-width: 520px;
+	margin: 0 auto;
+	gap: 12px;
 }
 
 /* Zunanji gumb poskrbi za pritisk in perspektivo */
 .memory__card {
-    display: block;
-    position: relative;
-    width: 100%;
-    min-width: 0;
-    aspect-ratio: 1;
-    padding: 0;
-    border: 0;
-    border-radius: 18px;
-    background: transparent;
-    color: var(--ink);
-    font: inherit;
-    cursor: pointer;
-    perspective: 900px;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    transition: transform 100ms ease;
+	display: block;
+	position: relative;
+	width: 100%;
+	min-width: 0;
+	aspect-ratio: 1;
+	padding: 0;
+	border: 0;
+	border-radius: 18px;
+	background: transparent;
+	color: var(--ink);
+	font: inherit;
+	cursor: pointer;
+	perspective: 900px;
+	-webkit-tap-highlight-color: transparent;
+	touch-action: manipulation;
+	transition: transform 100ms ease;
 }
 
 .memory__card[aria-disabled="true"] {
-    cursor: default;
-}
-
-.memory__card:focus-visible {
-    outline: 3px solid var(--sea);
-    outline-offset: 6px;
-}
-
-.memory__card:active:not([aria-disabled="true"]) {
-    transform: translateY(4px);
+	cursor: default;
 }
 
 /* Notranji element se obrne neodvisno od pritiska gumba */
 .memory__card-inner {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    transform-style: preserve-3d;
-    transition: transform 420ms ease;
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border-radius: inherit;
+	transform-style: preserve-3d;
+	transition: transform 420ms ease;
 }
 
 .memory__card--open .memory__card-inner {
-    transform: rotateY(180deg);
+	transform: rotateY(180deg);
 }
 
 .memory__face {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    padding: 10px;
-    border: 2px solid var(--line);
-    border-radius: inherit;
-    box-shadow: 0 4px 0 var(--line);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    user-select: none;
-    transition:
-        background-color 180ms ease,
-        border-color 180ms ease,
-        box-shadow 100ms ease;
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 10px;
+	border: 2px solid var(--line);
+	border-radius: inherit;
+	box-shadow: 0 4px 0 var(--line);
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	user-select: none;
+	transition:
+		background-color 180ms ease,
+		border-color 180ms ease,
+		box-shadow 100ms ease;
 }
 
 .memory__back {
-    background: var(--night);
+	background: var(--night);
 }
 
 .memory__back img {
-    width: 65%;
-    max-width: 80px;
-    height: auto;
-    pointer-events: none;
+	width: 65%;
+	max-width: 80px;
+	height: auto;
+	pointer-events: none;
 }
 
 .memory__front {
-    background: var(--paper);
-    transform: rotateY(180deg);
+	background: var(--paper);
+	transform: rotateY(180deg);
 }
 
 .memory__card:active:not([aria-disabled="true"]) .memory__face {
-    box-shadow: none;
+	box-shadow: none;
 }
 
 .memory__card--solved .memory__front {
-    border-color: var(--leaf);
-    background: var(--leaf-soft);
-    box-shadow: 0 4px 0 var(--leaf);
+	border-color: var(--leaf);
+	background: var(--leaf-soft);
+	box-shadow: 0 4px 0 var(--leaf);
 }
 
 .memory__word {
-    min-width: 0;
-    max-width: 100%;
-    color: var(--ink);
-    font-size: clamp(16px, 1.8vw, 22px);
-    font-weight: 700;
-    line-height: 1.2;
-    text-align: center;
-    overflow-wrap: anywhere;
+	min-width: 0;
+	max-width: 100%;
+	color: var(--ink);
+	font-size: clamp(16px, 1.8vw, 22px);
+	font-weight: 700;
+	line-height: 1.2;
+	text-align: center;
+	overflow-wrap: anywhere;
 }
 
 .memory__image {
-    display: block;
-    width: 80px;
-    max-width: 100%;
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
-    pointer-events: none;
-}
-
-/* Gumbi in rezultat */
-.memory__action {
-    padding: 12px 24px;
-    border: 2px solid var(--line);
-    border-radius: 14px;
-    background: var(--paper);
-    color: var(--ink);
-    font: inherit;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 0 var(--line);
-    transition:
-        transform 100ms ease,
-        box-shadow 100ms ease;
-}
-
-.memory__action:active {
-    transform: translateY(4px);
-    box-shadow: none;
-}
-
-.memory__action:focus-visible {
-    outline: 3px solid var(--sea);
-    outline-offset: 4px;
-}
-
-.memory__status {
-    margin-top: 24px;
-    text-align: center;
-    color: var(--muted);
-}
-
-.memory__save-error {
-    margin-top: 24px;
-    text-align: center;
+	display: block;
+	width: 80px;
+	max-width: 100%;
+	height: auto;
+	max-height: 100%;
+	object-fit: contain;
+	pointer-events: none;
 }
 
 @media (hover: hover) {
-    .memory__card:hover:not([aria-disabled="true"]) .memory__back {
-        border-color: var(--night-soft);
-        box-shadow: 0 4px 0 var(--night-soft);
-    }
-
-    .memory__action:hover {
-        border-color: var(--sea);
-    }
+	.memory__card:hover:not([aria-disabled="true"]) .memory__back {
+		border-color: var(--night-soft);
+		box-shadow: 0 4px 0 var(--night-soft);
+	}
 }
 
 @media (max-width: 900px) {
-    .memory__word {
-        font-size: clamp(16px, 3vw, 22px);
-    }
+	.memory__word {
+		font-size: clamp(16px, 3vw, 22px);
+	}
 }

@@ -92,11 +92,9 @@
 }
 
 .rewards__next-name {
-	margin-bottom: 8px;
 	font-weight: 700;
 }
 
-/* Enak trak kot na profilu, le rumen */
 .rewards__progress {
 	height: 12px;
 	border-radius: 6px;
@@ -110,7 +108,6 @@
 }
 
 .rewards__next-missing {
-	margin-top: 6px;
 	color: var(--muted);
 }
 
@@ -144,7 +141,7 @@
 	text-align: center;
 }
 
-.rewards__avatar img {
+.rewards__avatar > img {
 	width: 64px;
 	height: 64px;
 	margin-bottom: 4px;
@@ -152,10 +149,6 @@
 	border-radius: 50%;
 	background: var(--sea-soft);
 	box-sizing: border-box;
-}
-
-.rewards__avatar--current {
-	border-color: var(--sea);
 }
 
 .rewards__avatar--locked {

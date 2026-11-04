@@ -80,6 +80,7 @@ function GameResult({
 				<button
 					type="button"
 					className="game-result__replay"
+					data-ui-sound
 					onClick={onReplay}
 				>
 					Igraj ponovno
@@ -87,6 +88,7 @@ function GameResult({
 				<button
 					type="button"
 					className="game-result__back"
+					data-ui-sound
 					onClick={onBack}
 				>
 					Nazaj na lekcijo

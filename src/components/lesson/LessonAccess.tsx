@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useParams } from "react-router";
 import { lessons } from "../../data/lessons";
 import { getLessonAvailability } from "../../game/progression";
-import { useProgress } from "../../progress/useProgress";
+import { useProgress } from "../../hooks/useProgress";
 
 export default function LessonAccess() {
 	const { lessonId } = useParams();

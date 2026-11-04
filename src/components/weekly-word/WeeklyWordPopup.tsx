@@ -48,6 +48,7 @@ export default function WeeklyWordPopup({ onClose }: WeeklyWordPopupProps) {
 					</div>
 
 					<button
+						data-ui-sound
 						type="button"
 						className="weekly-word-modal__close"
 						aria-label="Zapri besedo tedna"

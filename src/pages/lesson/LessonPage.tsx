@@ -3,11 +3,11 @@ import { useNavigate } from "react-router";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
 import { getGameStars } from "../../game/scoring";
+import { useWordAudio } from "../../hooks/useWordAudio";
 import type { GameType } from "../../models/game";
 import type { Lesson } from "../../models/lesson";
 import type { LessonProgress } from "../../models/user";
 import type { Word } from "../../models/word";
-import { speak } from "../../utils/speech";
 import "./LessonPage.css";
 
 interface LessonPageProps {
@@ -24,35 +24,35 @@ const GAMES: {
 	icon: string;
 	color: string;
 }[] = [
-		{
-			id: "matching",
-			title: "Poveži besede",
-			description: "Slovenska beseda ↔ angleška beseda",
-			icon: openmoji("1F517"),
-			color: "var(--sea-soft)",
-		},
-		{
-			id: "grammar",
-			title: "Dopolni stavek",
-			description: "Izberi pravo besedo v stavku",
-			icon: openmoji("270F"),
-			color: "var(--leaf-soft)",
-		},
-		{
-			id: "listening",
-			title: "Poslušaj",
-			description: "Poslušaj besedo in izberi pravo sliko",
-			icon: openmoji("1F442"),
-			color: "var(--sea-soft)",
-		},
-		{
-			id: "memory",
-			title: "Spomin",
-			description: "Poišči par: slika + angleška beseda",
-			icon: openmoji("1F0CF"),
-			color: "var(--sun-soft)",
-		},
-	];
+	{
+		id: "matching",
+		title: "Poveži besede",
+		description: "Slovenska beseda ↔ angleška beseda",
+		icon: openmoji("1F517"),
+		color: "var(--sea-soft)",
+	},
+	{
+		id: "grammar",
+		title: "Dopolni stavek",
+		description: "Izberi pravo besedo v stavku",
+		icon: openmoji("270F"),
+		color: "var(--leaf-soft)",
+	},
+	{
+		id: "listening",
+		title: "Poslušaj",
+		description: "Poslušaj besedo in izberi pravo sliko",
+		icon: openmoji("1F442"),
+		color: "var(--sea-soft)",
+	},
+	{
+		id: "memory",
+		title: "Spomin",
+		description: "Poišči par: slika + angleška beseda",
+		icon: openmoji("1F0CF"),
+		color: "var(--sun-soft)",
+	},
+];
 
 // Največ kartic besed v eni vrsti
 const MAX_COLUMNS = 5;
@@ -65,6 +65,8 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 	const words = lesson.content.wordIds
 		.map((id) => wordsById.get(id))
 		.filter((word): word is Word => word !== undefined);
+
+	const { play, playingWordId, error } = useWordAudio();
 
 	// Čim manj vrst, kartice pa enakomerno razdelimo (8 → 4 + 4, 10 → 5 + 5)
 	const rows = Math.ceil(words.length / MAX_COLUMNS);
@@ -103,8 +105,12 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 						<span className="word-card__en">{word.en}</span>
 						<span className="word-card__sl">{word.sl}</span>
 						<button
-							className="word-card__say"
-							onClick={() => speak(word.en)}
+							className={
+								playingWordId === word.id
+									? "word-card__say word-card__say--playing"
+									: "word-card__say"
+							}
+							onClick={() => play(word)}
 							aria-label={`Poslušaj: ${word.en}`}
 						>
 							<img
@@ -117,6 +123,12 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 					</div>
 				))}
 			</section>
+
+			{error && (
+				<p className="lesson__audio-error" role="alert">
+					{error}
+				</p>
+			)}
 
 			{/* Nekatere lekcije nimajo pravil */}
 			{lesson.content.grammarHints.map((hint) => (
@@ -210,14 +222,9 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 											</span>
 										))}
 								</span>
-								{/* TODO: odpri ostale igre, ko bodo narejene */}
 								<button
 									className="game-card__play"
-									disabled={
-										game.id !== "matching" &&
-										game.id !== "grammar" &&
-										game.id !== "memory"
-									}
+									data-ui-sound
 									onClick={() =>
 										navigate(
 											`/lekcija/${lesson.id}/igra/${game.id}`,

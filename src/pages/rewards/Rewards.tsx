@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useSearchParams } from "react-router";
+import { RewardIcon } from "../../components/RewardIcon";
 import {
 	AVATARS,
 	getAvatar,
@@ -8,7 +9,7 @@ import {
 } from "../../data/avatars";
 import { FRAMES, isOwned, THEMES, type ShopItem } from "../../data/shop";
 import { getTotalStars, type User } from "../../models/user";
-import { useProgress } from "../../progress/useProgress";
+import { useProgress } from "../../hooks/useProgress";
 import { applyItem, buyItem } from "../../services/shop";
 import { plural } from "../../utils/plural";
 import "./Rewards.css";
@@ -33,7 +34,7 @@ function Rewards() {
 			<h1 className="rewards__title">Nagrade</h1>
 			<div className="rewards__chips">
 				<span className="rewards__chip rewards__chip--stars">
-					⭐{" "}
+					<RewardIcon kind="star" />{" "}
 					{plural(totalStars, [
 						"zvezdica",
 						"zvezdici",
@@ -42,7 +43,7 @@ function Rewards() {
 					])}
 				</span>
 				<span className="rewards__chip rewards__chip--shells">
-					🐚{" "}
+					<RewardIcon kind="shell" />{" "}
 					{plural(user?.shells ?? 0, [
 						"školjka",
 						"školjki",
@@ -54,6 +55,7 @@ function Rewards() {
 
 			<div className="rewards__tabs" role="tablist">
 				<button
+					data-ui-sound
 					type="button"
 					role="tab"
 					id="rewards-tab-avatarji"
@@ -65,6 +67,7 @@ function Rewards() {
 					Avatarji
 				</button>
 				<button
+					data-ui-sound
 					type="button"
 					role="tab"
 					id="rewards-tab-trgovina"
@@ -127,7 +130,8 @@ function AvatarsTab({ totalStars }: { totalStars: number }) {
 							/>
 						</div>
 						<p className="rewards__next-missing">
-							še {getMissingStars(next, totalStars)} ⭐
+							še {getMissingStars(next, totalStars)}{" "}
+							<RewardIcon kind="star" />
 						</p>
 					</div>
 				</section>
@@ -136,7 +140,6 @@ function AvatarsTab({ totalStars }: { totalStars: number }) {
 			)}
 
 			<h2 className="rewards__subtitle">Avatarji</h2>
-			{/* Samo pregled, avatar se menja v Uredi profil */}
 			<ul className="rewards__grid">
 				{AVATARS.map((avatar) => {
 					const unlocked = isAvatarUnlocked(avatar, totalStars);
@@ -154,7 +157,8 @@ function AvatarsTab({ totalStars }: { totalStars: number }) {
 								</span>
 							) : (
 								<span className="rewards__status">
-									{avatar.requiredStars} ⭐
+									{avatar.requiredStars}{" "}
+									<RewardIcon kind="star" />
 								</span>
 							)}
 						</li>
@@ -277,6 +281,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 	if (isActive) {
 		button = (
 			<button
+				data-ui-sound
 				type="button"
 				className="rewards__buy rewards__buy--active"
 				disabled
@@ -287,6 +292,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 	} else if (owned) {
 		button = (
 			<button
+				data-ui-sound
 				type="button"
 				className="rewards__buy rewards__buy--use"
 				disabled={saving}
@@ -298,21 +304,23 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 	} else if (canBuy) {
 		button = (
 			<button
+				data-ui-sound
 				type="button"
 				className="rewards__buy rewards__buy--buy"
 				onClick={() => setBuyOpen(true)}
 			>
-				Kupi 🐚 {item.price}
+				Kupi <RewardIcon kind="shell" /> {item.price}
 			</button>
 		);
 	} else {
 		button = (
 			<button
+				data-ui-sound
 				type="button"
 				className="rewards__buy rewards__buy--locked"
 				disabled
 			>
-				🐚 {item.price}
+				<RewardIcon kind="shell" /> {item.price}
 			</button>
 		);
 	}
@@ -336,10 +344,12 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 					</span>
 				) : (
 					<span className="rewards__missing">
-						{!isActive &&
-							!owned &&
-							!canBuy &&
-							`še ${item.price - user.shells} 🐚`}
+						{!isActive && !owned && !canBuy && (
+							<>
+								še {item.price - user.shells}{" "}
+								<RewardIcon kind="shell" />
+							</>
+						)}
 					</span>
 				)}
 			</div>
@@ -358,10 +368,11 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 						{/* Isti predogled kot na kartici */}
 						<div className="buy-dialog__preview">{children}</div>
 						<p className="buy-dialog__price">
-							Cena: 🐚 {item.price}
+							Cena: <RewardIcon kind="shell" /> {item.price}
 						</p>
 						<p className="buy-dialog__rest">
-							Ostane ti: 🐚 {user.shells - item.price}
+							Ostane ti: <RewardIcon kind="shell" />{" "}
+							{user.shells - item.price}
 						</p>
 						{error && (
 							<p className="buy-dialog__error" role="alert">
@@ -370,6 +381,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 						)}
 						<div className="buy-dialog__actions">
 							<button
+								data-ui-sound
 								type="button"
 								className="buy-dialog__yes"
 								disabled={saving}
@@ -378,6 +390,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 								{saving ? "…" : "Da, kupim"}
 							</button>
 							<button
+								data-ui-sound
 								type="button"
 								className="buy-dialog__no"
 								disabled={saving}

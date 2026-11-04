@@ -14,7 +14,11 @@ import {
 } from "firebase/firestore";
 import { AVATARS, isAvatarUnlocked } from "../data/avatars";
 import { auth, db } from "../firebase";
-import type { User as AppUser, UserProfile } from "../models/user";
+import {
+	getTotalStars,
+	type User as AppUser,
+	type UserProfile,
+} from "../models/user";
 import { loadLessonProgress } from "../services/progress";
 import { loadShop } from "../services/shop";
 
@@ -82,13 +86,9 @@ export async function register(
 export async function updateUser(user: User, profile: UserProfile) {
 	const current = await ensureUserProfile(user);
 
-	// Zvezdice preverimo le ob menjavi avatarja, obstoječi ostane dovoljen
 	if (profile.avatar !== current.avatar) {
 		const lessonProgress = await loadLessonProgress(db, user.uid);
-		const totalStars = Object.values(lessonProgress).reduce(
-			(sum, progress) => sum + progress.stars,
-			0,
-		);
+		const totalStars = getTotalStars({ lessonProgress });
 		const avatar = AVATARS.find((a) => a.id === profile.avatar);
 		if (!avatar || !isAvatarUnlocked(avatar, totalStars)) {
 			throw new Error("avatar-locked");

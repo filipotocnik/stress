@@ -1,17 +1,5 @@
-.fill {
-	max-width: 640px;
-	margin: 32px auto;
-	padding: 0 16px;
-}
-
-.fill__count {
-	margin: 0 0 16px;
-	text-align: center;
-	color: var(--muted);
-}
-
 .fill__sentence {
-	margin: 64px 0 24px;
+	margin: 32px 0 24px;
 	text-align: center;
 	color: var(--ink);
 	font-size: 28px;
@@ -32,12 +20,11 @@
 .fill__blank--done {
 	border-color: var(--leaf);
 	border-radius: 8px 8px 0 0;
-	/*background: var(--leaf-soft);*/
 	color: var(--leaf);
 }
 
 .fill__options {
-	margin: 32px;
+	margin: 32px 0;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -64,12 +51,6 @@
 	border-color: var(--sea);
 }
 
-/* ob pritisku se gumb spusti na mesto sence */
-.fill__option:active:not(:disabled) {
-	transform: translateY(4px);
-	box-shadow: none;
-}
-
 .fill__option:disabled {
 	cursor: default;
 }
@@ -86,53 +67,4 @@
 	background: var(--berry-soft);
 	color: var(--berry);
 	box-shadow: 0 4px 0 var(--berry);
-}
-
-.fill__feedback {
-	min-height: 96px;
-	margin-top: 24px;
-	text-align: center;
-}
-
-.fill__message {
-	margin: 0 0 12px;
-	font-size: 18px;
-	font-weight: 700;
-}
-
-.fill__message--correct {
-	color: var(--leaf);
-}
-
-.fill__message--wrong {
-	color: var(--berry);
-}
-
-.fill .start-button {
-	margin: 64px;
-	width: auto;
-	padding: 14px 40px;
-}
-
-.fill__retry {
-	display: block;
-	margin: 12px auto 0;
-	padding: 12px 24px;
-	border: 2px solid var(--line);
-	border-radius: 8px;
-	background: var(--paper);
-	color: var(--ink);
-	font-size: 18px;
-	font-weight: 700;
-	cursor: pointer;
-}
-
-.fill__next {
-	border-color: var(--sea);
-	background: var(--sea-soft);
-}
-
-.fill__status {
-	text-align: center;
-	color: var(--muted);
 }
