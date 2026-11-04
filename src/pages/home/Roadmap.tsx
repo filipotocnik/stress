@@ -142,7 +142,6 @@ function Roadmap({
 						mood={allDone ? "cheer" : "encourage"}
 						message={tobiMessage}
 						size={144}
-						cropped
 					/>
 				</div>
 
