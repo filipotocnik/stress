@@ -93,12 +93,12 @@
 }
 
 .memory__back {
-    background: var(--sun-soft);
+    background: var(--night);
 }
 
 .memory__back img {
-    width: 44%;
-    max-width: 48px;
+    width: 65%;
+    max-width: 80px;
     height: auto;
     pointer-events: none;
 }
@@ -179,8 +179,8 @@
 
 @media (hover: hover) {
     .memory__card:hover:not([aria-disabled="true"]) .memory__back {
-        border-color: var(--sun);
-        box-shadow: 0 4px 0 var(--sun);
+        border-color: var(--night-soft);
+        box-shadow: 0 4px 0 var(--night-soft);
     }
 
     .memory__action:hover {

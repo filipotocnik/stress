@@ -39,7 +39,7 @@ interface MemoryCard {
 
 const MISMATCH_DELAY = 1000;
 const FINISH_DELAY = 1200;
-const CARD_BACK_IMAGE = openmoji("2753");
+const CARD_BACK_IMAGE = openmoji("2754");
 
 // Vrne nov, naključno premešan seznam
 function shuffle<T>(items: readonly T[]): T[] {
