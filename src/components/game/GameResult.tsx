@@ -61,10 +61,18 @@ function GameResult({
 			)}
 
 			<div className="game-result__actions">
-				<button className="game-result__replay" onClick={onReplay}>
+				<button
+					className="game-result__replay"
+					data-ui-sound
+					onClick={onReplay}
+				>
 					Igraj ponovno
 				</button>
-				<button className="game-result__back" onClick={onBack}>
+				<button
+					className="game-result__back"
+					data-ui-sound
+					onClick={onBack}
+				>
 					Nazaj na lekcijo
 				</button>
 			</div>

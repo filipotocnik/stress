@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { useNavigate } from "react-router";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
+import { getListeningWords } from "../../game/listening";
 import { getGameStars } from "../../game/scoring";
 import { useWordAudio } from "../../hooks/useWordAudio";
 import type { GameType } from "../../models/game";
@@ -67,6 +68,7 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 		.filter((word): word is Word => word !== undefined);
 
 	const { play, playingWordId, error } = useWordAudio();
+	const canListen = getListeningWords(lesson).length >= 2;
 
 	// Čim manj vrst, kartice pa enakomerno razdelimo (8 → 4 + 4, 10 → 5 + 5)
 	const rows = Math.ceil(words.length / MAX_COLUMNS);
@@ -222,12 +224,13 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 											</span>
 										))}
 								</span>
-								{/* TODO: odpri ostale igre, ko bodo narejene */}
 								<button
 									className="game-card__play"
+									data-ui-sound
 									disabled={
 										game.id !== "matching" &&
-										game.id !== "grammar"
+										game.id !== "grammar" &&
+										(game.id !== "listening" || !canListen)
 									}
 									onClick={() =>
 										navigate(

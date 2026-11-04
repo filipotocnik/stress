@@ -38,6 +38,7 @@ function Navbar() {
 						// end: aktivna samo na "/", ne na vseh podstraneh
 						end={link.to === "/"}
 						className="navbar__link"
+						data-ui-sound
 						onClick={(event) => handleClick(event, link.to)}
 					>
 						{link.label}
@@ -49,6 +50,7 @@ function Navbar() {
 				<NavLink
 					to="/profil"
 					className="navbar__avatar"
+					data-ui-sound
 					aria-label="Moj profil"
 					title="Moj profil"
 					onClick={(event) => handleClick(event, "/profil")}
@@ -70,6 +72,7 @@ function Navbar() {
 						<div className="leave-dialog__actions">
 							<button
 								className="leave-dialog__stay"
+								data-ui-sound
 								onClick={() => setPendingPath(null)}
 								autoFocus
 							>
@@ -77,6 +80,7 @@ function Navbar() {
 							</button>
 							<button
 								className="leave-dialog__leave"
+								data-ui-sound
 								onClick={leaveGame}
 							>
 								Zapusti

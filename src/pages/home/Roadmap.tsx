@@ -138,6 +138,7 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 						</p>
 						<button
 							className="start-button"
+							data-ui-sound
 							onClick={() => onSelectLesson(currentLesson.id)}
 						>
 							{progress[currentLesson.id]

@@ -10,11 +10,13 @@ import {
 } from "react-router";
 import { getAuthErrorMessage, logIn, logOut, register } from "./auth/auth";
 import { useAuth } from "./auth/useAuth";
+import { useUiAudio } from "./hooks/useUiAudio";
 import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
 import FillGame from "./pages/games/FillGame";
+import ListeningGame from "./pages/games/ListeningGame";
 import MatchGame from "./pages/games/MatchGame";
 import Roadmap from "./pages/home/Roadmap";
 import LessonPage from "./pages/lesson/LessonPage";
@@ -26,6 +28,7 @@ import { ProgressProvider } from "./progress/ProgressProvider";
 import { useProgress } from "./progress/useProgress";
 
 function App() {
+	useUiAudio();
 	const { user, loading, error } = useAuth();
 	const [submitting, setSubmitting] = useState(false);
 
@@ -207,6 +210,10 @@ function GameRoute() {
 
 	if (gameId === "grammar") {
 		return <FillGame key={lesson.id} lesson={lesson} />;
+	}
+
+	if (gameId === "listening") {
+		return <ListeningGame key={lesson.id} lesson={lesson} />;
 	}
 
 	return <Navigate to={`/lekcija/${lesson.id}`} replace />;

@@ -8,6 +8,7 @@ import { useGameSession } from "../../game/useGameSession";
 import type { GameResult as GameResultData } from "../../models/game";
 import type { Lesson } from "../../models/lesson";
 import { useProgress } from "../../progress/useProgress";
+import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
 import { useRecordedAudio } from "../../hooks/useRecordedAudio";
 import { getGrammarAudioId } from "../../utils/audio";
 import "./FillGame.css";
@@ -45,6 +46,7 @@ function FillGame({ lesson }: FillGameProps) {
 function FillRound({ lesson, onReplay }: FillRoundProps) {
 	const questions = lesson.content.grammar;
 	const { play, stop, error } = useRecordedAudio();
+	const { play: playFeedback, stop: stopFeedback } = useFeedbackAudio();
 
 	const { resolvedCount, totalCount, result, dispatch } = useGameSession({
 		gameType: "grammar",
@@ -72,23 +74,28 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 	const [before, after] = question.sentence.split("___");
 
 	function handlePick(option: string) {
+		if (picked !== null || wrong.includes(option)) return;
 		const correct = option === question.correctAnswer;
 		dispatch({ type: "answer", itemId: question.id, correct });
-
 		if (correct) {
 			setPicked(option);
-			play(getGrammarAudioId(lesson.id, question.id));
+			playFeedback(true, () =>
+				play(getGrammarAudioId(lesson.id, question.id)),
+			);
 		} else {
+			playFeedback(false);
 			setWrong((prev) => [...prev, option]);
 		}
 	}
 
 	// Premaknemo se na naslednji stavek in počistimo prikaz prejšnjega
 	function handleNext() {
+		stopFeedback();
 		stop();
 		setIndex((i) => i + 1);
 		setPicked(null);
 		setWrong([]);
+		playFeedback(index + 1 === questions.length ? "complete" : "next");
 	}
 
 	return (
@@ -98,10 +105,6 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 				done={resolvedCount}
 				total={totalCount}
 			/>
-
-			<p className="fill__count">
-				Stavek {index + 1} od {questions.length}
-			</p>
 
 			<p className="fill__sentence">
 				{before}
@@ -143,9 +146,10 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 				<div role="alert">
 					<p>{error}</p>
 					<button
-						onClick={() =>
-							play(getGrammarAudioId(lesson.id, question.id))
-						}
+						onClick={() => {
+							stopFeedback();
+							play(getGrammarAudioId(lesson.id, question.id));
+						}}
 					>
 						Poslušaj znova
 					</button>

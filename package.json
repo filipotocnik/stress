@@ -10,6 +10,7 @@
 		"emulators:seed": "node scripts/seed-emulators.mjs",
 		"audio:generate": "node scripts/generate-audio.mjs",
 		"audio:check": "node scripts/generate-audio.mjs --check",
+		"audio:feedback": "node scripts/generate-feedback-audio.mjs",
 		"build": "tsc -b && vite build",
 		"format": "prettier --write .",
 		"check": "prettier --check . && eslint . --max-warnings 0 && npm run build"

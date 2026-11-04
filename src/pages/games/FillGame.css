@@ -4,12 +4,6 @@
 	padding: 0 16px;
 }
 
-.fill__count {
-	margin: 0 0 16px;
-	text-align: center;
-	color: var(--muted);
-}
-
 .fill__sentence {
 	margin: 64px 0 24px;
 	text-align: center;

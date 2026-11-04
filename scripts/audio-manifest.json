@@ -227,6 +227,12 @@
 		"modelId": "eleven_v4",
 		"outputFormat": "mp3_44100_128"
 	},
+	"finger": {
+		"text": "finger",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
 	"five": {
 		"text": "five",
 		"voiceId": "XrExE9yKIg1WjnnlVkGX",
@@ -253,6 +259,300 @@
 	},
 	"ghost": {
 		"text": "ghost",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"gloves": {
+		"text": "gloves",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/clothes/clothes-1": {
+		"text": "My hat is blue.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/clothes/clothes-2": {
+		"text": "My shoes are black.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/clothes/clothes-3": {
+		"text": "My T-shirt is yellow.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/clothes/clothes-4": {
+		"text": "My socks are white.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/colours/colours-1": {
+		"text": "It is red.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/colours/colours-2": {
+		"text": "What colour is it?",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/colours/colours-3": {
+		"text": "It is blue.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/colours/colours-4": {
+		"text": "It is green.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/food/food-1": {
+		"text": "I like apples.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/food/food-2": {
+		"text": "I don't like cheese.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/food/food-3": {
+		"text": "I don't like carrots.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/food/food-4": {
+		"text": "I like bananas.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/free-time/free-time-1": {
+		"text": "I can swim.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/free-time/free-time-2": {
+		"text": "I can't dance.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/free-time/free-time-3": {
+		"text": "I can play football.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/free-time/free-time-4": {
+		"text": "I can't sing.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/meal-times/meal-times-1": {
+		"text": "What do you have for breakfast?",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/meal-times/meal-times-2": {
+		"text": "I have cereal for breakfast.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/meal-times/meal-times-3": {
+		"text": "It is eight o'clock.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/meal-times/meal-times-4": {
+		"text": "It's seven o'clock.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/months-and-festivals/months-and-festivals-1": {
+		"text": "Halloween is in October.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/months-and-festivals/months-and-festivals-2": {
+		"text": "Christmas is in December.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/months-and-festivals/months-and-festivals-3": {
+		"text": "Easter is in March or April.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/months-and-festivals/months-and-festivals-4": {
+		"text": "Halloween is in October.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/my-body/my-body-1": {
+		"text": "I have got blue eyes.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/my-body/my-body-2": {
+		"text": "She has got long hair.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/my-body/my-body-3": {
+		"text": "He has got green eyes.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/my-body/my-body-4": {
+		"text": "You have got two ears.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/my-family/my-family-1": {
+		"text": "I have got a sister.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/my-family/my-family-2": {
+		"text": "I've got a brother.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/my-family/my-family-3": {
+		"text": "I have got two brothers.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/my-family/my-family-4": {
+		"text": "I've got a sister.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/numbers/numbers-1": {
+		"text": "I am eight.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/numbers/numbers-2": {
+		"text": "How old are you?",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/numbers/numbers-3": {
+		"text": "I am seven years old.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/numbers/numbers-4": {
+		"text": "I am six.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/school-day/school-day-1": {
+		"text": "Do you like Maths?",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/school-day/school-day-2": {
+		"text": "Do you like Music? Yes, I do.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/school-day/school-day-3": {
+		"text": "Maths is on Monday.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/school-day/school-day-4": {
+		"text": "When is English?",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/school-things/school-things-1": {
+		"text": "What is this?",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/school-things/school-things-2": {
+		"text": "It is a pencil.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/school-things/school-things-3": {
+		"text": "This is a book.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/school-things/school-things-4": {
+		"text": "It is a ruler.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/wild-animals/wild-animals-1": {
+		"text": "Has it got a tail?",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/wild-animals/wild-animals-2": {
+		"text": "Can it fly?",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/wild-animals/wild-animals-3": {
+		"text": "Can it fly? No, it can't.",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"grammar/wild-animals/wild-animals-4": {
+		"text": "Has it got legs? Yes, it has.",
 		"voiceId": "XrExE9yKIg1WjnnlVkGX",
 		"modelId": "eleven_v4",
 		"outputFormat": "mp3_44100_128"
@@ -461,8 +761,20 @@
 		"modelId": "eleven_v4",
 		"outputFormat": "mp3_44100_128"
 	},
+	"santa": {
+		"text": "santa",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
 	"science": {
 		"text": "Science",
+		"voiceId": "XrExE9yKIg1WjnnlVkGX",
+		"modelId": "eleven_v4",
+		"outputFormat": "mp3_44100_128"
+	},
+	"scissors": {
+		"text": "scissors",
 		"voiceId": "XrExE9yKIg1WjnnlVkGX",
 		"modelId": "eleven_v4",
 		"outputFormat": "mp3_44100_128"

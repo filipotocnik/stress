@@ -101,7 +101,11 @@ function Profile({ user, onEdit }: ProfileProps) {
 			</section>
 
 			{onEdit && (
-				<button className="profile__edit" onClick={onEdit}>
+				<button
+					className="profile__edit"
+					data-ui-sound
+					onClick={onEdit}
+				>
 					Uredi profil
 				</button>
 			)}

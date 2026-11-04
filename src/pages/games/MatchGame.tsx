@@ -11,6 +11,7 @@ import { getGameStars } from "../../game/scoring";
 import { useGameResultSave } from "../../game/useGameResultSave";
 import GameResult from "../../components/game/GameResult";
 import { Navigate, useNavigate } from "react-router";
+import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
 import { useWordAudio } from "../../hooks/useWordAudio";
 
 interface MatchGameProps {
@@ -74,10 +75,12 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 	const [slWords] = useState(() => shuffle(words));
 
 	const { play, error } = useWordAudio();
+	const { play: playFeedback } = useFeedbackAudio();
 
 	const [selectedEn, setSelectedEn] = useState<string | null>(null);
 	const [selectedSl, setSelectedSl] = useState<string | null>(null);
 	const [solved, setSolved] = useState<Set<string>>(new Set());
+	const [showResult, setShowResult] = useState(false);
 	const [wrong, setWrong] = useState<{ en: string; sl: string } | null>(null);
 
 	// Napačen par pokažemo 600 ms, tajmer počistimo, če igro zapustimo prej
@@ -89,13 +92,15 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 
 	function handleSelect(column: "en" | "sl", id: string) {
 		// Med prikazom napačnega para klike prezremo
-		if (wrong) return;
+		if (result !== null || wrong || solved.has(id)) return;
 
 		const en = column === "en" ? id : selectedEn;
 		const sl = column === "sl" ? id : selectedSl;
 
 		// Izbrana je šele ena beseda, počakamo na drugo
 		if (en === null || sl === null) {
+			if (id !== (column === "en" ? selectedEn : selectedSl))
+				playFeedback("tap");
 			setSelectedEn(en);
 			setSelectedSl(sl);
 			return;
@@ -106,8 +111,17 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 			setSolved((prev) => new Set(prev).add(en));
 			// Pravilen par: angleško besedo preberemo na glas
 			const word = wordsById.get(en);
-			if (word) play(word);
+			const isLastPair = solved.size + 1 === words.length;
+			function finishRound() {
+				setShowResult(true);
+				playFeedback("complete");
+			}
+			playFeedback(true, () => {
+				if (word) play(word, isLastPair ? finishRound : undefined);
+				else if (isLastPair) finishRound();
+			});
 		} else {
+			playFeedback(false);
 			dispatch({ type: "answer", itemId: en, correct: false });
 			setWrong({ en, sl });
 		}
@@ -138,7 +152,8 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 		);
 	}
 
-	if (result !== null) {
+	// Zadnji par ostane viden, dokler se njegova izgovorjava ne konča.
+	if (result !== null && showResult) {
 		return (
 			<MatchSave
 				lessonId={lesson.id}
