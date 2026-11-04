@@ -167,6 +167,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 								className="edit-profile__avatar"
 							>
 								<input
+									data-ui-sound
 									type="radio"
 									name="avatar"
 									value={avatar.id}
@@ -180,6 +181,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 						))}
 						{hiddenCount > 0 ? (
 							<button
+								data-ui-sound
 								type="button"
 								className="edit-profile__more"
 								aria-label="Prikaži vse avatarje"
@@ -190,6 +192,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 						) : (
 							hasLocked && (
 								<button
+									data-ui-sound
 									type="button"
 									className="edit-profile__more"
 									aria-label="Odkleni več avatarjev"
@@ -213,13 +216,18 @@ function EditProfile({ user }: { user: AuthUser }) {
 
 					<div className="edit-profile__actions">
 						<button
+							data-ui-sound
 							type="button"
 							className="edit-profile__cancel"
 							onClick={() => navigate("/profil")}
 						>
 							Prekliči
 						</button>
-						<button type="submit" className="edit-profile__save">
+						<button
+							data-ui-sound
+							type="submit"
+							className="edit-profile__save"
+						>
 							{saving ? "Shranjevanje…" : "Shrani"}
 						</button>
 					</div>
@@ -238,6 +246,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 						<div className="avatar-dialog__grid">
 							{avatars.map((avatar) => (
 								<button
+									data-ui-sound
 									key={avatar.id}
 									type="button"
 									className={
@@ -256,6 +265,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 							))}
 							{hasLocked && (
 								<button
+									data-ui-sound
 									type="button"
 									className="avatar-dialog__option avatar-dialog__option--unlock"
 									onClick={() => navigate("/nagrade")}
@@ -266,6 +276,7 @@ function EditProfile({ user }: { user: AuthUser }) {
 							)}
 						</div>
 						<button
+							data-ui-sound
 							type="button"
 							className="avatar-dialog__close"
 							onClick={() => setDialogOpen(false)}

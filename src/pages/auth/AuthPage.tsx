@@ -109,6 +109,7 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
 										className="auth-avatar"
 									>
 										<input
+											data-ui-sound
 											type="radio"
 											name="avatar"
 											value={avatar.id}
@@ -159,7 +160,7 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
 							{error}
 						</p>
 					)}
-					<button className="auth-button" type="submit">
+					<button data-ui-sound className="auth-button" type="submit">
 						{submitting
 							? "Počakaj…"
 							: isRegistration
@@ -172,6 +173,7 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
 			<p className="auth-switch">
 				{isRegistration ? "Že imaš račun?" : "Še nimaš računa?"}{" "}
 				<button
+					data-ui-sound
 					className="auth-link"
 					type="button"
 					onClick={switchMode}

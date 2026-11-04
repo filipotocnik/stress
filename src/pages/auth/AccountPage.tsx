@@ -67,6 +67,7 @@ export default function AccountPage({ user }: { user: User }) {
 						{profileError}
 					</p>
 					<button
+						data-ui-sound
 						className="auth-button auth-button--secondary"
 						onClick={() => {
 							setProfileError("");
@@ -83,6 +84,7 @@ export default function AccountPage({ user }: { user: User }) {
 				</p>
 			)}
 			<button
+				data-ui-sound
 				className="auth-button"
 				onClick={handleLogOut}
 				disabled={signingOut}

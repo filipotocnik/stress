@@ -54,7 +54,12 @@ function Navbar() {
 					title="Moj profil"
 					onClick={(event) => handleClick(event, "/profil")}
 				>
-					<img src={getAvatar(user.avatar).image} alt="" />
+					{/* Okvir je na ovoju, img ne podpira ::before/::after */}
+					<span
+						className={`navbar__avatar-frame frame--${user.activeFrame}`}
+					>
+						<img src={getAvatar(user.avatar).image} alt="" />
+					</span>
 				</NavLink>
 			)}
 
