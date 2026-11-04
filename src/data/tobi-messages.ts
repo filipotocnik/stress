@@ -52,8 +52,8 @@ const GAME_MESSAGES: Record<GameEvent, string[]> = {
 
 // Naključno sporočilo, ki ni enako prejšnjemu
 export function pickGameMessage(event: GameEvent, previous?: string): string {
-	const messages = GAME_MESSAGES[event].filter(
-		(message) => message !== previous,
-	);
+	const all = GAME_MESSAGES[event];
+	const others = all.filter((message) => message !== previous);
+	const messages = others.length > 0 ? others : all;
 	return messages[Math.floor(Math.random() * messages.length)];
 }

@@ -65,10 +65,18 @@
 	color: var(--line);
 }
 
-.game-result__message {
-	margin: 16px 0 4px;
-	font-size: 20px;
-	font-weight: 700;
+.game-result__tobi {
+	margin: 16px 0 8px;
+}
+
+.game-result__tobi .tobi-bubble {
+	justify-content: center;
+}
+
+/* Vrstica s Tobijem med igro. Tobi ima stalno višino, zato se gumbi
+   pod njim ne premaknejo, ko se sporočilo spremeni. */
+.game-tobi {
+	margin: 12px 0 16px;
 }
 
 .game-result__score {

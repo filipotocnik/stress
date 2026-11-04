@@ -1,5 +1,6 @@
 import "./Game.css";
 import type { LessonStars } from "../../models/game";
+import TobiBubble from "../mascot/TobiBubble";
 
 interface GameResultProps {
 	title: string;
@@ -51,9 +52,14 @@ function GameResult({
 				</span>
 			)}
 
-			<p className="game-result__message">
-				{stars === null ? "Našel si vse pare!" : MESSAGES[stars]}
-			</p>
+			<div className="game-result__tobi">
+				<TobiBubble
+					mood={stars === 1 ? "happy" : "cheer"}
+					message={
+						stars === null ? "Našel si vse pare!" : MESSAGES[stars]
+					}
+				/>
+			</div>
 			{firstTryCorrect !== null && (
 				<p className="game-result__score">
 					Pravilni odgovori: {firstTryCorrect} / {total}
