@@ -229,7 +229,7 @@
 .edit-profile__save {
 	border: 0;
 	background: var(--leaf);
-	color: var(--paper);
+	color: #fff;
 	box-shadow: 0 4px 0 #1f6b2f;
 }
 

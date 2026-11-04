@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { User as AuthUser } from "firebase/auth";
 import {
 	Navigate,
@@ -22,6 +22,7 @@ import EditProfile from "./pages/profile/EditProfile";
 import Profile from "./pages/profile/Profile";
 import Rewards from "./pages/rewards/Rewards";
 import { lessons } from "./data";
+import { DEFAULT_THEME, getShopItem } from "./data/shop";
 import { ProgressProvider } from "./progress/ProgressProvider";
 import { useProgress } from "./progress/useProgress";
 import MemoryGame from "./pages/games/MemoryGame";
@@ -29,6 +30,7 @@ import MemoryGame from "./pages/games/MemoryGame";
 function App() {
 	const { user, loading, error } = useAuth();
 	const [submitting, setSubmitting] = useState(false);
+	const navigate = useNavigate();
 
 	async function handleAuthenticate(values: AuthFormValues) {
 		setSubmitting(true);
@@ -43,6 +45,7 @@ function App() {
 			} else {
 				await logIn(values.email, values.password);
 			}
+			navigate("/", { replace: true });
 		} finally {
 			setSubmitting(false);
 		}
@@ -121,6 +124,21 @@ function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 function AppLayout() {
 	const { user, loading, error, refresh } = useProgress();
 	const [logoutError, setLogoutError] = useState("");
+	const activeTheme = user?.activeTheme;
+
+	// Izbrana tema velja za celo aplikacijo, barve so v styles/themes.css
+	useEffect(() => {
+		const root = document.documentElement;
+		// Neznan id ali id okvirja obravnavamo kot privzeto temo
+		const isTheme = getShopItem(activeTheme ?? "")?.type === "theme";
+		if (!activeTheme || activeTheme === DEFAULT_THEME || !isTheme) {
+			root.removeAttribute("data-theme");
+		} else {
+			root.dataset.theme = activeTheme;
+		}
+		// Ob odjavi se vrne privzeta tema
+		return () => root.removeAttribute("data-theme");
+	}, [activeTheme]);
 
 	async function handleLogOut() {
 		try {
