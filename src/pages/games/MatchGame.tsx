@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import GameHeader from "../../components/game/GameHeader";
+import TobiBubble from "../../components/mascot/TobiBubble";
+import { useTobiReaction } from "../../game/useTobiReaction";
 import { wordsById } from "../../data";
 import { useGameSession } from "../../game/useGameSession";
 import type { Lesson } from "../../models/lesson";
@@ -69,6 +71,8 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 		itemIds: words.map((w) => w.id),
 	});
 
+	const tobi = useTobiReaction();
+
 	// Stolpca premešamo samo enkrat, ob začetku igre
 	const [enWords] = useState(() => shuffle(words));
 	const [slWords] = useState(() => shuffle(words));
@@ -98,6 +102,8 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 			setSelectedSl(sl);
 			return;
 		}
+
+		tobi.onAnswer(en === sl);
 
 		if (en === sl) {
 			dispatch({ type: "answer", itemId: en, correct: true });
@@ -153,6 +159,10 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 				done={resolvedCount}
 				total={totalCount}
 			/>
+
+			<div className="game-tobi">
+				<TobiBubble mood={tobi.mood} message={tobi.message} />
+			</div>
 
 			<div className="match__board">
 				<div className="match__column">
