@@ -24,35 +24,35 @@ const GAMES: {
 	icon: string;
 	color: string;
 }[] = [
-	{
-		id: "matching",
-		title: "Poveži besede",
-		description: "Slovenska beseda ↔ angleška beseda",
-		icon: openmoji("1F517"),
-		color: "var(--sea-soft)",
-	},
-	{
-		id: "grammar",
-		title: "Dopolni stavek",
-		description: "Izberi pravo besedo v stavku",
-		icon: openmoji("270F"),
-		color: "var(--leaf-soft)",
-	},
-	{
-		id: "listening",
-		title: "Poslušaj",
-		description: "Poslušaj besedo in izberi pravo sliko",
-		icon: openmoji("1F442"),
-		color: "var(--sea-soft)",
-	},
-	{
-		id: "memory",
-		title: "Spomin",
-		description: "Poišči par: slika + angleška beseda",
-		icon: openmoji("1F0CF"),
-		color: "var(--sun-soft)",
-	},
-];
+		{
+			id: "matching",
+			title: "Poveži besede",
+			description: "Slovenska beseda ↔ angleška beseda",
+			icon: openmoji("1F517"),
+			color: "var(--sea-soft)",
+		},
+		{
+			id: "grammar",
+			title: "Dopolni stavek",
+			description: "Izberi pravo besedo v stavku",
+			icon: openmoji("270F"),
+			color: "var(--leaf-soft)",
+		},
+		{
+			id: "listening",
+			title: "Poslušaj",
+			description: "Poslušaj besedo in izberi pravo sliko",
+			icon: openmoji("1F442"),
+			color: "var(--sea-soft)",
+		},
+		{
+			id: "memory",
+			title: "Spomin",
+			description: "Poišči par: slika + angleška beseda",
+			icon: openmoji("1F0CF"),
+			color: "var(--sun-soft)",
+		},
+	];
 
 // Največ kartic besed v eni vrsti
 const MAX_COLUMNS = 5;
@@ -157,7 +157,7 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 
 			<div className="lesson__section-title">
 				<h2>Vaje</h2>
-				<span>Za vsako vajo dobiš do 3 zvezdice</span>
+				<span>Pri vajah z ocenjevanjem dobiš do 3 zvezdice</span>
 			</div>
 
 			<section className="lesson__games">
@@ -215,7 +215,8 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 									className="game-card__play"
 									disabled={
 										game.id !== "matching" &&
-										game.id !== "grammar"
+										game.id !== "grammar" &&
+										game.id !== "memory"
 									}
 									onClick={() =>
 										navigate(
