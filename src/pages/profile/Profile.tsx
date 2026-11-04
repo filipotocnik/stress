@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import { getAuthErrorMessage, logOut } from "../../auth/auth";
 import { lessons } from "../../data/lessons";
 import { getTotalXp, getUserLevel } from "../../game/scoring";
@@ -78,7 +79,15 @@ function Profile({ user, onEdit }: ProfileProps) {
 					<span className="profile__value">⭐ {stars}</span>
 					<span className="profile__label">Zvezdice</span>
 				</div>
+				<div className="profile__stat">
+					<span className="profile__value">🐚 {user.shells}</span>
+					<span className="profile__label">Školjke</span>
+				</div>
 			</section>
+
+			<Link className="profile__shop-link" to="/nagrade?tab=trgovina">
+				Okrasi svoj profil z okvirji in temami →
+			</Link>
 
 			<div className="profile__progress">
 				<div

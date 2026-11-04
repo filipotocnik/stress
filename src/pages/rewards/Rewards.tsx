@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { useSearchParams } from "react-router";
 import {
 	AVATARS,
 	getAvatar,
@@ -18,7 +19,14 @@ type Tab = "avatarji" | "trgovina";
 function Rewards() {
 	const { user } = useProgress();
 	const totalStars = user ? getTotalStars(user) : 0;
-	const [tab, setTab] = useState<Tab>("avatarji");
+	// Zavihek je v naslovu (?tab=trgovina), da deluje povezava s profila in gumb Nazaj
+	const [searchParams, setSearchParams] = useSearchParams();
+	const tab: Tab =
+		searchParams.get("tab") === "trgovina" ? "trgovina" : "avatarji";
+
+	function selectTab(next: Tab) {
+		setSearchParams(next === "trgovina" ? { tab: next } : {});
+	}
 
 	return (
 		<main className="rewards">
@@ -52,7 +60,7 @@ function Rewards() {
 					aria-selected={tab === "avatarji"}
 					aria-controls="rewards-panel"
 					className="rewards__tab"
-					onClick={() => setTab("avatarji")}
+					onClick={() => selectTab("avatarji")}
 				>
 					Avatarji
 				</button>
@@ -63,7 +71,7 @@ function Rewards() {
 					aria-selected={tab === "trgovina"}
 					aria-controls="rewards-panel"
 					className="rewards__tab"
-					onClick={() => setTab("trgovina")}
+					onClick={() => selectTab("trgovina")}
 				>
 					Trgovina
 				</button>

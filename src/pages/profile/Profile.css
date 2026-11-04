@@ -37,6 +37,8 @@
 
 .profile__stat {
 	flex: 1;
+	/* Brez tega dolga vrednost raztegne stolpec čez rob */
+	min-width: 0;
 	padding: 16px;
 	border-radius: 12px;
 	background: var(--paper);
@@ -52,6 +54,23 @@
 
 .profile__label {
 	color: var(--muted);
+}
+
+.profile__shop-link {
+	display: inline-block;
+	margin-bottom: 24px;
+	color: var(--sea);
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.profile__shop-link:hover {
+	text-decoration: underline;
+}
+
+.profile__shop-link:focus-visible {
+	outline: 3px solid var(--sun);
+	outline-offset: 3px;
 }
 
 .profile__progress {
@@ -115,4 +134,23 @@
 	font-size: 18px;
 	font-weight: 700;
 	cursor: pointer;
+}
+
+/* Na telefonu tri statistike ostanejo v eni vrsti */
+@media (max-width: 560px) {
+	.profile__stats {
+		gap: 8px;
+	}
+
+	.profile__stat {
+		padding: 12px 8px;
+	}
+
+	.profile__value {
+		font-size: 20px;
+	}
+
+	.profile__label {
+		font-size: 14px;
+	}
 }
