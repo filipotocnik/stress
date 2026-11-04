@@ -4,7 +4,7 @@ import {
 	createGameSession,
 	gameSessionReducer,
 	getSessionSummary,
-} from "./session";
+} from "../game/session";
 
 export function useGameSession(input: GameSessionInput) {
 	const [state, dispatch] = useReducer(

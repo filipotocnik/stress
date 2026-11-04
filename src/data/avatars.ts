@@ -23,10 +23,9 @@ export interface Avatar {
 	id: string;
 	name: string;
 	image: string;
-	requiredStars: number; // skupno število zvezdic za odklep, 0 = brezplačen
+	requiredStars: number;
 }
 
-// Najprej brezplačni, nato po številu zvezdic naraščajoče
 export const AVATARS: Avatar[] = [
 	{ id: "owl", name: "Owl", image: owl, requiredStars: 0 },
 	{ id: "dog", name: "Dog", image: dog, requiredStars: 0 },
@@ -58,7 +57,6 @@ export function isAvatarUnlocked(avatar: Avatar, totalStars: number): boolean {
 	return totalStars >= avatar.requiredStars;
 }
 
-// Koliko zvezdic še manjka do odklepa
 export function getMissingStars(avatar: Avatar, totalStars: number): number {
 	return Math.max(0, avatar.requiredStars - totalStars);
 }

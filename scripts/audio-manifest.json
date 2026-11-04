@@ -161,12 +161,6 @@
 		"modelId": "eleven_v4",
 		"outputFormat": "mp3_44100_128"
 	},
-	"desk": {
-		"text": "desk",
-		"voiceId": "XrExE9yKIg1WjnnlVkGX",
-		"modelId": "eleven_v4",
-		"outputFormat": "mp3_44100_128"
-	},
 	"dinner": {
 		"text": "dinner",
 		"voiceId": "XrExE9yKIg1WjnnlVkGX",
@@ -187,12 +181,6 @@
 	},
 	"ears": {
 		"text": "ears",
-		"voiceId": "XrExE9yKIg1WjnnlVkGX",
-		"modelId": "eleven_v4",
-		"outputFormat": "mp3_44100_128"
-	},
-	"easter-egg": {
-		"text": "Easter egg",
 		"voiceId": "XrExE9yKIg1WjnnlVkGX",
 		"modelId": "eleven_v4",
 		"outputFormat": "mp3_44100_128"
@@ -593,12 +581,6 @@
 		"modelId": "eleven_v4",
 		"outputFormat": "mp3_44100_128"
 	},
-	"head": {
-		"text": "head",
-		"voiceId": "XrExE9yKIg1WjnnlVkGX",
-		"modelId": "eleven_v4",
-		"outputFormat": "mp3_44100_128"
-	},
 	"history": {
 		"text": "History",
 		"voiceId": "XrExE9yKIg1WjnnlVkGX",
@@ -805,12 +787,6 @@
 	},
 	"six": {
 		"text": "six",
-		"voiceId": "XrExE9yKIg1WjnnlVkGX",
-		"modelId": "eleven_v4",
-		"outputFormat": "mp3_44100_128"
-	},
-	"skirt": {
-		"text": "skirt",
 		"voiceId": "XrExE9yKIg1WjnnlVkGX",
 		"modelId": "eleven_v4",
 		"outputFormat": "mp3_44100_128"

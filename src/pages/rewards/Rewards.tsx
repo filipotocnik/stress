@@ -1,13 +1,11 @@
 import { AVATARS, getMissingStars, isAvatarUnlocked } from "../../data/avatars";
 import { getTotalStars } from "../../models/user";
-import { useProgress } from "../../progress/useProgress";
+import { useProgress } from "../../hooks/useProgress";
 import "./Rewards.css";
 
-// Nagrade za zvezdice, kasneje bodo tu tudi teme
 function Rewards() {
 	const { user } = useProgress();
 	const totalStars = user ? getTotalStars(user) : 0;
-	// AVATARS so razvrščeni po zvezdicah, prvi zaklenjen je naslednji
 	const next = AVATARS.find(
 		(avatar) => !isAvatarUnlocked(avatar, totalStars),
 	);
@@ -52,7 +50,6 @@ function Rewards() {
 			)}
 
 			<h2 className="rewards__subtitle">Avatarji</h2>
-			{/* Samo pregled, avatar se menja v Uredi profil */}
 			<ul className="rewards__grid">
 				{AVATARS.map((avatar) => {
 					const unlocked = isAvatarUnlocked(avatar, totalStars);

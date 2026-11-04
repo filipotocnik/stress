@@ -2,7 +2,6 @@ import { useState, type SubmitEvent } from "react";
 import { getAuthErrorMessage } from "../../auth/auth";
 import { AVATARS } from "../../data/avatars";
 
-// Nov uporabnik še nima zvezdic, zato ponudimo le brezplačne avatarje
 const FREE_AVATARS = AVATARS.filter((avatar) => avatar.requiredStars === 0);
 
 export interface AuthFormValues {

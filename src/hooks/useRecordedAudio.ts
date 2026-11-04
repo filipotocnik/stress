@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// Predvaja lokalne posnetke ElevenLabs; brez nadomestnega glasu brskalnika.
 export function useRecordedAudio() {
 	const currentAudio = useRef<HTMLAudioElement | null>(null);
 	const finishTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
@@ -42,7 +41,6 @@ export function useRecordedAudio() {
 		const onError = () => finish("Posnetka ni bilo mogoče predvajati.");
 		audio.addEventListener("ended", () => finish());
 		audio.addEventListener("error", onError);
-		// Zataknjen posnetek ne sme za vedno zadržati zaključnega zaslona.
 		if (onFinished) finishTimer.current = setTimeout(onError, 15_000);
 		void audio.play().catch(onError);
 	}, []);

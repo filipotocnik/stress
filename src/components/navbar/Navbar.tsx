@@ -1,7 +1,7 @@
 import { useState, type MouseEvent } from "react";
 import { NavLink, useMatch, useNavigate } from "react-router";
 import { getAvatar } from "../../data/avatars";
-import { useProgress } from "../../progress/useProgress";
+import { useProgress } from "../../hooks/useProgress";
 import "./Navbar.css";
 
 const LINKS = [
@@ -45,7 +45,6 @@ function Navbar() {
 					</NavLink>
 				))}
 			</nav>
-			{/* Avatar desno, simetrično z logotipom */}
 			{user && (
 				<NavLink
 					to="/profil"

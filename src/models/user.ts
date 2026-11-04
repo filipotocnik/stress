@@ -24,7 +24,7 @@ export interface User extends UserProfile {
 	lessonProgress: Record<string, LessonProgress>;
 }
 
-export function getTotalStars(user: User): number {
+export function getTotalStars(user: Pick<User, "lessonProgress">): number {
 	return Object.values(user.lessonProgress).reduce(
 		(sum, progress) => sum + progress.stars,
 		0,

@@ -14,7 +14,6 @@ const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const audioDirectory = path.join(projectRoot, "public/audio");
 const manifestFile = path.join(projectRoot, "scripts/audio-manifest.json");
 
-// Podatki aplikacije uporabljajo uvoze brez končnice, Node pa zahteva .ts.
 const sourceImports = registerHooks({
 	resolve(specifier, context, nextResolve) {
 		if (specifier.startsWith(".") && !path.extname(specifier)) {

@@ -9,7 +9,7 @@ import {
 	useParams,
 } from "react-router";
 import { getAuthErrorMessage, logIn, logOut, register } from "./auth/auth";
-import { useAuth } from "./auth/useAuth";
+import { useAuth } from "./hooks/useAuth";
 import { useUiAudio } from "./hooks/useUiAudio";
 import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
@@ -25,7 +25,7 @@ import Profile from "./pages/profile/Profile";
 import Rewards from "./pages/rewards/Rewards";
 import { lessons } from "./data";
 import { ProgressProvider } from "./progress/ProgressProvider";
-import { useProgress } from "./progress/useProgress";
+import { useProgress } from "./hooks/useProgress";
 
 function App() {
 	useUiAudio();
@@ -195,7 +195,6 @@ function LessonRoute() {
 	);
 }
 
-// Igro izberemo po id-ju iz naslova, neznana igra vrne na lekcijo
 function GameRoute() {
 	const { lessonId, gameId } = useParams();
 	const lesson = lessons.find((lesson) => lesson.id === lessonId);

@@ -1,20 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { useRef, useState } from "react";
+import { Navigate } from "react-router";
 import GameHeader from "../../components/game/GameHeader";
-import GameResult from "../../components/game/GameResult";
+import GameResultSave from "../../components/game/GameResultSave";
 import { openmoji } from "../../data/images";
 import {
 	createListeningQuestions,
 	getListeningWords,
 } from "../../game/listening";
-import { getGameStars } from "../../game/scoring";
-import { useGameResultSave } from "../../game/useGameResultSave";
-import { useGameSession } from "../../game/useGameSession";
+import { useGameSession } from "../../hooks/useGameSession";
 import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
 import { useWordAudio } from "../../hooks/useWordAudio";
-import type { GameResult as GameResultData } from "../../models/game";
 import type { Lesson } from "../../models/lesson";
-import { useProgress } from "../../progress/useProgress";
 import "./ListeningGame.css";
 
 interface ListeningGameProps {
@@ -23,12 +19,6 @@ interface ListeningGameProps {
 
 interface ListeningRoundProps {
 	lesson: Lesson;
-	onReplay: () => void;
-}
-
-interface ListeningSaveProps {
-	lessonId: string;
-	result: GameResultData;
 	onReplay: () => void;
 }
 
@@ -65,7 +55,9 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 
 	if (result !== null && index === questions.length) {
 		return (
-			<ListeningSave
+			<GameResultSave
+				title="Poslušaj"
+				className="listening"
 				lessonId={lesson.id}
 				result={result}
 				onReplay={onReplay}
@@ -211,49 +203,6 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 					</p>
 				) : null}
 			</div>
-		</main>
-	);
-}
-
-function ListeningSave({ lessonId, result, onReplay }: ListeningSaveProps) {
-	const navigate = useNavigate();
-	const { saveGame } = useProgress();
-	const { status, save, retry } = useGameResultSave(result, (attempt) =>
-		saveGame(lessonId, attempt),
-	);
-
-	useEffect(() => {
-		void save();
-	}, [save]);
-
-	return (
-		<main className="listening">
-			<GameResult
-				title="Poslušaj"
-				stars={getGameStars(result)}
-				firstTryCorrect={result.firstTryCorrect}
-				total={result.totalItems}
-				onReplay={onReplay}
-				onBack={() => navigate(`/lekcija/${lessonId}`)}
-			/>
-			{status === "saving" && (
-				<p className="listening__status" role="status">
-					Shranjevanje rezultata…
-				</p>
-			)}
-			{status === "error" && (
-				<>
-					<p className="auth-error" role="alert">
-						Rezultata ni bilo mogoče shraniti.
-					</p>
-					<button
-						className="listening__retry"
-						onClick={() => void retry()}
-					>
-						Poskusi znova
-					</button>
-				</>
-			)}
 		</main>
 	);
 }
