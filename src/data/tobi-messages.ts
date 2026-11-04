@@ -39,3 +39,21 @@ export function pickRoadmapMessage(
 		.filter((message) => message !== null);
 	return messages[Math.floor(choice * messages.length)];
 }
+
+export type GameEvent = "start" | "correct" | "streak" | "wrong";
+
+// Sporočila med igro. Tobi nikoli ne kritizira, ob napaki samo spodbuja.
+const GAME_MESSAGES: Record<GameEvent, string[]> = {
+	start: ["Let's go!", "Ti to zmoreš!"],
+	correct: ["Yes!", "Pravilno!", "Well done!"],
+	streak: ["Great! Odlično ti gre!", "Super! Kar tako naprej!"],
+	wrong: ["Skoraj! Poskusi še enkrat.", "Almost! Še en poskus."],
+};
+
+// Naključno sporočilo, ki ni enako prejšnjemu
+export function pickGameMessage(event: GameEvent, previous?: string): string {
+	const messages = GAME_MESSAGES[event].filter(
+		(message) => message !== previous,
+	);
+	return messages[Math.floor(Math.random() * messages.length)];
+}
