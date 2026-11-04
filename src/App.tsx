@@ -85,6 +85,7 @@ function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 						<Roadmap
 							lessons={lessons}
 							progress={user?.lessonProgress ?? {}}
+							displayName={user?.displayName}
 							onSelectLesson={(id) => navigate(`/lekcija/${id}`)}
 						/>
 					}
