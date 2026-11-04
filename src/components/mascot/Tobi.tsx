@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export type TobiMood = "happy" | "cheer" | "think" | "encourage" | "sad";
 export type TobiOutfit =
-	| "none"
+	| "no-outfit"
 	| "ninja"
 	| "pirate"
 	| "captain"
@@ -354,7 +354,7 @@ const FACE: Record<TobiMood, ReactNode> = {
 
 // Novo oblačilo = vnos v TobiOutfit + v OUTFIT_UNDER (pred obrazom) in/ali OUTFIT_OVER (čez vse).
 const OUTFIT_UNDER: Record<TobiOutfit, ReactNode> = {
-	none: null,
+	"no-outfit": null,
 	ninja: (
 		<>
 			<circle cx="44" cy="15" r="1.7" fill="#B1CC33" />
@@ -689,7 +689,7 @@ const OUTFIT_UNDER: Record<TobiOutfit, ReactNode> = {
 };
 
 const OUTFIT_OVER: Record<TobiOutfit, ReactNode> = {
-	none: null,
+	"no-outfit": null,
 	ninja: null,
 	pirate: (
 		<>
@@ -939,7 +939,7 @@ type Props = {
 
 export function Tobi({
 	mood = "happy",
-	outfit = "none",
+	outfit = "no-outfit",
 	size = 96,
 	className,
 }: Props) {
