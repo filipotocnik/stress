@@ -94,20 +94,6 @@
 	text-align: center;
 }
 
-.fill__message {
-	margin: 0 0 12px;
-	font-size: 18px;
-	font-weight: 700;
-}
-
-.fill__message--correct {
-	color: var(--leaf);
-}
-
-.fill__message--wrong {
-	color: var(--berry);
-}
-
 .fill .start-button {
 	margin: 64px;
 	width: auto;

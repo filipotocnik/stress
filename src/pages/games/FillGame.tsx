@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import GameHeader from "../../components/game/GameHeader";
 import GameResult from "../../components/game/GameResult";
+import TobiBubble from "../../components/mascot/TobiBubble";
+import { useTobiReaction } from "../../game/useTobiReaction";
 import { getGameStars } from "../../game/scoring";
 import { useGameResultSave } from "../../game/useGameResultSave";
 import { useGameSession } from "../../game/useGameSession";
@@ -49,6 +51,8 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 		itemIds: questions.map((q) => q.id),
 	});
 
+	const tobi = useTobiReaction();
+
 	// lokalno stanje prikaza
 	const [index, setIndex] = useState(0);
 	const [picked, setPicked] = useState<string | null>(null);
@@ -72,6 +76,7 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 	function handlePick(option: string) {
 		const correct = option === question.correctAnswer;
 		dispatch({ type: "answer", itemId: question.id, correct });
+		tobi.onAnswer(correct);
 
 		if (correct) {
 			setPicked(option);
@@ -95,6 +100,10 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 				done={resolvedCount}
 				total={totalCount}
 			/>
+
+			<div className="game-tobi">
+				<TobiBubble mood={tobi.mood} message={tobi.message} />
+			</div>
 
 			<p className="fill__count">
 				Stavek {index + 1} od {questions.length}
@@ -136,22 +145,11 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 				})}
 			</div>
 
-			<div className="fill__feedback" aria-live="polite">
-				{picked !== null ? (
-					<>
-						<p className="fill__message fill__message--correct">
-							✓ Pravilno!
-						</p>
-						<button className="start-button" onClick={handleNext}>
-							Naprej
-						</button>
-					</>
-				) : (
-					wrong.length > 0 && (
-						<p className="fill__message fill__message--wrong">
-							✗ Skoraj! Poskusi še enkrat.
-						</p>
-					)
+			<div className="fill__feedback">
+				{picked !== null && (
+					<button className="start-button" onClick={handleNext}>
+						Naprej
+					</button>
 				)}
 			</div>
 		</main>
