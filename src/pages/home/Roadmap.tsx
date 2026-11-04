@@ -6,7 +6,7 @@ import { getLessonProgression } from "../../game/progression";
 import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
 import WeeklyWordCard from "../../components/weekly-word/WeeklyWordCard";
-import Tobi from "../../components/mascot/Tobi";
+import TobiBubble from "../../components/mascot/TobiBubble";
 
 interface RoadmapProps {
 	lessons: Lesson[]; // že razvrščene (data/lessons)
@@ -122,12 +122,8 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 			</section>
 
 			<aside className="roadmap__side">
-				<div className="card hello">
-					{/* Okrogel okvir odreže spodnji del večjega Tobija */}
-					<span className="hello__character">
-						<Tobi mood="encourage" size={144} />
-					</span>
-					<p className="hello__bubble">Hi! Let's learn!</p>
+				<div className="card">
+					<TobiBubble mood="encourage" message="Hi! Let's learn!" />
 				</div>
 
 				{/* Kartico pokažemo samo, če trenutna lekcija obstaja */}

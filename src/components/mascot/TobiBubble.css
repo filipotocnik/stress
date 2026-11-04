@@ -1,0 +1,30 @@
+.tobi-bubble {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+/* Okrogla "maska": vse, kar pade iz kroga, se odreže.
+   Širino in višino kroga izračuna TobiBubble.tsx iz velikosti Tobija. */
+.tobi-bubble__character {
+	flex-shrink: 0; /* Tobi se ne stisne, ko je oblaček dolg */
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+.tobi-bubble__character svg {
+	display: block;
+	/* Zamik v % širine kroga, da velja pri vsaki velikosti:
+	   -22px in -4px pri krogu 112px */
+	margin-left: -19.64%;
+	margin-top: -3.57%;
+	background: var(--sea-soft);
+}
+
+.tobi-bubble__message {
+	margin: 0;
+	background: var(--sun-soft);
+	border-radius: 16px;
+	padding: 10px 14px;
+	font-weight: 700;
+}
