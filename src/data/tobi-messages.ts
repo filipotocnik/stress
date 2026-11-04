@@ -15,10 +15,10 @@ const ROADMAP_MESSAGES: RoadmapMessage[] = [
 	({ name }) => (name ? `Hi, ${name}! Veselim se učenja s tabo!` : null),
 	({ name, lesson }) =>
 		name && lesson
-			? `Hi, ${name}! Naslednja postaja: ${lesson.titleSl}. Greva?`
+			? `Hi, ${name}! Naslednja postaja: ${lesson.title}. Greva?`
 			: null,
 	({ lesson }) =>
-		lesson ? `Naslednja postaja: ${lesson.titleSl}. Greva?` : null,
+		lesson ? `Naslednja postaja: ${lesson.title}. Greva?` : null,
 ];
 
 // Ko so vse lekcije končane
