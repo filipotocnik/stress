@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router";
+import { RewardIcon } from "../../components/RewardIcon";
 import { getAuthErrorMessage, logOut } from "../../auth/auth";
 import { lessons } from "../../data/lessons";
-import { getTotalXp, getUserLevel } from "../../game/scoring";
 import { getAvatar } from "../../data/avatars";
 import { getCompletedCount, getTotalStars, type User } from "../../models/user";
 import "./Profile.css";
@@ -34,6 +35,7 @@ function Profile({ user, onEdit }: ProfileProps) {
 				</p>
 			)}
 			<button
+				data-ui-sound
 				className="profile__logout"
 				onClick={handleLogOut}
 				disabled={signingOut}
@@ -49,17 +51,20 @@ function Profile({ user, onEdit }: ProfileProps) {
 		lessons.length === 0
 			? 0
 			: Math.round((completed / lessons.length) * 100);
-	const xp = getTotalXp(stars);
-	const userLevel = getUserLevel(xp);
 	const avatar = getAvatar(user.avatar);
 
 	return (
 		<section className="profile">
-			<img
-				className="profile__avatar"
-				src={avatar.image}
-				alt={avatar.name}
-			/>
+			{/* Okvir je na ovoju, img ne podpira ::before/::after */}
+			<span
+				className={`profile__avatar-frame frame--${user.activeFrame}`}
+			>
+				<img
+					className="profile__avatar"
+					src={avatar.image}
+					alt={avatar.name}
+				/>
+			</span>
 			<h1 className="profile__name">{user.displayName}</h1>
 
 			<section className="profile__stats">
@@ -70,10 +75,26 @@ function Profile({ user, onEdit }: ProfileProps) {
 					<span className="profile__label">Končane</span>
 				</div>
 				<div className="profile__stat">
-					<span className="profile__value">⭐ {stars}</span>
+					<span className="profile__value">
+						<RewardIcon kind="star" /> {stars}
+					</span>
 					<span className="profile__label">Zvezdice</span>
 				</div>
+				<div className="profile__stat">
+					<span className="profile__value">
+						<RewardIcon kind="shell" /> {user.shells}
+					</span>
+					<span className="profile__label">Školjke</span>
+				</div>
 			</section>
+
+			<Link
+				data-ui-sound
+				className="profile__shop-link"
+				to="/nagrade?tab=trgovina"
+			>
+				Okrasi svoj profil z okvirji in temami →
+			</Link>
 
 			<div className="profile__progress">
 				<div
@@ -82,9 +103,6 @@ function Profile({ user, onEdit }: ProfileProps) {
 				/>
 			</div>
 			<p className="profile__percent">{percent}% poti</p>
-			<p>
-				{xp} XP · Raven {userLevel}
-			</p>
 
 			<h2 className="profile__info-title">Moji podatki</h2>
 			<section className="profile__info">
@@ -101,7 +119,11 @@ function Profile({ user, onEdit }: ProfileProps) {
 			</section>
 
 			{onEdit && (
-				<button className="profile__edit" onClick={onEdit}>
+				<button
+					className="profile__edit"
+					data-ui-sound
+					onClick={onEdit}
+				>
 					Uredi profil
 				</button>
 			)}

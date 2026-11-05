@@ -2,18 +2,32 @@ import { useEffect, useState, type SubmitEvent } from "react";
 import { useNavigate } from "react-router";
 import type { User as AuthUser } from "firebase/auth";
 import { ensureUserProfile, updateUser } from "../../auth/auth";
-import { AVATARS } from "../../data/avatars";
-import type { UserProfile } from "../../models/user";
-import { useProgress } from "../../progress/useProgress";
+import { AVATARS, isAvatarUnlocked } from "../../data/avatars";
+import { getTotalStars, type UserProfile } from "../../models/user";
+import { useProgress } from "../../hooks/useProgress";
 import "./EditProfile.css";
+
+const MAX_VISIBLE_AVATARS = 5;
 
 function EditProfile({ user }: { user: AuthUser }) {
 	const navigate = useNavigate();
-	const { refresh } = useProgress();
+	const { user: progressUser, refresh } = useProgress();
+	const totalStars = progressUser ? getTotalStars(progressUser) : 0;
 	const [profile, setProfile] = useState<UserProfile | null>(null);
 	const [loadError, setLoadError] = useState(false);
 	const [error, setError] = useState("");
 	const [saving, setSaving] = useState(false);
+	const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+	const [dialogOpen, setDialogOpen] = useState(false);
+
+	useEffect(() => {
+		if (!dialogOpen) return;
+		function handleKeyDown(event: KeyboardEvent) {
+			if (event.key === "Escape") setDialogOpen(false);
+		}
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [dialogOpen]);
 
 	useEffect(() => {
 		let active = true;
@@ -55,8 +69,13 @@ function EditProfile({ user }: { user: AuthUser }) {
 			await updateUser(user, newProfile);
 			await refresh();
 			navigate("/profil");
-		} catch {
-			setError("Shranjevanje ni uspelo. Poskusi znova.");
+		} catch (saveError) {
+			setError(
+				saveError instanceof Error &&
+					saveError.message === "avatar-locked"
+					? "Ta avatar je še zaklenjen."
+					: "Shranjevanje ni uspelo. Poskusi znova.",
+			);
 			setSaving(false);
 		}
 	}
@@ -74,6 +93,29 @@ function EditProfile({ user }: { user: AuthUser }) {
 			</section>
 		);
 	}
+
+	const avatars = AVATARS.filter(
+		(avatar) =>
+			isAvatarUnlocked(avatar, totalStars) ||
+			avatar.id === profile.avatar,
+	);
+	const selected = selectedAvatar ?? profile.avatar;
+
+	let visibleAvatars = avatars;
+	if (avatars.length > MAX_VISIBLE_AVATARS) {
+		visibleAvatars = avatars.slice(0, MAX_VISIBLE_AVATARS);
+		const selectedItem = avatars.find((avatar) => avatar.id === selected);
+		if (selectedItem && !visibleAvatars.includes(selectedItem)) {
+			visibleAvatars = [
+				...avatars.slice(0, MAX_VISIBLE_AVATARS - 1),
+				selectedItem,
+			];
+		}
+	}
+	const hiddenCount = avatars.length - visibleAvatars.length;
+	const hasLocked = AVATARS.some(
+		(avatar) => !isAvatarUnlocked(avatar, totalStars),
+	);
 
 	return (
 		<section className="edit-profile">
@@ -119,22 +161,47 @@ function EditProfile({ user }: { user: AuthUser }) {
 
 					<fieldset className="edit-profile__avatars">
 						<legend>Profilna slika</legend>
-						{AVATARS.map((avatar) => (
+						{visibleAvatars.map((avatar) => (
 							<label
 								key={avatar.id}
 								className="edit-profile__avatar"
 							>
 								<input
+									data-ui-sound
 									type="radio"
 									name="avatar"
 									value={avatar.id}
-									defaultChecked={
-										avatar.id === profile.avatar
+									checked={avatar.id === selected}
+									onChange={() =>
+										setSelectedAvatar(avatar.id)
 									}
 								/>
 								<img src={avatar.image} alt={avatar.name} />
 							</label>
 						))}
+						{hiddenCount > 0 ? (
+							<button
+								data-ui-sound
+								type="button"
+								className="edit-profile__more"
+								aria-label="Prikaži vse avatarje"
+								onClick={() => setDialogOpen(true)}
+							>
+								+{hiddenCount}
+							</button>
+						) : (
+							hasLocked && (
+								<button
+									data-ui-sound
+									type="button"
+									className="edit-profile__more"
+									aria-label="Odkleni več avatarjev"
+									onClick={() => navigate("/nagrade")}
+								>
+									🔒
+								</button>
+							)
+						)}
 					</fieldset>
 
 					<p className="edit-profile__email">
@@ -149,18 +216,77 @@ function EditProfile({ user }: { user: AuthUser }) {
 
 					<div className="edit-profile__actions">
 						<button
+							data-ui-sound
 							type="button"
 							className="edit-profile__cancel"
 							onClick={() => navigate("/profil")}
 						>
 							Prekliči
 						</button>
-						<button type="submit" className="edit-profile__save">
+						<button
+							data-ui-sound
+							type="submit"
+							className="edit-profile__save"
+						>
 							{saving ? "Shranjevanje…" : "Shrani"}
 						</button>
 					</div>
 				</fieldset>
 			</form>
+
+			{dialogOpen && (
+				<div className="avatar-dialog__backdrop">
+					<div
+						className="avatar-dialog"
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby="avatar-dialog-title"
+					>
+						<h2 id="avatar-dialog-title">Izberi profilno sliko</h2>
+						<div className="avatar-dialog__grid">
+							{avatars.map((avatar) => (
+								<button
+									data-ui-sound
+									key={avatar.id}
+									type="button"
+									className={
+										avatar.id === selected
+											? "avatar-dialog__option avatar-dialog__option--selected"
+											: "avatar-dialog__option"
+									}
+									aria-pressed={avatar.id === selected}
+									onClick={() => {
+										setSelectedAvatar(avatar.id);
+										setDialogOpen(false);
+									}}
+								>
+									<img src={avatar.image} alt={avatar.name} />
+								</button>
+							))}
+							{hasLocked && (
+								<button
+									data-ui-sound
+									type="button"
+									className="avatar-dialog__option avatar-dialog__option--unlock"
+									onClick={() => navigate("/nagrade")}
+								>
+									<span aria-hidden="true">🔒</span>
+									Odkleni več
+								</button>
+							)}
+						</div>
+						<button
+							data-ui-sound
+							type="button"
+							className="avatar-dialog__close"
+							onClick={() => setDialogOpen(false)}
+							autoFocus
+						>
+							Zapri
+						</button>
+					</div>
+				</div>
+			)}
 		</section>
 	);
 }

@@ -23,6 +23,7 @@ export default function WeeklyWordCard() {
 				</p>
 
 				<button
+					data-ui-sound
 					type="button"
 					className="start-button"
 					aria-haspopup="dialog"

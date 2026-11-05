@@ -76,6 +76,36 @@
 	cursor: pointer;
 }
 
+.word-card__say--playing {
+	border-color: var(--sea);
+	background: var(--sea);
+}
+
+.word-card__say--playing img {
+	animation: word-card__say-pulse 1s ease-in-out infinite;
+}
+
+@keyframes word-card__say-pulse {
+	50% {
+		opacity: 0.4;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.word-card__say--playing img {
+		animation: none;
+	}
+}
+
+.lesson__audio-error {
+	margin: 14px 0 0;
+	padding: 12px;
+	border: 1px solid #efc4bd;
+	border-radius: 12px;
+	background: #fff0ed;
+	color: #942c27;
+}
+
 /* ---------- Pravilo ---------- */
 .lesson__rule {
 	display: grid;

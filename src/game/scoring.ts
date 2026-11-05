@@ -47,17 +47,3 @@ export function getBestGameResult(
 		? attempt
 		: previous;
 }
-
-export function getTotalXp(totalStars: number): number {
-	if (!Number.isInteger(totalStars) || totalStars < 0) {
-		throw new Error("Total stars must be a nonnegative integer.");
-	}
-	return 10 * totalStars;
-}
-
-export function getUserLevel(totalXp: number): number {
-	if (!Number.isFinite(totalXp) || totalXp < 0) {
-		throw new Error("XP must be nonnegative.");
-	}
-	return 1 + Math.floor(totalXp / 100);
-}

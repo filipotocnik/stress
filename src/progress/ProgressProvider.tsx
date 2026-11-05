@@ -12,7 +12,7 @@ import { db } from "../firebase";
 import type { GameResult } from "../models/game";
 import type { User } from "../models/user";
 import { saveFinishedGame } from "../services/progress";
-import { ProgressContext } from "./useProgress";
+import { ProgressContext } from "../hooks/useProgress";
 
 interface ProgressProviderProps {
 	user: AuthUser;
@@ -74,7 +74,11 @@ function AccountProgressProvider({
 	}, [refresh]);
 
 	const saveGame = useCallback(
-		async (lessonId: string, result: GameResult) => {
+		async (
+			lessonId: string,
+			result: GameResult,
+			attemptId: string = crypto.randomUUID(),
+		) => {
 			if (!isMounted.current) {
 				throw new Error("This account session has ended.");
 			}
@@ -83,6 +87,7 @@ function AccountProgressProvider({
 				authUser.uid,
 				lessonId,
 				result,
+				attemptId,
 			);
 			if (isMounted.current) await refresh();
 			return savedResult;

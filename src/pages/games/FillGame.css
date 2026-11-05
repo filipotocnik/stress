@@ -1,0 +1,70 @@
+.fill__sentence {
+	margin: 32px 0 24px;
+	text-align: center;
+	color: var(--ink);
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+
+.fill__blank {
+	display: inline-block;
+	min-width: 3em;
+	margin: 0 6px;
+	padding: 0 8px;
+	border-bottom: 3px solid var(--line);
+	color: var(--muted);
+}
+
+.fill__blank--done {
+	border-color: var(--leaf);
+	border-radius: 8px 8px 0 0;
+	color: var(--leaf);
+}
+
+.fill__options {
+	margin: 32px 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 12px;
+}
+
+.fill__option {
+	min-width: 120px;
+	padding: 18px 26px;
+	border: 2px solid var(--line);
+	border-radius: 14px;
+	background: var(--paper);
+	color: var(--ink);
+	font-size: 20px;
+	font-weight: 700;
+	cursor: pointer;
+	box-shadow: 0 4px 0 var(--line);
+	transition:
+		transform 0.1s,
+		box-shadow 0.1s;
+}
+
+.fill__option:hover:not(:disabled) {
+	border-color: var(--sea);
+}
+
+.fill__option:disabled {
+	cursor: default;
+}
+
+.fill__option--correct {
+	border-color: var(--leaf);
+	background: var(--leaf-soft);
+	color: var(--leaf);
+	box-shadow: 0 4px 0 var(--leaf);
+}
+
+.fill__option--wrong {
+	border-color: var(--berry);
+	background: var(--berry-soft);
+	color: var(--berry);
+	box-shadow: 0 4px 0 var(--berry);
+}
