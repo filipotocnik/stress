@@ -1,23 +1,35 @@
+import { useState } from "react";
 import { useRoutePath } from "../../hooks/useRoutePath";
-import { levels } from "../../data";
+import { levels, wordsById } from "../../data";
 import type { Lesson } from "../../models/lesson";
 import type { LessonProgress } from "../../models/user";
 import { getLessonProgression } from "../../game/progression";
 import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
 import WeeklyWordCard from "../../components/weekly-word/WeeklyWordCard";
+import TobiBubble from "../../components/mascot/TobiBubble";
+import { pickRoadmapMessage } from "../../data/tobi-messages";
 
 interface RoadmapProps {
 	lessons: Lesson[]; // že razvrščene (data/lessons)
 	progress: Record<string, LessonProgress>;
+	displayName?: string; // ni na voljo, dokler se profil nalaga
 	onSelectLesson: (lessonId: string) => void;
 }
 
 // Vzorec cik-cak: levo, sredina, desno, sredina, levo ...
 const SIDES = ["left", "center", "right", "center"] as const;
 
-function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
+function Roadmap({
+	lessons,
+	progress,
+	displayName,
+	onSelectLesson,
+}: RoadmapProps) {
 	const { mapRef, path } = useRoutePath();
+	// Naključno izbiro naredimo samo enkrat, ob prikazu strani
+	const [messageChoice] = useState(() => Math.random());
+	const [wordChoice] = useState(() => Math.random());
 	const progression = getLessonProgression(lessons, progress);
 
 	// Koliko lekcij je že končanih (za vrstico napredka)
@@ -33,6 +45,14 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 	const currentLesson = progression.find(
 		(entry) => entry.status === "current",
 	)?.lesson;
+
+	const allDone = progression.length > 0 && doneCount === progression.length;
+	const wordIds = currentLesson?.content.wordIds ?? [];
+	const tobi = pickRoadmapMessage(messageChoice, allDone, {
+		name: displayName,
+		lesson: currentLesson,
+		word: wordsById.get(wordIds[Math.floor(wordChoice * wordIds.length)]),
+	});
 
 	return (
 		<div className="roadmap">
@@ -74,11 +94,12 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 			</section>
 
 			<aside className="roadmap__side">
-				<div className="card hello">
-					<span className="hello__character" aria-hidden="true">
-						🦊
-					</span>
-					<p className="hello__bubble">Hi! Let's learn!</p>
+				<div className="card">
+					<TobiBubble
+						mood={tobi.mood}
+						message={tobi.message}
+						size={144}
+					/>
 				</div>
 
 				{/* Kartico pokažemo samo, če trenutna lekcija obstaja */}

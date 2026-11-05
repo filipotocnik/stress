@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import GameHeader from "../../components/game/GameHeader";
 import GameResultSave from "../../components/game/GameResultSave";
+import TobiBubble from "../../components/mascot/TobiBubble";
+import { useTobiReaction } from "../../game/useTobiReaction";
 import { wordsById } from "../../data";
 import { useGameSession } from "../../hooks/useGameSession";
 import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
@@ -46,6 +48,8 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 		itemIds: words.map((w) => w.id),
 	});
 
+	const tobi = useTobiReaction();
+
 	const [enWords] = useState(() => shuffle(words));
 	const [slWords] = useState(() => shuffle(words));
 
@@ -57,14 +61,12 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 	const [selectedSl, setSelectedSl] = useState<string | null>(null);
 	const [solved, setSolved] = useState<Set<string>>(new Set());
 	const [showResult, setShowResult] = useState(false);
-	const [feedback, setFeedback] = useState<"correct" | "wrong">();
 	const [wrong, setWrong] = useState<{ en: string; sl: string } | null>(null);
 
 	useEffect(() => {
 		if (!wrong) return;
 		const timer = setTimeout(() => {
 			setWrong(null);
-			setFeedback(undefined);
 		}, 600);
 		return () => clearTimeout(timer);
 	}, [wrong]);
@@ -75,7 +77,6 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 		if (id === (column === "en" ? selectedEn : selectedSl)) return;
 		stopFeedback();
 		stop();
-		setFeedback(undefined);
 
 		const en = column === "en" ? id : selectedEn;
 		const sl = column === "sl" ? id : selectedSl;
@@ -87,7 +88,8 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 			return;
 		}
 
-		setFeedback(en === sl ? "correct" : "wrong");
+		tobi.onAnswer(en === sl);
+
 		if (en === sl) {
 			dispatch({ type: "answer", itemId: en, correct: true });
 			setSolved((prev) => new Set(prev).add(en));
@@ -154,6 +156,10 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 				total={totalCount}
 			/>
 
+			<div className="game-tobi">
+				<TobiBubble mood={tobi.mood} message={tobi.message} />
+			</div>
+
 			{error && (
 				<div className="game-audio-error" role="alert">
 					<p>{error}</p>
@@ -177,15 +183,6 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 				<div className="match__column">
 					{slWords.map((word) => renderItem(word, "sl"))}
 				</div>
-			</div>
-			<div className="game-feedback" aria-live="polite">
-				{feedback && (
-					<p className={`game-message game-message--${feedback}`}>
-						{feedback === "correct"
-							? "✓ Pravilno!"
-							: "✗ Skoraj! Poskusi še enkrat."}
-					</p>
-				)}
 			</div>
 		</main>
 	);

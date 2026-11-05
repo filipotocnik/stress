@@ -7,17 +7,17 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	gap: 18px;
+	gap: 16px;
 	box-sizing: border-box;
-	width: 280px;
+	width: 240px;
 	max-width: 100%;
-	min-height: 96px;
-	padding: 14px 22px;
+	min-height: 80px;
+	padding: 10px 20px;
 	border: 2px solid var(--sea);
 	border-radius: 20px;
 	background: var(--paper);
 	color: var(--sea);
-	font-size: 22px;
+	font-size: 20px;
 	font-weight: 700;
 	box-shadow: 0 4px 0 var(--sea);
 	cursor: pointer;
@@ -27,8 +27,8 @@
 	display: grid;
 	place-items: center;
 	flex-shrink: 0;
-	width: 60px;
-	height: 60px;
+	width: 50px;
+	height: 50px;
 	border-radius: 50%;
 	background: var(--sea-soft);
 }
@@ -95,8 +95,8 @@
 	position: relative;
 	display: grid;
 	place-items: center;
-	min-height: 164px;
-	padding: 20px;
+	min-height: 136px;
+	padding: 14px;
 	border: 2px solid var(--line);
 	border-radius: 20px;
 	background: var(--paper);
@@ -140,7 +140,6 @@
 }
 
 .listening .game-message strong {
-	margin-left: 8px;
 	font-size: 28px;
 }
 
@@ -150,8 +149,8 @@
 	}
 
 	.listening__option {
-		min-height: 144px;
-		padding: 16px;
+		min-height: 120px;
+		padding: 12px;
 	}
 }
 

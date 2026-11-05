@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useSearchParams } from "react-router";
+import Tobi from "../../components/mascot/Tobi";
 import { RewardIcon } from "../../components/RewardIcon";
 import {
 	AVATARS,
@@ -7,7 +8,14 @@ import {
 	getMissingStars,
 	isAvatarUnlocked,
 } from "../../data/avatars";
-import { FRAMES, isOwned, THEMES, type ShopItem } from "../../data/shop";
+import { OUTFITS } from "../../data/outfits";
+import {
+	ACTIVE_FIELD,
+	FRAMES,
+	isOwned,
+	THEMES,
+	type ShopItem,
+} from "../../data/shop";
 import { getTotalStars, type User } from "../../models/user";
 import { useProgress } from "../../hooks/useProgress";
 import { applyItem, buyItem } from "../../services/shop";
@@ -16,7 +24,7 @@ import "./Rewards.css";
 
 type Tab = "avatarji" | "trgovina";
 
-// Nagrade za zvezdice in trgovina s temami in okvirji
+// Nagrade za zvezdice in trgovina s temami, okvirji in oblačili
 function Rewards() {
 	const { user } = useProgress();
 	const totalStars = user ? getTotalStars(user) : 0;
@@ -169,7 +177,7 @@ function AvatarsTab({ totalStars }: { totalStars: number }) {
 	);
 }
 
-// Teme in okvirji, ki jih kupiš s školjkami
+// Teme, okvirji in oblačila, ki jih kupiš s školjkami
 function ShopTab({ user }: { user: User }) {
 	const avatar = getAvatar(user.avatar);
 
@@ -213,6 +221,18 @@ function ShopTab({ user }: { user: User }) {
 					</ShopCard>
 				))}
 			</ul>
+
+			<h2 className="rewards__subtitle">Oblačila za Tobija</h2>
+			<p className="rewards__description">
+				Tobi jih nosi na vseh straneh
+			</p>
+			<ul className="rewards__shop">
+				{OUTFITS.map((item) => (
+					<ShopCard key={item.id} item={item} user={user}>
+						<Tobi outfit={item.id} size={80} />
+					</ShopCard>
+				))}
+			</ul>
 		</>
 	);
 }
@@ -220,7 +240,7 @@ function ShopTab({ user }: { user: User }) {
 interface ShopCardProps {
 	item: ShopItem;
 	user: User;
-	children: ReactNode; // predogled teme ali okvirja
+	children: ReactNode; // predogled izdelka
 }
 
 // Kartica v trgovini: predogled, ime in gumb glede na stanje
@@ -249,9 +269,7 @@ function ShopCard({ item, user, children }: ShopCardProps) {
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, [buyOpen, saving]);
 
-	const activeId =
-		item.type === "theme" ? user.activeTheme : user.activeFrame;
-	const isActive = item.id === activeId;
+	const isActive = item.id === user[ACTIVE_FIELD[item.type]];
 	const owned = isOwned(item, user.ownedItems);
 	const canBuy = user.shells >= item.price;
 

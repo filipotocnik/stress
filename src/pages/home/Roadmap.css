@@ -1,9 +1,9 @@
 /* Postavitev: zemljevid levo, stranski stolpec desno */
 .roadmap {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) 280px;
+	grid-template-columns: minmax(0, 1fr) 340px;
 	gap: 24px;
-	max-width: 1000px;
+	max-width: 1120px;
 	margin: 0 auto;
 	padding: 20px 16px;
 	align-items: start;
@@ -179,23 +179,6 @@
 
 .card p {
 	margin: 0;
-}
-
-.hello {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-}
-
-.hello__character {
-	font-size: 48px;
-}
-
-.hello__bubble {
-	background: var(--sun-soft);
-	border-radius: 16px;
-	padding: 10px 14px;
-	font-weight: 700;
 }
 
 /* Kartica s trenutno lekcijo */
