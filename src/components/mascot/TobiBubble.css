@@ -1,0 +1,18 @@
+.tobi-bubble {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+/* Tobi se ne stisne, ko je oblaček dolg */
+.tobi-bubble__character {
+	flex-shrink: 0;
+}
+
+.tobi-bubble__message {
+	margin: 0;
+	background: var(--sun-soft);
+	border-radius: 16px;
+	padding: 10px 14px;
+	font-weight: 700;
+}

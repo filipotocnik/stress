@@ -1,4 +1,7 @@
-export type ShopItemType = "theme" | "frame";
+import type { ShopState } from "../models/user";
+import { OUTFITS } from "./outfits";
+
+export type ShopItemType = "theme" | "frame" | "outfit";
 
 export interface ShopItem {
 	id: string;
@@ -30,9 +33,17 @@ export const FRAMES: ShopItem[] = [
 export const DEFAULT_THEME = "ocean";
 export const DEFAULT_FRAME = "none";
 
-// Poišče temo ali okvir po id-ju
+// Polje v users/{uid}, v katerem je izbrani izdelek posameznega tipa
+export const ACTIVE_FIELD = {
+	theme: "activeTheme",
+	frame: "activeFrame",
+	outfit: "activeOutfit",
+} as const satisfies Record<ShopItemType, keyof ShopState>;
+
+// Poišče temo, okvir ali oblačilo po id-ju
 export function getShopItem(id: string): ShopItem | undefined {
-	return [...THEMES, ...FRAMES].find((item) => item.id === id);
+	const items: ShopItem[] = [...THEMES, ...FRAMES, ...OUTFITS];
+	return items.find((item) => item.id === id);
 }
 
 // Brezplačne stvari ima vsak, ostale le, če jih je kupil

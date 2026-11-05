@@ -1,6 +1,8 @@
 import { useState } from "react";
 import GameHeader from "../../components/game/GameHeader";
 import GameResultSave from "../../components/game/GameResultSave";
+import TobiBubble from "../../components/mascot/TobiBubble";
+import { useTobiReaction } from "../../game/useTobiReaction";
 import { useGameSession } from "../../hooks/useGameSession";
 import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
 import { useRecordedAudio } from "../../hooks/useRecordedAudio";
@@ -39,6 +41,8 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 		itemIds: questions.map((q) => q.id),
 	});
 
+	const tobi = useTobiReaction();
+
 	const [index, setIndex] = useState(0);
 	const [picked, setPicked] = useState<string | null>(null);
 	const [wrong, setWrong] = useState<string[]>([]);
@@ -62,6 +66,8 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 		if (picked !== null || wrong.includes(option)) return;
 		const correct = option === question.correctAnswer;
 		dispatch({ type: "answer", itemId: question.id, correct });
+		tobi.onAnswer(correct);
+
 		if (correct) {
 			setPicked(option);
 			playFeedback(true, () =>
@@ -89,6 +95,10 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 				done={resolvedCount}
 				total={totalCount}
 			/>
+
+			<div className="game-tobi">
+				<TobiBubble mood={tobi.mood} message={tobi.message} />
+			</div>
 
 			<p className="fill__sentence">
 				{before}
@@ -142,22 +152,11 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 				</div>
 			)}
 
-			<div className="game-feedback" aria-live="polite">
-				{picked !== null ? (
-					<>
-						<p className="game-message game-message--correct">
-							✓ Pravilno!
-						</p>
-						<button className="game-action" onClick={handleNext}>
-							Naprej
-						</button>
-					</>
-				) : (
-					wrong.length > 0 && (
-						<p className="game-message game-message--wrong">
-							✗ Skoraj! Poskusi še enkrat.
-						</p>
-					)
+			<div className="game-feedback">
+				{picked !== null && (
+					<button className="game-action" onClick={handleNext}>
+						Naprej
+					</button>
 				)}
 			</div>
 		</main>

@@ -1,5 +1,6 @@
 import "./Game.css";
 import type { LessonStars } from "../../models/game";
+import TobiBubble from "../mascot/TobiBubble";
 
 interface GameResultProps {
 	title: string;
@@ -62,13 +63,18 @@ function GameResult({
 				)
 			)}
 
-			<p className="game-result__message">
-				{isMemory
-					? "Našel si vse pare!"
-					: stars !== null
-						? MESSAGES[stars]
-						: "Igra končana!"}
-			</p>
+			<div className="game-result__tobi">
+				<TobiBubble
+					mood={stars === 1 ? "happy" : "cheer"}
+					message={
+						isMemory
+							? "Našel si vse pare!"
+							: stars !== null
+								? MESSAGES[stars]
+								: "Igra končana!"
+					}
+				/>
+			</div>
 
 			{!isMemory && firstTryCorrect !== null && (
 				<p className="game-result__score">
