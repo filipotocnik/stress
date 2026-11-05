@@ -25,6 +25,7 @@ function RoadmapStop({
 		<div className={`stop stop--${status} stop--${side}`}>
 			<button
 				className="stop__island"
+				data-ui-sound
 				disabled={isLocked}
 				onClick={() => onSelect(lesson.id)}
 				aria-label={`${lesson.title} (${lesson.titleSl})`}

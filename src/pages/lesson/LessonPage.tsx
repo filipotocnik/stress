@@ -3,11 +3,11 @@ import { useNavigate } from "react-router";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
 import { getGameStars } from "../../game/scoring";
+import { useWordAudio } from "../../hooks/useWordAudio";
 import type { GameType } from "../../models/game";
 import type { Lesson } from "../../models/lesson";
 import type { LessonProgress } from "../../models/user";
 import type { Word } from "../../models/word";
-import { speak } from "../../utils/speech";
 import "./LessonPage.css";
 
 interface LessonPageProps {
@@ -66,6 +66,8 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 		.map((id) => wordsById.get(id))
 		.filter((word): word is Word => word !== undefined);
 
+	const { play, playingWordId, error } = useWordAudio();
+
 	// Čim manj vrst, kartice pa enakomerno razdelimo (8 → 4 + 4, 10 → 5 + 5)
 	const rows = Math.ceil(words.length / MAX_COLUMNS);
 	const columns = Math.max(1, Math.ceil(words.length / rows));
@@ -103,8 +105,12 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 						<span className="word-card__en">{word.en}</span>
 						<span className="word-card__sl">{word.sl}</span>
 						<button
-							className="word-card__say"
-							onClick={() => speak(word.en)}
+							className={
+								playingWordId === word.id
+									? "word-card__say word-card__say--playing"
+									: "word-card__say"
+							}
+							onClick={() => play(word)}
 							aria-label={`Poslušaj: ${word.en}`}
 						>
 							<img
@@ -117,6 +123,12 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 					</div>
 				))}
 			</section>
+
+			{error && (
+				<p className="lesson__audio-error" role="alert">
+					{error}
+				</p>
+			)}
 
 			{/* Nekatere lekcije nimajo pravil */}
 			{lesson.content.grammarHints.map((hint) => (
@@ -157,7 +169,7 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 
 			<div className="lesson__section-title">
 				<h2>Vaje</h2>
-				<span>Za vsako vajo dobiš do 3 zvezdice</span>
+				<span>Pri vajah z ocenjevanjem dobiš do 3 zvezdice</span>
 			</div>
 
 			<section className="lesson__games">
@@ -210,13 +222,9 @@ function LessonPage({ lesson, number, progress }: LessonPageProps) {
 											</span>
 										))}
 								</span>
-								{/* TODO: odpri ostale igre, ko bodo narejene */}
 								<button
 									className="game-card__play"
-									disabled={
-										game.id !== "matching" &&
-										game.id !== "grammar"
-									}
+									data-ui-sound
 									onClick={() =>
 										navigate(
 											`/lekcija/${lesson.id}/igra/${game.id}`,

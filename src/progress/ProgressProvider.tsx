@@ -12,7 +12,7 @@ import { db } from "../firebase";
 import type { GameResult } from "../models/game";
 import type { User } from "../models/user";
 import { saveFinishedGame } from "../services/progress";
-import { ProgressContext } from "./useProgress";
+import { ProgressContext } from "../hooks/useProgress";
 
 interface ProgressProviderProps {
 	user: AuthUser;
