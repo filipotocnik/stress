@@ -2,11 +2,13 @@ import { useRef, useState } from "react";
 import { Navigate } from "react-router";
 import GameHeader from "../../components/game/GameHeader";
 import GameResultSave from "../../components/game/GameResultSave";
+import TobiBubble from "../../components/mascot/TobiBubble";
 import { openmoji } from "../../data/images";
 import {
 	createListeningQuestions,
 	getListeningWords,
 } from "../../game/listening";
+import { useTobiReaction } from "../../game/useTobiReaction";
 import { useGameSession } from "../../hooks/useGameSession";
 import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
 import { useWordAudio } from "../../hooks/useWordAudio";
@@ -46,6 +48,7 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 		gameType: "listening",
 		itemIds: questions.map((question) => question.word.id),
 	});
+	const tobi = useTobiReaction();
 	const [index, setIndex] = useState(0);
 	const [picked, setPicked] = useState<string | null>(null);
 	const [wrong, setWrong] = useState<string[]>([]);
@@ -73,6 +76,7 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 		submissions.current.add(id);
 		const correct = id === question.word.id;
 		dispatch({ type: "answer", itemId: question.word.id, correct });
+		tobi.onAnswer(correct);
 		stop();
 		playFeedback(correct);
 
@@ -110,6 +114,10 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 				total={totalCount}
 			/>
 
+			<div className="game-tobi">
+				<TobiBubble mood={tobi.mood} message={tobi.message} />
+			</div>
+
 			<div className="listening__player">
 				<button
 					ref={soundButton}
@@ -128,8 +136,8 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 						<img
 							src={openmoji("1F50A")}
 							alt=""
-							width={40}
-							height={40}
+							width={34}
+							height={34}
 						/>
 					</span>
 					<span>Poslušaj</span>
@@ -169,8 +177,8 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 							<img
 								src={option.imageSrc}
 								alt=""
-								width={112}
-								height={112}
+								width={96}
+								height={96}
 							/>
 							<span
 								className="listening__mark"
@@ -184,21 +192,17 @@ function ListeningRound({ lesson, onReplay }: ListeningRoundProps) {
 			</div>
 
 			<div className="game-feedback" aria-live="polite">
-				{picked !== null ? (
+				{picked !== null && (
 					<>
+						{/* Odziv pove Tobi, tukaj ostane beseda, ki se je otrok uči */}
 						<p className="game-message game-message--correct">
-							✓ Pravilno!{" "}
 							<strong lang="en">{question.word.en}</strong>
 						</p>
 						<button className="game-action" onClick={handleNext}>
 							Naprej
 						</button>
 					</>
-				) : wrong.length > 0 ? (
-					<p className="game-message game-message--wrong">
-						✗ Skoraj! Poskusi še enkrat.
-					</p>
-				) : null}
+				)}
 			</div>
 		</main>
 	);
