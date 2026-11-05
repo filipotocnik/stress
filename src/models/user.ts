@@ -21,9 +21,10 @@ export interface UserProfile {
 // Trgovina, tudi shranjeno v users/{uid}
 export interface ShopState {
 	shells: number; // školjke za nakupe
-	ownedItems: string[]; // id-ji kupljenih tem in okvirjev
+	ownedItems: string[]; // id-ji kupljenih tem, okvirjev in oblačil
 	activeTheme: string;
 	activeFrame: string;
+	activeOutfit: string; // Tobijevo oblačilo
 }
 
 export interface User extends UserProfile, ShopState {

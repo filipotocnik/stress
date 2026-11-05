@@ -1,10 +1,11 @@
 import { doc, getDoc, runTransaction, updateDoc } from "firebase/firestore";
+import { DEFAULT_OUTFIT } from "../data/outfits";
 import {
+	ACTIVE_FIELD,
 	DEFAULT_FRAME,
 	DEFAULT_THEME,
 	getShopItem,
 	isOwned,
-	type ShopItem,
 } from "../data/shop";
 import { db } from "../firebase";
 import type { ShopState } from "../models/user";
@@ -19,15 +20,12 @@ export async function loadShop(uid: string): Promise<ShopState> {
 		ownedItems: (data.ownedItems as string[] | undefined) ?? [],
 		activeTheme: (data.activeTheme as string | undefined) ?? DEFAULT_THEME,
 		activeFrame: (data.activeFrame as string | undefined) ?? DEFAULT_FRAME,
+		activeOutfit:
+			(data.activeOutfit as string | undefined) ?? DEFAULT_OUTFIT,
 	};
 }
 
-// Polje, v katerem je shranjena izbrana tema ali okvir
-function activeField(item: ShopItem) {
-	return item.type === "theme" ? "activeTheme" : "activeFrame";
-}
-
-// Kupi temo ali okvir in ga takoj uporabi
+// Kupi izdelek in ga takoj uporabi
 // Transakcija prepreči, da bi dva hkratna nakupa porabila iste školjke
 export async function buyItem(uid: string, itemId: string): Promise<void> {
 	const reference = doc(db, "users", uid);
@@ -46,12 +44,12 @@ export async function buyItem(uid: string, itemId: string): Promise<void> {
 		transaction.update(reference, {
 			shells: shells - item.price,
 			ownedItems: [...ownedItems, itemId],
-			[activeField(item)]: itemId,
+			[ACTIVE_FIELD[item.type]]: itemId,
 		});
 	});
 }
 
-// Uporabi že kupljeno ali brezplačno temo ali okvir
+// Uporabi že kupljen ali brezplačen izdelek
 // Ne "useItem", ker ESLint imena use... obravnava kot React hook
 export async function applyItem(uid: string, itemId: string): Promise<void> {
 	const reference = doc(db, "users", uid);
@@ -62,5 +60,5 @@ export async function applyItem(uid: string, itemId: string): Promise<void> {
 	const item = getShopItem(itemId);
 	if (!item || !isOwned(item, ownedItems)) throw new Error("not-owned");
 
-	await updateDoc(reference, { [activeField(item)]: itemId });
+	await updateDoc(reference, { [ACTIVE_FIELD[item.type]]: itemId });
 }

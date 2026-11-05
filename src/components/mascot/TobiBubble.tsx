@@ -1,3 +1,5 @@
+import { getTobiOutfit } from "../../data/outfits";
+import { useProgress } from "../../hooks/useProgress";
 import Tobi, { type TobiMood } from "./Tobi";
 import "./TobiBubble.css";
 
@@ -18,6 +20,8 @@ function TobiBubble({
 	size = 96,
 	cropped = false,
 }: TobiBubbleProps) {
+	const { user } = useProgress();
+	const outfit = getTobiOutfit(user?.activeOutfit);
 	const circle = Math.round(size * CIRCLE_RATIO);
 
 	return (
@@ -27,12 +31,13 @@ function TobiBubble({
 					className="tobi-bubble__circle"
 					style={{ width: circle, height: circle }}
 				>
-					<Tobi mood={mood} size={size} />
+					<Tobi mood={mood} size={size} outfit={outfit} />
 				</span>
 			) : (
 				<Tobi
 					mood={mood}
 					size={size}
+					outfit={outfit}
 					className="tobi-bubble__character"
 				/>
 			)}
