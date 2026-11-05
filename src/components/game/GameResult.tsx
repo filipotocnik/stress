@@ -1,10 +1,13 @@
 import "./Game.css";
 import type { LessonStars } from "../../models/game";
 import TobiBubble from "../mascot/TobiBubble";
+import { RewardIcon } from "../RewardIcon";
+import { plural } from "../../utils/plural";
 
 interface GameResultProps {
 	title: string;
 	stars: LessonStars | null;
+	shellsGained?: number;
 	firstTryCorrect: number | null;
 	total: number;
 	turns?: number;
@@ -22,6 +25,7 @@ const MESSAGES: Record<LessonStars, string> = {
 function GameResult({
 	title,
 	stars,
+	shellsGained,
 	firstTryCorrect,
 	total,
 	turns,
@@ -79,6 +83,21 @@ function GameResult({
 			{!isMemory && firstTryCorrect !== null && (
 				<p className="game-result__score">
 					Pravilni odgovori: {firstTryCorrect} / {total}
+				</p>
+			)}
+
+			{shellsGained !== undefined && (
+				<p className="game-result__shells">
+					<RewardIcon kind="shell" />
+					<span>
+						+
+						{plural(shellsGained, [
+							"školjka",
+							"školjki",
+							"školjke",
+							"školjk",
+						])}
+					</span>
 				</p>
 			)}
 

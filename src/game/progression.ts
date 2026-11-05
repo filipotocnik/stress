@@ -1,7 +1,7 @@
 import { REQUIRED_GAMES, type GameResults } from "../models/game";
 import type { Lesson } from "../models/lesson";
 import { isLessonCompleted, type LessonProgress } from "../models/user";
-import { getGameAccuracy, getStarsForAccuracy, getTotalXp } from "./scoring";
+import { getGameAccuracy, getStarsForAccuracy } from "./scoring";
 
 export function getLessonGrade(games: GameResults, previous?: LessonProgress) {
 	const allRequiredFinished = REQUIRED_GAMES.every(
@@ -27,7 +27,6 @@ export function getLessonGrade(games: GameResults, previous?: LessonProgress) {
 		accuracy,
 		stars,
 		newlyCompleted: previousStars === 0 && stars > 0,
-		xpGained: getTotalXp(stars - previousStars),
 	};
 }
 

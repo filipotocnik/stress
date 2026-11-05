@@ -10,10 +10,14 @@ interface GameSaveState {
 
 export function useGameResultSave(
 	initialResult: GameResult,
-	initialSaveResult: (attempt: GameResult) => Promise<SaveGameResult>,
+	initialSaveResult: (
+		attempt: GameResult,
+		attemptId: string,
+	) => Promise<SaveGameResult>,
 ) {
 	const [attemptResult] = useState<GameResult>(() => ({ ...initialResult }));
 	const [saveAttempt] = useState(() => initialSaveResult);
+	const [attemptId] = useState(() => crypto.randomUUID());
 	const [state, setState] = useState<GameSaveState>({
 		status: "idle",
 		savedResult: null,
@@ -35,7 +39,7 @@ export function useGameResultSave(
 		if (pendingSave.current) return pendingSave.current;
 
 		pendingSave.current = Promise.resolve()
-			.then(() => saveAttempt(attemptResult))
+			.then(() => saveAttempt(attemptResult, attemptId))
 			.then(
 				(savedResult) => {
 					isSaved.current = true;
@@ -54,7 +58,7 @@ export function useGameResultSave(
 			});
 		setState({ status: "saving", savedResult: null, error: null });
 		return pendingSave.current;
-	}, [attemptResult, saveAttempt]);
+	}, [attemptResult, attemptId, saveAttempt]);
 
 	return { ...state, attemptResult, save, retry: save };
 }
