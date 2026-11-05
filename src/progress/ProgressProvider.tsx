@@ -74,7 +74,11 @@ function AccountProgressProvider({
 	}, [refresh]);
 
 	const saveGame = useCallback(
-		async (lessonId: string, result: GameResult) => {
+		async (
+			lessonId: string,
+			result: GameResult,
+			attemptId: string = crypto.randomUUID(),
+		) => {
 			if (!isMounted.current) {
 				throw new Error("This account session has ended.");
 			}
@@ -83,6 +87,7 @@ function AccountProgressProvider({
 				authUser.uid,
 				lessonId,
 				result,
+				attemptId,
 			);
 			if (isMounted.current) await refresh();
 			return savedResult;

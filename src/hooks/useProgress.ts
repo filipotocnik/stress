@@ -8,7 +8,11 @@ export interface ProgressContextValue {
 	loading: boolean;
 	error: unknown;
 	refresh: () => Promise<void>;
-	saveGame: (lessonId: string, result: GameResult) => Promise<SaveGameResult>;
+	saveGame: (
+		lessonId: string,
+		result: GameResult,
+		attemptId?: string,
+	) => Promise<SaveGameResult>;
 }
 
 export const ProgressContext = createContext<ProgressContextValue | null>(null);
