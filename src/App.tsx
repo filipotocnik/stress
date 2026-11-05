@@ -10,6 +10,7 @@ import {
 } from "react-router";
 import { getAuthErrorMessage, logIn, logOut, register } from "./auth/auth";
 import { useAuth } from "./hooks/useAuth";
+import { useScrollToTop } from "./hooks/useScrollToTop";
 import { useUiAudio } from "./hooks/useUiAudio";
 import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
@@ -31,6 +32,7 @@ import MemoryGame from "./pages/games/MemoryGame";
 
 function App() {
 	useUiAudio();
+	useScrollToTop();
 	const { user, loading, error } = useAuth();
 	const [submitting, setSubmitting] = useState(false);
 	const navigate = useNavigate();
