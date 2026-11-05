@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 	max-width: 672px;
 	margin: 32px auto;
-	padding: 0 16px 40px;
+	padding: 0 16px 16px;
 	color: var(--ink);
 }
 
