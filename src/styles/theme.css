@@ -35,3 +35,14 @@ button,
 input {
 	font-family: inherit;
 }
+
+.app-layout {
+	min-height: 100vh;
+	min-height: 100dvh;
+	display: flex;
+	flex-direction: column;
+}
+
+.app-layout__content {
+	flex: 1;
+}
