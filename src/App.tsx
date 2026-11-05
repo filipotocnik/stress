@@ -14,6 +14,7 @@ import { useScrollToTop } from "./hooks/useScrollToTop";
 import { useUiAudio } from "./hooks/useUiAudio";
 import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
+import Footer from "./components/footer/Footer";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
 import FillGame from "./pages/games/FillGame";
@@ -155,17 +156,41 @@ function AppLayout() {
 	}
 
 	return (
-		<>
+		<div className="app-layout">
 			<Navbar />
-			{!user ? (
-				<main className="auth-layout">
-					<section className="auth-card">
-						{loading ? (
-							<p role="status">Nalaganje napredka…</p>
-						) : (
-							<>
+
+			<div className="app-layout__content">
+				{!user ? (
+					<main className="auth-layout">
+						<section className="auth-card">
+							{loading ? (
+								<p role="status">Nalaganje napredka…</p>
+							) : (
+								<>
+									<p className="auth-error" role="alert">
+										Podatkov ni bilo mogoče naložiti.
+									</p>
+									<button
+										data-ui-sound
+										onClick={() => void refresh()}
+									>
+										Poskusi znova
+									</button>
+								</>
+							)}
+							{logoutError && <p role="alert">{logoutError}</p>}
+							<button data-ui-sound onClick={handleLogOut}>
+								Odjavi se
+							</button>
+						</section>
+					</main>
+				) : (
+					<>
+						{error && (
+							<section>
 								<p className="auth-error" role="alert">
-									Podatkov ni bilo mogoče naložiti.
+									Napredka ni bilo mogoče osvežiti. Prikazani so
+									zadnji naloženi podatki.
 								</p>
 								<button
 									data-ui-sound
@@ -173,35 +198,16 @@ function AppLayout() {
 								>
 									Poskusi znova
 								</button>
-							</>
+							</section>
 						)}
-						{logoutError && <p role="alert">{logoutError}</p>}
-						<button data-ui-sound onClick={handleLogOut}>
-							Odjavi se
-						</button>
-					</section>
-				</main>
-			) : (
-				<>
-					{error && (
-						<section>
-							<p className="auth-error" role="alert">
-								Napredka ni bilo mogoče osvežiti. Prikazani so
-								zadnji naloženi podatki.
-							</p>
-							<button
-								data-ui-sound
-								onClick={() => void refresh()}
-							>
-								Poskusi znova
-							</button>
-						</section>
-					)}
-					{loading && <p role="status">Osveževanje napredka…</p>}
-					<Outlet />
-				</>
-			)}
-		</>
+						{loading && <p role="status">Osveževanje napredka…</p>}
+						<Outlet />
+					</>
+				)}
+			</div>
+
+			<Footer />
+		</div>
 	);
 }
 
