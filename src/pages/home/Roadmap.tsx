@@ -1,70 +1,35 @@
-import { useEffect, useRef, useState } from "react";
-import { levels } from "../../data";
+import { useState } from "react";
+import { useRoutePath } from "../../hooks/useRoutePath";
+import { levels, wordsById } from "../../data";
 import type { Lesson } from "../../models/lesson";
 import type { LessonProgress } from "../../models/user";
 import { getLessonProgression } from "../../game/progression";
 import RoadmapStop from "./RoadmapStop";
 import "./Roadmap.css";
 import WeeklyWordCard from "../../components/weekly-word/WeeklyWordCard";
+import TobiBubble from "../../components/mascot/TobiBubble";
+import { pickRoadmapMessage } from "../../data/tobi-messages";
 
 interface RoadmapProps {
 	lessons: Lesson[]; // že razvrščene (data/lessons)
 	progress: Record<string, LessonProgress>;
+	displayName?: string; // ni na voljo, dokler se profil nalaga
 	onSelectLesson: (lessonId: string) => void;
 }
 
 // Vzorec cik-cak: levo, sredina, desno, sredina, levo ...
 const SIDES = ["left", "center", "right", "center"] as const;
 
-// Črtkana pot: izmerimo, kje so otoki, in jih povežemo s krivuljami.
-// Pot narišemo znova, ko se spremeni velikost zemljevida (npr. širina okna).
-function useRoutePath() {
-	const mapRef = useRef<HTMLElement>(null);
-	const [path, setPath] = useState("");
-
-	useEffect(() => {
-		const map = mapRef.current;
-		if (!map) return;
-
-		function draw() {
-			if (!map) return;
-			const mapBox = map.getBoundingClientRect();
-			const points = [...map.querySelectorAll(".stop__island")].map(
-				(island) => {
-					const box = island.getBoundingClientRect();
-					return {
-						x: box.left - mapBox.left + box.width / 2,
-						y: box.top - mapBox.top + box.height / 2,
-					};
-				},
-			);
-
-			if (points.length === 0) {
-				setPath("");
-				return;
-			}
-
-			// Med dvema otokoma narišemo mehko krivuljo v obliki črke S
-			let d = `M ${points[0].x} ${points[0].y}`;
-			for (let i = 1; i < points.length; i++) {
-				const from = points[i - 1];
-				const to = points[i];
-				const middleY = (from.y + to.y) / 2;
-				d += ` C ${from.x} ${middleY} ${to.x} ${middleY} ${to.x} ${to.y}`;
-			}
-			setPath(d);
-		}
-
-		const observer = new ResizeObserver(draw);
-		observer.observe(map);
-		return () => observer.disconnect();
-	}, []);
-
-	return { mapRef, path };
-}
-
-function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
+function Roadmap({
+	lessons,
+	progress,
+	displayName,
+	onSelectLesson,
+}: RoadmapProps) {
 	const { mapRef, path } = useRoutePath();
+	// Naključno izbiro naredimo samo enkrat, ob prikazu strani
+	const [messageChoice] = useState(() => Math.random());
+	const [wordChoice] = useState(() => Math.random());
 	const progression = getLessonProgression(lessons, progress);
 
 	// Koliko lekcij je že končanih (za vrstico napredka)
@@ -80,6 +45,14 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 	const currentLesson = progression.find(
 		(entry) => entry.status === "current",
 	)?.lesson;
+
+	const allDone = progression.length > 0 && doneCount === progression.length;
+	const wordIds = currentLesson?.content.wordIds ?? [];
+	const tobi = pickRoadmapMessage(messageChoice, allDone, {
+		name: displayName,
+		lesson: currentLesson,
+		word: wordsById.get(wordIds[Math.floor(wordChoice * wordIds.length)]),
+	});
 
 	return (
 		<div className="roadmap">
@@ -121,11 +94,12 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 			</section>
 
 			<aside className="roadmap__side">
-				<div className="card hello">
-					<span className="hello__character" aria-hidden="true">
-						🦊
-					</span>
-					<p className="hello__bubble">Hi! Let's learn!</p>
+				<div className="card">
+					<TobiBubble
+						mood={tobi.mood}
+						message={tobi.message}
+						size={144}
+					/>
 				</div>
 
 				{/* Kartico pokažemo samo, če trenutna lekcija obstaja */}
@@ -138,6 +112,7 @@ function Roadmap({ lessons, progress, onSelectLesson }: RoadmapProps) {
 						</p>
 						<button
 							className="start-button"
+							data-ui-sound
 							onClick={() => onSelectLesson(currentLesson.id)}
 						>
 							{progress[currentLesson.id]

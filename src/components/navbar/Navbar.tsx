@@ -1,26 +1,28 @@
 import { useState, type MouseEvent } from "react";
 import { NavLink, useMatch, useNavigate } from "react-router";
+import { getAvatar } from "../../data/avatars";
+import { useProgress } from "../../hooks/useProgress";
 import "./Navbar.css";
 
 const LINKS = [
 	{ to: "/", label: "Učna pot" },
-	{ to: "/lekcije", label: "Moje lekcije" },
-	{ to: "/profil", label: "Profil" },
+	{ to: "/nagrade", label: "Nagrade" },
 ];
 
 function Navbar() {
 	const navigate = useNavigate();
-	const inLesson = useMatch("/lekcija/*") !== null;
-	// Kam želi uporabnik, dokler ne potrdi odhoda iz lekcije
+	const { user } = useProgress();
+	const inGame = useMatch("/lekcija/:lessonId/igra/*") !== null;
+	// Kam želi uporabnik, dokler ne potrdi odhoda iz igre
 	const [pendingPath, setPendingPath] = useState<string | null>(null);
 
 	function handleClick(event: MouseEvent, to: string) {
-		if (!inLesson) return;
+		if (!inGame) return;
 		event.preventDefault();
 		setPendingPath(to);
 	}
 
-	function leaveLesson() {
+	function leaveGame() {
 		if (pendingPath) navigate(pendingPath);
 		setPendingPath(null);
 	}
@@ -36,12 +38,30 @@ function Navbar() {
 						// end: aktivna samo na "/", ne na vseh podstraneh
 						end={link.to === "/"}
 						className="navbar__link"
+						data-ui-sound
 						onClick={(event) => handleClick(event, link.to)}
 					>
 						{link.label}
 					</NavLink>
 				))}
 			</nav>
+			{user && (
+				<NavLink
+					to="/profil"
+					className="navbar__avatar"
+					data-ui-sound
+					aria-label="Moj profil"
+					title="Moj profil"
+					onClick={(event) => handleClick(event, "/profil")}
+				>
+					{/* Okvir je na ovoju, img ne podpira ::before/::after */}
+					<span
+						className={`navbar__avatar-frame frame--${user.activeFrame}`}
+					>
+						<img src={getAvatar(user.avatar).image} alt="" />
+					</span>
+				</NavLink>
+			)}
 
 			{pendingPath !== null && (
 				<div className="leave-dialog__backdrop">
@@ -51,10 +71,12 @@ function Navbar() {
 						aria-modal="true"
 						aria-labelledby="leave-title"
 					>
-						<h2 id="leave-title">Res želiš zapustiti lekcijo?</h2>
+						<h2 id="leave-title">Res želiš zapustiti igro?</h2>
+						<p>Tvoj napredek v tej igri se ne bo shranil</p>
 						<div className="leave-dialog__actions">
 							<button
 								className="leave-dialog__stay"
+								data-ui-sound
 								onClick={() => setPendingPath(null)}
 								autoFocus
 							>
@@ -62,7 +84,8 @@ function Navbar() {
 							</button>
 							<button
 								className="leave-dialog__leave"
-								onClick={leaveLesson}
+								data-ui-sound
+								onClick={leaveGame}
 							>
 								Zapusti
 							</button>

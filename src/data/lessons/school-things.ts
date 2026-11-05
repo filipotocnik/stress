@@ -16,7 +16,7 @@ export const schoolThingsLesson: Lesson = {
 			"ruler",
 			"rubber",
 			"bag",
-			"desk",
+			"scissors",
 			"chair",
 		],
 		grammarHints: [
