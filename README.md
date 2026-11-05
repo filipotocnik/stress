@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/toby.svg" alt="Toby the turtle" width="140">
+  <img src="images/tobi.svg" alt="Tobi the turtle" width="140">
 </p>
 
 # Stress 🐢
@@ -8,7 +8,7 @@ Stress is a web application that helps Slovenian primary-school pupils,
 particularly around Grade 4, learn English through vocabulary games and
 listening activities.
 
-Learners explore lessons with Toby the turtle, track their progress,
+Learners explore lessons with Tobi the turtle, track their progress,
 and earn rewards to personalize their experience.
 
 <p align="center">
@@ -98,15 +98,15 @@ The settings for each recording are saved in `scripts/audio-manifest.json`.
 
 ### ✅ Checks
 
-- `npm run check` — formatting, linting, and build.
-- `npm run format` — format files.
+- `npm run check` - formatting, linting, and build.
+- `npm run format` - format files.
 
 ## 🔗 Sources and acknowledgements
 
 Third-party assets remain subject to their respective licenses and terms.
 The references below do not imply endorsement by their authors or publishers.
 
-### Atkinson Hyperlegible — font
+### Atkinson Hyperlegible - font
 
 The application uses
 [Atkinson Hyperlegible](https://fonts.google.com/specimen/Atkinson+Hyperlegible?preview.script=Latn),
@@ -118,7 +118,7 @@ distinguishing letterforms and improving readability.
 - **Project and license information:**
   [Atkinson Hyperlegible font project](https://github.com/googlefonts/atkinson-hyperlegible).
 
-### OpenMoji — emoji illustrations and icons
+### OpenMoji - emoji illustrations and icons
 
 Most emoji illustrations and icons used in the application are from
 [OpenMoji](https://openmoji.org/), an open-source emoji project.
@@ -128,7 +128,7 @@ Most emoji illustrations and icons used in the application are from
   [Creative Commons Attribution-ShareAlike 4.0 International
   (CC BY-SA 4.0)](https://creativecommons.org/licenses/by-sa/4.0/).
 
-### ElevenLabs — generated pronunciation audio
+### ElevenLabs - generated pronunciation audio
 
 Word-pronunciation audio was generated using
 [ElevenLabs](https://elevenlabs.io/) text-to-speech technology.
@@ -150,7 +150,7 @@ child-focused interface design. The app is not a complete official curriculum.
   [Tuji jezik v 2. in 3. razredu (2013)](https://www.gov.si/assets/ministrstva/MVI/Dokumenti/Osnovna-sola/Ucni-nacrti/obvezni/UN_TJ_2._in_3._razred_OS.pdf);
   [Tuji jezik – angleščina (2025)](https://www.gov.si/assets/ministrstva/MVI/Dokumenti/Osnovna-sola/Ucni-nacrti/Ucni-nacrti/2025/UN_OS/Ucni_nacrt_tuji_jezik_-_anglescina_2025.pdf);
   [Didaktična priporočila (2025)](https://www.gov.si/assets/ministrstva/MVI/Dokumenti/Osnovna-sola/Ucni-nacrti/Ucni-nacrti/2025/UN_OS/Didakticna_priporocila_k_ucnemu_nacrtu_tuji_jezik_anglescina_2025.pdf).
-- **Mladinska knjiga — annual teaching plans:**
+- **Mladinska knjiga - annual teaching plans:**
   [Rainbow Bridge 2](https://mladinska-knjiga.si/wp-content/uploads/2026/04/rainbow_bridge_2.pdf),
   [Rainbow Bridge 3](https://mladinska-knjiga.si/wp-content/uploads/2026/04/rainbow_bridge_3_0.pdf),
   [Rainbow Bridge 4](https://mladinska-knjiga.si/wp-content/uploads/2026/04/rainbow_bridge_4.pdf).
