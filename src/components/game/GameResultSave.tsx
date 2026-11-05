@@ -23,8 +23,9 @@ function GameResultSave({
 }: GameResultSaveProps) {
 	const navigate = useNavigate();
 	const { saveGame } = useProgress();
-	const { status, save, retry } = useGameResultSave(result, (attempt) =>
-		saveGame(lessonId, attempt),
+	const { status, savedResult, save, retry } = useGameResultSave(
+		result,
+		(attempt, attemptId) => saveGame(lessonId, attempt, attemptId),
 	);
 
 	useEffect(() => {
@@ -36,6 +37,7 @@ function GameResultSave({
 			<GameResult
 				title={title}
 				stars={getGameStars(result)}
+				shellsGained={savedResult?.shellsGained}
 				firstTryCorrect={result.firstTryCorrect}
 				total={result.totalItems}
 				turns={
