@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .firebase/
+.vitest/
 *-debug.log
 package-lock.json
 flake.lock

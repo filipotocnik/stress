@@ -18,13 +18,21 @@ export interface UserProfile {
 	avatar: string; // id iz AVATARS
 }
 
-export interface User extends UserProfile {
+// Trgovina, tudi shranjeno v users/{uid}
+export interface ShopState {
+	shells: number; // školjke za nakupe
+	ownedItems: string[]; // id-ji kupljenih tem in okvirjev
+	activeTheme: string;
+	activeFrame: string;
+}
+
+export interface User extends UserProfile, ShopState {
 	id: string;
 	email: string;
 	lessonProgress: Record<string, LessonProgress>;
 }
 
-export function getTotalStars(user: User): number {
+export function getTotalStars(user: Pick<User, "lessonProgress">): number {
 	return Object.values(user.lessonProgress).reduce(
 		(sum, progress) => sum + progress.stars,
 		0,

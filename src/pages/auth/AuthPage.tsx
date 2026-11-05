@@ -2,7 +2,6 @@ import { useState, type SubmitEvent } from "react";
 import { getAuthErrorMessage } from "../../auth/auth";
 import { AVATARS } from "../../data/avatars";
 
-// Nov uporabnik še nima zvezdic, zato ponudimo le brezplačne avatarje
 const FREE_AVATARS = AVATARS.filter((avatar) => avatar.requiredStars === 0);
 
 export interface AuthFormValues {
@@ -110,6 +109,7 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
 										className="auth-avatar"
 									>
 										<input
+											data-ui-sound
 											type="radio"
 											name="avatar"
 											value={avatar.id}
@@ -160,7 +160,7 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
 							{error}
 						</p>
 					)}
-					<button className="auth-button" type="submit">
+					<button data-ui-sound className="auth-button" type="submit">
 						{submitting
 							? "Počakaj…"
 							: isRegistration
@@ -173,6 +173,7 @@ export default function AuthPage({ submitting, onSubmit }: AuthPageProps) {
 			<p className="auth-switch">
 				{isRegistration ? "Že imaš račun?" : "Še nimaš računa?"}{" "}
 				<button
+					data-ui-sound
 					className="auth-link"
 					type="button"
 					onClick={switchMode}

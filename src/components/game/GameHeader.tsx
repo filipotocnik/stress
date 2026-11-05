@@ -12,7 +12,12 @@ function GameHeader({ title, done, total }: GameHeaderProps) {
 
 	return (
 		<header className="game-header">
-			<h1 className="game-header__title">{title}</h1>
+			<div className="game-header__heading">
+				<h1 className="game-header__title">{title}</h1>
+				<p className="game-header__count" aria-live="polite">
+					{done} / {total}
+				</p>
+			</div>
 
 			<div
 				className="game-header__progress"
@@ -27,9 +32,6 @@ function GameHeader({ title, done, total }: GameHeaderProps) {
 					style={{ width: `${percent}%` }}
 				/>
 			</div>
-			<p className="game-header__count">
-				{done}/{total}
-			</p>
 		</header>
 	);
 }

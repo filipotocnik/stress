@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { User as AuthUser } from "firebase/auth";
 import {
 	Navigate,
@@ -9,12 +9,14 @@ import {
 	useParams,
 } from "react-router";
 import { getAuthErrorMessage, logIn, logOut, register } from "./auth/auth";
-import { useAuth } from "./auth/useAuth";
+import { useAuth } from "./hooks/useAuth";
+import { useUiAudio } from "./hooks/useUiAudio";
 import LessonAccess from "./components/lesson/LessonAccess";
 import Navbar from "./components/navbar/Navbar";
 import AuthPage, { type AuthFormValues } from "./pages/auth/AuthPage";
 import "./pages/auth/AuthPage.css";
 import FillGame from "./pages/games/FillGame";
+import ListeningGame from "./pages/games/ListeningGame";
 import MatchGame from "./pages/games/MatchGame";
 import Roadmap from "./pages/home/Roadmap";
 import LessonPage from "./pages/lesson/LessonPage";
@@ -22,12 +24,16 @@ import EditProfile from "./pages/profile/EditProfile";
 import Profile from "./pages/profile/Profile";
 import Rewards from "./pages/rewards/Rewards";
 import { lessons } from "./data";
+import { DEFAULT_THEME, getShopItem } from "./data/shop";
 import { ProgressProvider } from "./progress/ProgressProvider";
-import { useProgress } from "./progress/useProgress";
+import { useProgress } from "./hooks/useProgress";
+import MemoryGame from "./pages/games/MemoryGame";
 
 function App() {
+	useUiAudio();
 	const { user, loading, error } = useAuth();
 	const [submitting, setSubmitting] = useState(false);
+	const navigate = useNavigate();
 
 	async function handleAuthenticate(values: AuthFormValues) {
 		setSubmitting(true);
@@ -42,6 +48,7 @@ function App() {
 			} else {
 				await logIn(values.email, values.password);
 			}
+			navigate("/", { replace: true });
 		} finally {
 			setSubmitting(false);
 		}
@@ -121,6 +128,21 @@ function AuthenticatedRoutes({ authUser }: { authUser: AuthUser }) {
 function AppLayout() {
 	const { user, loading, error, refresh } = useProgress();
 	const [logoutError, setLogoutError] = useState("");
+	const activeTheme = user?.activeTheme;
+
+	// Izbrana tema velja za celo aplikacijo, barve so v styles/themes.css
+	useEffect(() => {
+		const root = document.documentElement;
+		// Neznan id ali id okvirja obravnavamo kot privzeto temo
+		const isTheme = getShopItem(activeTheme ?? "")?.type === "theme";
+		if (!activeTheme || activeTheme === DEFAULT_THEME || !isTheme) {
+			root.removeAttribute("data-theme");
+		} else {
+			root.dataset.theme = activeTheme;
+		}
+		// Ob odjavi se vrne privzeta tema
+		return () => root.removeAttribute("data-theme");
+	}, [activeTheme]);
 
 	async function handleLogOut() {
 		try {
@@ -143,13 +165,18 @@ function AppLayout() {
 								<p className="auth-error" role="alert">
 									Podatkov ni bilo mogoče naložiti.
 								</p>
-								<button onClick={() => void refresh()}>
+								<button
+									data-ui-sound
+									onClick={() => void refresh()}
+								>
 									Poskusi znova
 								</button>
 							</>
 						)}
 						{logoutError && <p role="alert">{logoutError}</p>}
-						<button onClick={handleLogOut}>Odjavi se</button>
+						<button data-ui-sound onClick={handleLogOut}>
+							Odjavi se
+						</button>
 					</section>
 				</main>
 			) : (
@@ -160,7 +187,10 @@ function AppLayout() {
 								Napredka ni bilo mogoče osvežiti. Prikazani so
 								zadnji naloženi podatki.
 							</p>
-							<button onClick={() => void refresh()}>
+							<button
+								data-ui-sound
+								onClick={() => void refresh()}
+							>
 								Poskusi znova
 							</button>
 						</section>
@@ -193,7 +223,6 @@ function LessonRoute() {
 	);
 }
 
-// Igro izberemo po id-ju iz naslova, neznana igra vrne na lekcijo
 function GameRoute() {
 	const { lessonId, gameId } = useParams();
 	const lesson = lessons.find((lesson) => lesson.id === lessonId);
@@ -208,6 +237,14 @@ function GameRoute() {
 
 	if (gameId === "grammar") {
 		return <FillGame key={lesson.id} lesson={lesson} />;
+	}
+
+	if (gameId === "listening") {
+		return <ListeningGame key={lesson.id} lesson={lesson} />;
+	}
+
+	if (gameId === "memory") {
+		return <MemoryGame key={lesson.id} lesson={lesson} />;
 	}
 
 	return <Navigate to={`/lekcija/${lesson.id}`} replace />;

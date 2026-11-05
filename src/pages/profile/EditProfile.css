@@ -98,7 +98,6 @@
 	outline-offset: 3px;
 }
 
-/* Krog "+N" je enake velikosti kot avatar */
 .edit-profile__more {
 	width: 100%;
 	aspect-ratio: 1;
@@ -123,7 +122,6 @@
 	place-items: center;
 	padding: 16px;
 	background: rgb(23 48 66 / 0.5);
-	/* Nad navigacijo, ki ima z-index 10 */
 	z-index: 100;
 }
 
@@ -169,7 +167,6 @@
 	border-color: var(--sea);
 }
 
-/* Ploščica "Odkleni več" na koncu izbire */
 .avatar-dialog__option--unlock {
 	display: flex;
 	flex-direction: column;
@@ -229,7 +226,7 @@
 .edit-profile__save {
 	border: 0;
 	background: var(--leaf);
-	color: var(--paper);
+	color: #fff;
 	box-shadow: 0 4px 0 #1f6b2f;
 }
 

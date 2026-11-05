@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useState } from "react";
 import GameHeader from "../../components/game/GameHeader";
-import GameResult from "../../components/game/GameResult";
+import GameResultSave from "../../components/game/GameResultSave";
 import TobiBubble from "../../components/mascot/TobiBubble";
 import { useTobiReaction } from "../../game/useTobiReaction";
-import { getGameStars } from "../../game/scoring";
-import { useGameResultSave } from "../../game/useGameResultSave";
-import { useGameSession } from "../../game/useGameSession";
-import type { GameResult as GameResultData } from "../../models/game";
+import { useGameSession } from "../../hooks/useGameSession";
+import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
+import { useRecordedAudio } from "../../hooks/useRecordedAudio";
 import type { Lesson } from "../../models/lesson";
-import { useProgress } from "../../progress/useProgress";
-import { speak } from "../../utils/speech";
+import { getGrammarAudioId } from "../../utils/audio";
 import "./FillGame.css";
 
 interface FillGameProps {
@@ -22,14 +19,6 @@ interface FillRoundProps {
 	onReplay: () => void;
 }
 
-interface FillSaveProps {
-	lessonId: string;
-	result: GameResultData;
-	onReplay: () => void;
-}
-
-// Igra: izberi pravo besedo, ki manjka v stavku
-// hrani številko kroga. S spremembo key se ustvari nov FillRound
 function FillGame({ lesson }: FillGameProps) {
 	const [round, setRound] = useState(0);
 
@@ -42,9 +31,10 @@ function FillGame({ lesson }: FillGameProps) {
 	);
 }
 
-// stavki po vrsti, na koncu rezultat
 function FillRound({ lesson, onReplay }: FillRoundProps) {
 	const questions = lesson.content.grammar;
+	const { play, stop, error } = useRecordedAudio();
+	const { play: playFeedback, stop: stopFeedback } = useFeedbackAudio();
 
 	const { resolvedCount, totalCount, result, dispatch } = useGameSession({
 		gameType: "grammar",
@@ -53,16 +43,15 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 
 	const tobi = useTobiReaction();
 
-	// lokalno stanje prikaza
 	const [index, setIndex] = useState(0);
 	const [picked, setPicked] = useState<string | null>(null);
 	const [wrong, setWrong] = useState<string[]>([]);
 
-	// Rezultat pokažemo šele po »Naprej« pri zadnjem stavku,
-	// da otrok vidi še pravilno dopolnjen stavek
 	if (result !== null && index === questions.length) {
 		return (
-			<FillSave
+			<GameResultSave
+				title="Dopolni stavek"
+				className="fill"
 				lessonId={lesson.id}
 				result={result}
 				onReplay={onReplay}
@@ -74,27 +63,33 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 	const [before, after] = question.sentence.split("___");
 
 	function handlePick(option: string) {
+		if (picked !== null || wrong.includes(option)) return;
 		const correct = option === question.correctAnswer;
 		dispatch({ type: "answer", itemId: question.id, correct });
 		tobi.onAnswer(correct);
 
 		if (correct) {
 			setPicked(option);
-			speak(`${before}${option}${after}`);
+			playFeedback(true, () =>
+				play(getGrammarAudioId(lesson.id, question.id)),
+			);
 		} else {
+			playFeedback(false);
 			setWrong((prev) => [...prev, option]);
 		}
 	}
 
-	// Premaknemo se na naslednji stavek in počistimo prikaz prejšnjega
 	function handleNext() {
+		stopFeedback();
+		stop();
 		setIndex((i) => i + 1);
 		setPicked(null);
 		setWrong([]);
+		playFeedback(index + 1 === questions.length ? "complete" : "next");
 	}
 
 	return (
-		<main className="fill">
+		<main className="game-screen fill">
 			<GameHeader
 				title="Dopolni stavek"
 				done={resolvedCount}
@@ -104,10 +99,6 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 			<div className="game-tobi">
 				<TobiBubble mood={tobi.mood} message={tobi.message} />
 			</div>
-
-			<p className="fill__count">
-				Stavek {index + 1} od {questions.length}
-			</p>
 
 			<p className="fill__sentence">
 				{before}
@@ -145,58 +136,29 @@ function FillRound({ lesson, onReplay }: FillRoundProps) {
 				})}
 			</div>
 
-			<div className="fill__feedback">
+			{error && (
+				<div className="game-audio-error" role="alert">
+					<p>{error}</p>
+					<button
+						type="button"
+						className="game-retry"
+						onClick={() => {
+							stopFeedback();
+							play(getGrammarAudioId(lesson.id, question.id));
+						}}
+					>
+						Poslušaj znova
+					</button>
+				</div>
+			)}
+
+			<div className="game-feedback">
 				{picked !== null && (
-					<button className="start-button" onClick={handleNext}>
+					<button className="game-action" onClick={handleNext}>
 						Naprej
 					</button>
 				)}
 			</div>
-		</main>
-	);
-}
-
-// Rezultat kroga, ki se ob prikazu shrani v napredek
-function FillSave({ lessonId, result, onReplay }: FillSaveProps) {
-	const navigate = useNavigate();
-	const { saveGame } = useProgress();
-	const { status, save, retry } = useGameResultSave(result, (attempt) =>
-		saveGame(lessonId, attempt),
-	);
-
-	useEffect(() => {
-		void save();
-	}, [save]);
-
-	return (
-		<main className="fill">
-			<GameResult
-				title="Dopolni stavek"
-				stars={getGameStars(result)}
-				firstTryCorrect={result.firstTryCorrect}
-				total={result.totalItems}
-				onReplay={onReplay}
-				onBack={() => navigate(`/lekcija/${lessonId}`)}
-			/>
-
-			{status === "saving" && (
-				<p className="fill__status" role="status">
-					Shranjevanje rezultata…
-				</p>
-			)}
-			{status === "error" && (
-				<>
-					<p className="auth-error" role="alert">
-						Rezultata ni bilo mogoče shraniti.
-					</p>
-					<button
-						className="fill__retry"
-						onClick={() => void retry()}
-					>
-						Poskusi znova
-					</button>
-				</>
-			)}
 		</main>
 	);
 }

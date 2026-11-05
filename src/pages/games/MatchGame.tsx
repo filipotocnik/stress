@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router";
 import GameHeader from "../../components/game/GameHeader";
+import GameResultSave from "../../components/game/GameResultSave";
 import TobiBubble from "../../components/mascot/TobiBubble";
 import { useTobiReaction } from "../../game/useTobiReaction";
 import { wordsById } from "../../data";
-import { useGameSession } from "../../game/useGameSession";
+import { useGameSession } from "../../hooks/useGameSession";
+import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
+import { useWordAudio } from "../../hooks/useWordAudio";
 import type { Lesson } from "../../models/lesson";
 import type { Word } from "../../models/word";
+import { shuffle } from "../../utils/shuffle";
 import "./MatchGame.css";
-import { useProgress } from "../../progress/useProgress";
-import type { GameResult as GameResultData } from "../../models/game";
-import { getGameStars } from "../../game/scoring";
-import { useGameResultSave } from "../../game/useGameResultSave";
-import GameResult from "../../components/game/GameResult";
-import { Navigate, useNavigate } from "react-router";
-import { speak } from "../../utils/speech";
 
 interface MatchGameProps {
 	lesson: Lesson;
@@ -24,28 +22,9 @@ interface MatchRoundProps {
 	onReplay: () => void;
 }
 
-interface MatchSaveProps {
-	lessonId: string;
-	result: GameResultData;
-	onReplay: () => void;
-}
-
-// Vrne nov, naključno premešan seznam (Fisher-Yates)
-function shuffle<T>(items: T[]) {
-	const result = [...items];
-	for (let i = result.length - 1; i > 0; i--) {
-		const j = Math.floor(Math.random() * (i + 1));
-		[result[i], result[j]] = [result[j], result[i]];
-	}
-	return result;
-}
-
-// Igra: poveži slovensko in angleško besedo
-// Nov key ob ponovni igri začne krog od začetka in znova premeša besede
 function MatchGame({ lesson }: MatchGameProps) {
 	const [round, setRound] = useState(0);
 
-	// Lekcija brez veljavnih besed nima igre
 	if (!lesson.content.wordIds.some((id) => wordsById.has(id))) {
 		return <Navigate to={`/lekcija/${lesson.id}`} replace />;
 	}
@@ -59,9 +38,7 @@ function MatchGame({ lesson }: MatchGameProps) {
 	);
 }
 
-// En krog igre: tabla z besedami, na koncu rezultat
 function MatchRound({ lesson, onReplay }: MatchRoundProps) {
-	// Besede poiščemo po id-ju, neznane id-je izpustimo
 	const words = lesson.content.wordIds
 		.map((id) => wordsById.get(id))
 		.filter((word): word is Word => word !== undefined);
@@ -73,31 +50,39 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 
 	const tobi = useTobiReaction();
 
-	// Stolpca premešamo samo enkrat, ob začetku igre
 	const [enWords] = useState(() => shuffle(words));
 	const [slWords] = useState(() => shuffle(words));
+
+	const { play, stop, error } = useWordAudio();
+	const { play: playFeedback, stop: stopFeedback } = useFeedbackAudio();
+	const [lastWord, setLastWord] = useState<Word>();
 
 	const [selectedEn, setSelectedEn] = useState<string | null>(null);
 	const [selectedSl, setSelectedSl] = useState<string | null>(null);
 	const [solved, setSolved] = useState<Set<string>>(new Set());
+	const [showResult, setShowResult] = useState(false);
 	const [wrong, setWrong] = useState<{ en: string; sl: string } | null>(null);
 
-	// Napačen par pokažemo 600 ms, tajmer počistimo, če igro zapustimo prej
 	useEffect(() => {
 		if (!wrong) return;
-		const timer = setTimeout(() => setWrong(null), 600);
+		const timer = setTimeout(() => {
+			setWrong(null);
+		}, 600);
 		return () => clearTimeout(timer);
 	}, [wrong]);
 
 	function handleSelect(column: "en" | "sl", id: string) {
-		// Med prikazom napačnega para klike prezremo
-		if (wrong) return;
+		if (result !== null || wrong || solved.has(id)) return;
+
+		if (id === (column === "en" ? selectedEn : selectedSl)) return;
+		stopFeedback();
+		stop();
 
 		const en = column === "en" ? id : selectedEn;
 		const sl = column === "sl" ? id : selectedSl;
 
-		// Izbrana je šele ena beseda, počakamo na drugo
 		if (en === null || sl === null) {
+			playFeedback("tap");
 			setSelectedEn(en);
 			setSelectedSl(sl);
 			return;
@@ -108,10 +93,19 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 		if (en === sl) {
 			dispatch({ type: "answer", itemId: en, correct: true });
 			setSolved((prev) => new Set(prev).add(en));
-			// Pravilen par: angleško besedo preberemo na glas
 			const word = wordsById.get(en);
-			if (word) speak(word.en);
+			setLastWord(word);
+			const isLastPair = solved.size + 1 === words.length;
+			function finishRound() {
+				setShowResult(true);
+				playFeedback("complete");
+			}
+			playFeedback(true, () => {
+				if (word) play(word, isLastPair ? finishRound : undefined);
+				else if (isLastPair) finishRound();
+			});
 		} else {
+			playFeedback(false);
 			dispatch({ type: "answer", itemId: en, correct: false });
 			setWrong({ en, sl });
 		}
@@ -142,9 +136,11 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 		);
 	}
 
-	if (result !== null) {
+	if (result !== null && showResult) {
 		return (
-			<MatchSave
+			<GameResultSave
+				title="Poveži besede"
+				className="match"
 				lessonId={lesson.id}
 				result={result}
 				onReplay={onReplay}
@@ -153,7 +149,7 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 	}
 
 	return (
-		<main className="match">
+		<main className="game-screen match">
 			<GameHeader
 				title="Poveži besede"
 				done={resolvedCount}
@@ -164,6 +160,22 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 				<TobiBubble mood={tobi.mood} message={tobi.message} />
 			</div>
 
+			{error && (
+				<div className="game-audio-error" role="alert">
+					<p>{error}</p>
+					<button
+						type="button"
+						className="game-retry"
+						onClick={() => {
+							stopFeedback();
+							if (lastWord) play(lastWord);
+						}}
+					>
+						Poslušaj znova
+					</button>
+				</div>
+			)}
+
 			<div className="match__board">
 				<div className="match__column">
 					{enWords.map((word) => renderItem(word, "en"))}
@@ -172,51 +184,6 @@ function MatchRound({ lesson, onReplay }: MatchRoundProps) {
 					{slWords.map((word) => renderItem(word, "sl"))}
 				</div>
 			</div>
-		</main>
-	);
-}
-
-// Rezultat kroga, ki se ob prikazu shrani v napredek
-function MatchSave({ lessonId, result, onReplay }: MatchSaveProps) {
-	const navigate = useNavigate();
-	const { saveGame } = useProgress();
-	const { status, save, retry } = useGameResultSave(result, (attempt) =>
-		saveGame(lessonId, attempt),
-	);
-
-	useEffect(() => {
-		void save();
-	}, [save]);
-
-	return (
-		<main className="match">
-			<GameResult
-				title="Poveži besede"
-				stars={getGameStars(result)}
-				firstTryCorrect={result.firstTryCorrect}
-				total={result.totalItems}
-				onReplay={onReplay}
-				onBack={() => navigate(`/lekcija/${lessonId}`)}
-			/>
-
-			{status === "saving" && (
-				<p className="match__status" role="status">
-					Shranjevanje rezultata…
-				</p>
-			)}
-			{status === "error" && (
-				<>
-					<p className="auth-error" role="alert">
-						Rezultata ni bilo mogoče shraniti.
-					</p>
-					<button
-						className="match__retry"
-						onClick={() => void retry()}
-					>
-						Poskusi znova
-					</button>
-				</>
-			)}
 		</main>
 	);
 }
