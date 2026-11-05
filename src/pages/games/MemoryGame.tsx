@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import GameHeader from "../../components/game/GameHeader";
 import GameResultSave from "../../components/game/GameResultSave";
+import TobiBubble from "../../components/mascot/TobiBubble";
+import { useTobiReaction } from "../../game/useTobiReaction";
 import { wordsById } from "../../data";
 import { openmoji } from "../../data/images";
 import { useFeedbackAudio } from "../../hooks/useFeedbackAudio";
@@ -63,6 +65,7 @@ function MemoryRound({ lesson, onReplay }: MemoryRoundProps) {
 		gameType: "memory",
 		itemIds: words.map((word) => word.id),
 	});
+	const tobi = useTobiReaction();
 	const { play, stop, error } = useWordAudio();
 	const { play: playFeedback, stop: stopFeedback } = useFeedbackAudio();
 	const [selected, setSelected] = useState<MemoryCard[]>([]);
@@ -106,6 +109,8 @@ function MemoryRound({ lesson, onReplay }: MemoryRoundProps) {
 			setSolved((previous) => new Set(previous).add(card.word.id));
 			setSelected([]);
 			dispatch({ type: "resolve-pair", itemId: card.word.id });
+			// Tobi se odzove samo na najden par: zgrešen par je običajen del spomina
+			tobi.onAnswer(true);
 			setLastWord(card.word);
 			const isLastPair = solved.size + 1 === words.length;
 			playFeedback(true, () =>
@@ -196,6 +201,9 @@ function MemoryRound({ lesson, onReplay }: MemoryRoundProps) {
 				done={resolvedCount}
 				total={totalCount}
 			/>
+			<div className="game-tobi">
+				<TobiBubble mood={tobi.mood} message={tobi.message} />
+			</div>
 			<p className="memory__turns">Število potez: {turns}</p>
 			{error && (
 				<div className="game-audio-error" role="alert">
